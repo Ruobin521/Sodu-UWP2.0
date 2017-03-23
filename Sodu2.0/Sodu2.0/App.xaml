@@ -1,0 +1,22 @@
+﻿<Application
+    x:Class="Sodu.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Sodu"
+    xmlns:viewModel="using:Sodu.ViewModel"
+    RequestedTheme="Light">
+    <Application.Resources>
+        <ResourceDictionary>
+            <viewModel:ViewModelInstance  x:Key="Locator"/>
+
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Style/Resources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <!--<ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light" Source="Styles/LightThemeDictionary.xaml"></ResourceDictionary>
+                <ResourceDictionary x:Key="Dark" Source="Styles/DarkThemeDictionary.xaml"></ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>-->
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
