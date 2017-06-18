@@ -1,0 +1,152 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Sodu.Control">
+
+
+    <Style  TargetType="local:TabbarButton" >
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
+        <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="MinWidth" Value="0"/>
+        <Setter Property="MinHeight" Value="0"/>
+        <Setter Property="UseSystemFocusVisuals" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:TabbarButton">
+                    <Grid x:Name="Root" Background="{TemplateBinding Background}" MaxWidth="{TemplateBinding MaxWidth}" MinWidth="{TemplateBinding MinWidth}">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="ApplicationViewStates">
+                                <VisualState x:Name="FullSize"/>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal"/>
+
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="Root">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="LightGray"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="Content">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltBaseHighBrush}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="TextLabel">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltBaseHighBrush}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Disabled">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="Content">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlDisabledBaseMediumLowBrush}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="TextLabel">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlDisabledBaseMediumLowBrush}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="InputModeStates">
+                                <VisualState x:Name="InputModeDefault"/>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Grid x:Name="ContentRoot">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="20"/>
+                            </Grid.RowDefinitions>
+                            <ContentPresenter Grid.Row="0" x:Name="Content"  AutomationProperties.AccessibilityView="Raw" Foreground="{Binding  PathFill, RelativeSource={RelativeSource Mode=TemplatedParent}}"   HorizontalAlignment="Stretch" >
+                                <ContentPresenter.Content>
+                                    <Path  Fill="{Binding  PathFill, RelativeSource={RelativeSource Mode=TemplatedParent}}" 
+                                           Data="{TemplateBinding Content}" Height="22"  Width="22"  Stretch="UniformToFill" ></Path>
+                                </ContentPresenter.Content>
+                            </ContentPresenter>
+                            <TextBlock Grid.Row="1" x:Name="TextLabel" Foreground="{Binding  PathFill, RelativeSource={RelativeSource Mode=TemplatedParent}}"  FontSize="12" FontFamily="{TemplateBinding FontFamily}" Margin="0,0,0,0" TextAlignment="Center" TextWrapping="Wrap" Text="{TemplateBinding Label}"/>
+                        </Grid>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:PullToRefreshListView">
+        <Setter Property="IsTabStop" Value="False"/>
+        <Setter Property="TabNavigation" Value="Once"/>
+        <Setter Property="IsSwipeEnabled" Value="True"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="ScrollViewer.HorizontalScrollMode" Value="Disabled"/>
+        <Setter Property="ScrollViewer.IsHorizontalRailEnabled" Value="False"/>
+        <Setter Property="ScrollViewer.VerticalScrollMode" Value="Enabled"/>
+        <Setter Property="ScrollViewer.IsVerticalRailEnabled" Value="True"/>
+        <Setter Property="ScrollViewer.ZoomMode" Value="Disabled"/>
+        <Setter Property="ScrollViewer.IsDeferredScrollingEnabled" Value="False"/>
+        <Setter Property="ScrollViewer.BringIntoViewOnFocusChange" Value="True"/>
+        <Setter Property="OverscrollLimit" Value="0.4"></Setter>
+        <Setter Property="ItemContainerTransitions">
+            <Setter.Value>
+                <TransitionCollection>
+                    <AddDeleteThemeTransition/>
+                    <ContentThemeTransition/>
+                    <ReorderThemeTransition/>
+                    <EntranceThemeTransition IsStaggeringEnabled="False"/>
+                </TransitionCollection>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <ItemsStackPanel Orientation="Vertical"/>
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:PullToRefreshListView">
+                    <Border x:Name="Root"  BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
+                        <ScrollViewer x:Name="ScrollViewer" 
+                                      AutomationProperties.AccessibilityView="Raw" 
+                                      BringIntoViewOnFocusChange="{TemplateBinding ScrollViewer.BringIntoViewOnFocusChange}" 
+                                      HorizontalScrollMode="{TemplateBinding ScrollViewer.HorizontalScrollMode}" 
+                                      HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}" 
+                                      IsHorizontalRailEnabled="{TemplateBinding ScrollViewer.IsHorizontalRailEnabled}" 
+                                      IsHorizontalScrollChainingEnabled="{TemplateBinding ScrollViewer.IsHorizontalScrollChainingEnabled}" 
+                                      IsVerticalScrollChainingEnabled="{TemplateBinding ScrollViewer.IsVerticalScrollChainingEnabled}" 
+                                      IsVerticalRailEnabled="{TemplateBinding ScrollViewer.IsVerticalRailEnabled}" 
+                                      IsDeferredScrollingEnabled="{TemplateBinding ScrollViewer.IsDeferredScrollingEnabled}" 
+                                      TabNavigation="{TemplateBinding TabNavigation}" 
+                                      VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}" 
+                                      VerticalScrollMode="{TemplateBinding ScrollViewer.VerticalScrollMode}" 
+                                      ZoomMode="{TemplateBinding ScrollViewer.ZoomMode}">
+                            <Grid x:Name="ScrollerContent">
+                                <Border x:Name="RefreshIndicator" VerticalAlignment="Top">
+                                    <Grid>
+                                        <TextBlock x:Name="DefaultIndicatorContent" HorizontalAlignment="Center"   FontSize="16" Text="" Margin="0,0,0,10"></TextBlock>
+                                        <ContentPresenter Content="{TemplateBinding RefreshIndicatorContent}"></ContentPresenter>
+                                    </Grid>
+                                    <Border.RenderTransform>
+                                        <CompositeTransform x:Name="RefreshIndicatorTransform"></CompositeTransform>
+                                    </Border.RenderTransform>
+                                </Border>
+                                <ItemsPresenter FooterTransitions="{TemplateBinding FooterTransitions}" 
+                                                FooterTemplate="{TemplateBinding FooterTemplate}" 
+                                                Footer="{TemplateBinding Footer}" 
+                                                HeaderTemplate="{TemplateBinding HeaderTemplate}" 
+                                                Header="{TemplateBinding Header}" 
+                                                HeaderTransitions="{TemplateBinding HeaderTransitions}" 
+                                                Padding="{TemplateBinding Padding}"
+                                                x:Name="ItemsPresenter">
+                                    <ItemsPresenter.RenderTransform>
+                                        <CompositeTransform x:Name="ContentTransform" TranslateY="0"></CompositeTransform>
+                                    </ItemsPresenter.RenderTransform>
+                                </ItemsPresenter>
+                            </Grid>
+                        </ScrollViewer>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

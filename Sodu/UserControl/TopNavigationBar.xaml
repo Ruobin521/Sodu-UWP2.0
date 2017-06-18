@@ -1,0 +1,27 @@
+﻿<UserControl
+    x:Class="Sodu.UserControl.TopNavigationBar"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Sodu.UserControl"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Height="44"
+    d:DesignWidth="400"
+    x:Name="root"  >
+
+    <Grid Background="{StaticResource AppThemeColor}" BorderThickness="0" >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Text="{Binding Title,ElementName=root}" Foreground="White" FontSize="18" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,5"></TextBlock>
+        <AppBarButton Grid.Column="2" Icon="Refresh" Foreground="White" Command="{Binding RefreshCommand ,ElementName=root}" ></AppBarButton>
+        <AppBarButton Grid.Column="0" Icon="Find" Foreground="White" Command="{Binding SearchCommand,ElementName=root}" RenderTransformOrigin="0.5,0.5" >
+            <AppBarButton.RenderTransform>
+                <CompositeTransform Rotation="0"/>
+            </AppBarButton.RenderTransform>
+        </AppBarButton>
+    </Grid>
+</UserControl>

@@ -1,0 +1,41 @@
+﻿<Page
+    x:Class="Sodu.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Sodu"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:control="using:Sodu.Control"
+    DataContext="{Binding  Instance.Main,Source={StaticResource Locator}}"
+    mc:Ignorable="d">
+
+    <Grid  Background="{StaticResource AppBackColor}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="1"/>
+            <RowDefinition Height="55"/>
+        </Grid.RowDefinitions>
+
+        <ContentControl   Grid.Row="0"  Content="{Binding CurrentContent}"  HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"></ContentControl>
+        <Border Grid.Row="1" BorderThickness="1" BorderBrush="DarkGray" Opacity="0.5"></Border>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{Binding  LoginButtonLength}" />
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <control:TabbarButton  Grid.Column="0" DataContext="{Binding TabbarItemList[0]}" CommandParameter="{Binding Index}" Command="{Binding Instance.Main.TabSwitchCommand,Source={StaticResource Locator}}"  IsSelectedItem="{Binding IsSelected}"  Label="{Binding Title}"  Content="{Binding PathData}"  />
+
+            <control:TabbarButton  Grid.Column="1" DataContext="{Binding TabbarItemList[1]}" CommandParameter="{Binding Index}" Command="{Binding Instance.Main.TabSwitchCommand,Source={StaticResource Locator}}"  IsSelectedItem="{Binding IsSelected}"     Label="{Binding Title}"   Content="{Binding PathData}"  />
+
+            <control:TabbarButton  Grid.Column="2" DataContext="{Binding TabbarItemList[2]}" CommandParameter="{Binding Index}" Command="{Binding Instance.Main.TabSwitchCommand,Source={StaticResource Locator}}"  IsSelectedItem="{Binding IsSelected}"    Label="{Binding Title}"  Content="{Binding PathData}"  />
+
+            <control:TabbarButton  Grid.Column="3" DataContext="{Binding TabbarItemList[3]}" CommandParameter="{Binding Index}" Command="{Binding Instance.Main.TabSwitchCommand,Source={StaticResource Locator}}"  IsSelectedItem="{Binding IsSelected}"  Label="{Binding Title}"  Content="{Binding PathData}"  />
+
+            <control:TabbarButton  Grid.Column="4" DataContext="{Binding TabbarItemList[4]}" CommandParameter="{Binding Index}" Command="{Binding Instance.Main.TabSwitchCommand,Source={StaticResource Locator}}"  IsSelectedItem="{Binding IsSelected}"  Label="{Binding Title}"   Content="{Binding PathData}"/>
+        </Grid>
+    </Grid>
+</Page>
