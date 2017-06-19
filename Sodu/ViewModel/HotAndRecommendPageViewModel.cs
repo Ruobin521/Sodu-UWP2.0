@@ -12,6 +12,12 @@ namespace Sodu.ViewModel
         public HotAndRecommendPageViewModel()
         {
             Title = "热门推荐";
+
+        }
+
+
+        public override void LoadData()
+        {
             if (Books == null || Books.Count == 0)
             {
                 GetData();

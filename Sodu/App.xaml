@@ -4,12 +4,15 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Sodu"
     xmlns:viewModel="using:Sodu.ViewModel"
+    xmlns:converter="using:Sodu.Converter"
     RequestedTheme="Light">
     <Application.Resources>
         <ResourceDictionary>
             <viewModel:ViewModelInstance  x:Key="Locator"/>
+            <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"></converter:BooleanToVisibilityConverter>
             <SolidColorBrush x:Key="AppThemeColor" Color="#FF007AFF"></SolidColorBrush>
             <SolidColorBrush x:Key="AppBackColor" Color="#FFEFEFF4"></SolidColorBrush>
+            <SolidColorBrush x:Key="AppTextColor" Color="#FF515151"></SolidColorBrush>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Sodu.Control/Style/CustomControlStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>

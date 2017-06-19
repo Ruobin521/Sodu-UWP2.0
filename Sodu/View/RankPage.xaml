@@ -1,4 +1,4 @@
-﻿<UserControl
+﻿<local:BaseListUserControl
     x:Class="Sodu.View.RankPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -15,7 +15,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <userControl:TopNavigationBar Grid.Row="0" Title="{Binding Title}"  SearchCommand="{Binding SearchCommand}" RefreshCommand="{Binding RefreshCommand}"></userControl:TopNavigationBar>
-        <control:PullToRefreshListView   Grid.Row="1"   RefreshCommand="{Binding RefreshCommand}" RequestCommand="{Binding PullToLoadCommand}"  ItemContainerStyle="{ StaticResource  CustomListViewItemStyle}"   Margin="0,0,0,0"   ItemsSource="{Binding  Books}"      HorizontalAlignment="Stretch" Background="Transparent">
+        <control:PullToRefreshListView x:Name="BookListView"  Grid.Row="1"   RefreshCommand="{Binding RefreshCommand}" RequestCommand="{Binding PullToLoadCommand}"  ItemContainerStyle="{ StaticResource  CustomListViewItemStyle}"   Margin="0,0,0,0"   ItemsSource="{Binding  Books}"      HorizontalAlignment="Stretch" Background="Transparent">
             <control:PullToRefreshListView.ItemTemplate>
                 <DataTemplate>
                     <userControl:RankListItem   DataContext="{Binding}"  Command="{Binding  Instance.Rank.ItemClickCommand,Source={ StaticResource  Locator}}" CommandParameter="{Binding}"/>
@@ -23,6 +23,6 @@
             </control:PullToRefreshListView.ItemTemplate>
         </control:PullToRefreshListView >
 
-        <control:LoadingControl IsActive="{Binding IsLoading}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="140,232.333,140,280" Grid.Row="1"></control:LoadingControl>
+        <control:LoadingControl IsActive="{Binding IsLoading}" Grid.Row="1"></control:LoadingControl>
     </Grid>
-</UserControl>
+</local:BaseListUserControl>

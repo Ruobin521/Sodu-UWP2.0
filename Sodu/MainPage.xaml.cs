@@ -31,12 +31,10 @@ namespace Sodu
 
             Loaded += (sender, e) =>
             {
-                //if (((MainViewModel)DataContext).ContentFrame == null)
-                //{
-                //    ((MainViewModel)DataContext).ContentFrame = MainFrame;
-                //}
-
-                ((MainViewModel)DataContext).SwitchTab(((MainViewModel)DataContext).IsLogin ? 0 : 1);
+                if (((MainViewModel)DataContext).CurrentContent == null)
+                {
+                    ((MainViewModel)DataContext).SwitchTab(((MainViewModel)DataContext).IsLogin ? 0 : 1);
+                }
             };
         }
     }

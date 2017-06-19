@@ -1,13 +1,18 @@
 ﻿using System;
 using GalaSoft.MvvmLight;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.Web.Http;
+using Windows.Web.Http.Filters;
 using GalaSoft.MvvmLight.Command;
 using Sodu.Core.Entity;
 using Sodu.Core.HtmlService;
+using Sodu.Service;
 using Sodu.View;
 
 namespace Sodu.ViewModel
@@ -19,19 +24,23 @@ namespace Sodu.ViewModel
 
         public Frame ContentFrame { get; set; }
 
-        private bool _isLogin;
+        private bool _hasShow = false;
 
         /// <summary>
         /// 是否登陆
         /// </summary>
+
+        private bool _isLogin;
         public bool IsLogin
         {
-            get { return _isLogin; }
+            get
+            {
+                return _isLogin;
+            }
             set
             {
-                _isLogin = value;
-
-                OnLoginAction(value);
+                Set(ref _isLogin, value);
+                LoginButtonLength = IsLogin ? new GridLength(1, GridUnitType.Star) : new GridLength(0);
             }
         }
 
@@ -40,7 +49,6 @@ namespace Sodu.ViewModel
         {
             get
             {
-                _loginButtonLength = IsLogin ? new GridLength(1, GridUnitType.Star) : new GridLength(0);
                 return _loginButtonLength;
             }
             set
@@ -55,13 +63,6 @@ namespace Sodu.ViewModel
         {
             get
             {
-                if (_tabbarItemList != null)
-                {
-                    return _tabbarItemList;
-                }
-
-                _tabbarItemList = new ObservableCollection<TabbarItem>();
-                InitTabbar();
                 return _tabbarItemList;
             }
             set { Set(ref _tabbarItemList, value); }
@@ -81,7 +82,6 @@ namespace Sodu.ViewModel
             set { Set(ref _currentContent, value); }
         }
         #endregion
-
 
         #region 命令
 
@@ -106,11 +106,15 @@ namespace Sodu.ViewModel
 
         public MainViewModel()
         {
-
+            IsLogin = CookieHelper.CheckLogin();
+            InitTabbar();
         }
+
         private void InitTabbar()
         {
-            TabbarItemList.Add(new TabbarItem()
+            _tabbarItemList = new ObservableCollection<TabbarItem>();
+
+            _tabbarItemList.Add(new TabbarItem()
             {
                 Index = 0,
                 Title = "在线书架",
@@ -133,7 +137,6 @@ namespace Sodu.ViewModel
                 PathData = "M890.05557 543.793627c-44.169482-106.755749-49.50442-196.2927-32.663618-266.22388 1.74898-7.259915 3.595958-13.549841 5.462936-18.997777 0.904989-2.639969 3.047964-8.234903 3.304962-9.107893l14.725827-49.914415-47.826439 20.516759c-0.955989 0.409995-2.444971 1.035988-5.635934 2.379972a316.056296 316.056296 0 0 0-7.557912 3.305961c-6.577923 2.986965-12.81985 6.153928-19.170775 9.831885-16.607805 9.616887-32.211623 21.755745-46.834451 37.379562-26.232693 28.024672-47.335445 65.266235-62.080273 113.318672-16.739804 54.555361-20.265763 98.251849-18.77678 161.771104 0.472994 20.204763 0.458995 25.741698-0.164998 29.615653 0.939989-5.831932 11.615864-15.35382 23.264728-10.871872-3.047964-1.171986-10.409878-9.816885-19.790769-32.171623-15.762815-37.56056-29.479655-98.800842-39.496537-187.979797-11.370867-101.237814-6.712921-185.375828 7.829909-251.986047 3.029964-13.881837 6.252927-25.742698 9.439889-35.565584 1.827979-5.632934 3.167963-9.189892 3.792955-10.649875L678.643047 0l-50.400409 15.421819c-10.833873 3.314961-28.297668 11.05587-50.138413 24.73271-35.556583 22.266739-70.904169 53.459374-103.703784 95.006887-26.802686 33.953602-50.788405 73.535138-71.280165 119.133604-24.210716 53.872369-40.11553 98.901841-49.960415 138.462377-3.883954 15.604817-6.724921 29.913649-8.963895 44.312481a624.352683 624.352683 0 0 0-2.389972 17.012801c-0.300996 2.357972-1.446983 11.581864-1.729979 13.765838-2.477971 19.112776-4.22595 23.792721-10.838873 29.832651 6.84692-6.253927 13.997836-5.784932 17.372796-3.773956-1.755979-1.045988-5.009941-4.406948-8.615899-9.799885-10.960872-16.391808-20.011765-42.995496-24.300715-77.452092-2.439971-19.60177-3.486959-49.745417-3.320961-87.203979 0.109999-24.876708 0.742991-51.576396 1.72998-78.43208 0.380996-10.414878 0.790991-20.126764 1.199985-28.870662 0.244997-5.229939 0.434995-8.963895 0.541994-10.933872l3.712957-68.395198-46.193459 50.574407c-0.89299 0.976989-2.507971 2.766968-4.741944 5.277938-3.690957 4.146951-7.794909 8.831897-12.210857 13.964836-12.619852 14.666828-25.243704 30.019648-37.066566 45.356469a755.801143 755.801143 0 0 0-15.889814 21.33975c-25.433702 35.516584-44.833475 71.260165-63.327258 114.507658-47.280446 110.558704-61.145283 212.50351-38.860544 324.016203 27.545677 137.839385 89.289954 225.777354 179.565895 272.821803 65.360234 34.061601 130.005476 43.309492 229.107316 43.309492 17.772792 0 50.036414-2.432971 82.916028-7.537912 50.294411-7.808908 96.638868-20.672758 135.204415-39.870532 12.092858-6.019929 17.015801-20.701757 10.995872-32.794616-6.019929-12.091858-20.701757-17.015801-32.793616-10.995871-33.409608 16.629805-75.171119 28.222669-120.911583 35.324586-30.367644 4.714945-60.123295 6.957918-75.410116 6.957918-91.777924 0-150.005242-8.329902-206.50258-37.771557-76.605102-39.921532-129.456483-115.19365-154.204193-239.029199-20.232763-101.243814-7.71491-193.281735 35.869579-295.196541 17.182799-40.180529 34.919591-72.862146 58.121319-105.261766a707.242712 707.242712 0 0 1 14.859826-19.953766c11.236868-14.575829 23.319727-29.270657 35.406585-43.319493 7.242915-8.417901 12.849849-14.718828 15.989813-18.155787l-42.481502-17.820791c-0.112999 2.087976-0.308996 5.94093-0.559994 11.297868-0.416995 8.901896-0.83299 18.77778-1.221986 29.363656-1.003988 27.34268-1.647981 54.548361-1.760979 80.009062-0.174998 39.403538 0.930989 71.268165 3.694957 93.465905 10.909872 87.626973 57.477326 157.270157 97.075862 121.098581 17.115799-15.633817 22.529736-30.132647 26.357691-59.660301 9.34889-72.117155 18.74878-109.888712 59.152307-199.790659 18.849779-41.944508 40.746523-78.080085 65.057238-108.875724 29.239657-37.038566 60.360293-64.501244 91.27193-83.859017 10.628875-6.655922 20.403761-11.813862 29.05666-15.649817 4.897943-2.169975 8.133905-3.367961 9.430889-3.764956L612.918817 29.173658c-4.26095 9.941883-10.23288 28.346668-16.063811 55.052355-15.669816 71.769159-20.623758 161.27211-8.649899 267.879861 19.089776 169.946008 50.612407 245.061128 90.329941 260.344949 22.764733 8.759897 39.194541-5.893931 42.595501-26.998684 1.342984-8.329902 1.355984-13.721839 0.774991-38.543548-1.374984-58.706312 1.782979-97.865853 16.637805-146.277286 12.605852-41.079519 29.997648-71.771159 51.029402-94.240896 19.65477-20.997754 32.149623-28.233669 62.771265-41.369515l-9.642887-22.477736-23.457726-6.919919c2.988965-10.131881-5.796932 15.499818-9.407889 30.493642-19.190775 79.690066-13.227845 179.764893 35.019589 296.378527 38.246552 92.440917 29.728652 207.430569-20.855755 272.096812-8.322902 10.639875-6.443924 26.011695 4.194951 34.334597 10.639875 8.321902 26.011695 6.443924 34.333597-4.195951 62.229271-79.554068 72.126155-213.142502 27.527678-320.936239z",
                 Title = "热门推荐",
                 ContentElement = new HotAndRecommandPage()
-
             });
 
             _tabbarItemList.Add(new TabbarItem()
@@ -153,38 +156,54 @@ namespace Sodu.ViewModel
                 ContentElement = new SettingPage()
             });
         }
-        //private void ClearHistory()
-        //{
-        //    if (!ContentFrame.CanGoBack)
-        //    {
-        //        return;
-        //    }
-        //    ContentFrame.BackStack.Clear();
-        //    ContentFrame.ForwardStack.Clear();
-        //}
-        public void SwitchTab(int index)
+
+        public async void SwitchTab(int index)
         {
-            if (index == CurrentIndex &&  CurrentContent != null)
+            var item = TabbarItemList[index];
+
+            if (index == CurrentIndex && CurrentContent != null)
             {
+                ToTopOrBottom(item.ContentElement as BaseListUserControl);
                 return;
             }
             CurrentIndex = index;
-            var item = TabbarItemList[index];
             foreach (var temp in TabbarItemList)
             {
                 temp.IsSelected = temp.Index == index;
             }
             CurrentContent = item.ContentElement;
+
+            (item.ContentElement.DataContext as BasePageViewModel)?.LoadData();
+
+            if (index == 4 && !IsLogin && !_hasShow)
+            {
+                _hasShow = true;
+                await Task.Delay(500);
+                NavigationService.NavigateTo(typeof(LoginPage));
+            }
         }
 
-        private void OnLoginAction(bool value)
+        public void SetLoginAction(bool value)
         {
-            LoginButtonLength = value ? new GridLength(1, GridUnitType.Star) : new GridLength(0);
-
-            if (CurrentIndex == 0)
+            IsLogin = true;
+            if (value)
             {
-                SwitchTab(1);
+                ViewModelInstance.Instance.OnLineBookShelf.GetData();
             }
+        }
+
+
+        private void CheckLogin()
+        {
+            var filter = new HttpBaseProtocolFilter();
+            var cookieCollection = filter.CookieManager.GetCookies(new Uri(WebPageUrl.HomePage));
+            var cookieItem = cookieCollection.FirstOrDefault(p => p.Name.Equals("sodu_user"));
+            IsLogin = cookieItem != null;
+        }
+
+        private void ToTopOrBottom(BaseListUserControl control)
+        {
+            control?.GoTopOrBottom();
         }
         #endregion
     }

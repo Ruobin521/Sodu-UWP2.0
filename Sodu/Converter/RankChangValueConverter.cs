@@ -17,7 +17,7 @@ namespace Sodu.Converter
                 return null;
             }
             var change = value.ToString();
-            return change.StartsWith("-") ? new BitmapImage(new Uri("ms-appx:Assets/down.png", UriKind.Absolute)) : new BitmapImage(new Uri("ms-appx:Assets/up.png", UriKind.Absolute));
+            return change.StartsWith("-") ? new BitmapImage(new Uri("ms-appx:Assets/Icon/down.png", UriKind.Absolute)) : new BitmapImage(new Uri("ms-appx:Assets/Icon/up.png", UriKind.Absolute));
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

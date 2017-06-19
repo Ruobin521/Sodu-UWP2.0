@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 using GalaSoft.MvvmLight;
 
 namespace Sodu.Core.Entity
@@ -27,7 +28,7 @@ namespace Sodu.Core.Entity
             }
         }
         public string Title { get; set; }
-        public UIElement ContentElement { get; set; }
+        public UserControl ContentElement { get; set; }
 
     }
 }

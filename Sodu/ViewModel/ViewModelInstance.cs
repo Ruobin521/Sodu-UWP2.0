@@ -53,5 +53,25 @@ namespace Sodu.ViewModel
                 Set(ref _hotAndRecommend, value);
             }
         }
+
+        private OnlineBookShelfPageViewModel _onLineBookShelf;
+        public OnlineBookShelfPageViewModel OnLineBookShelf
+        {
+            get { return _onLineBookShelf ?? (_onLineBookShelf = new OnlineBookShelfPageViewModel()); }
+            set
+            {
+                Set(ref _onLineBookShelf, value);
+            }
+        }
+
+        private SettingPageViewModel _setting;
+        public SettingPageViewModel Setting
+        {
+            get { return _setting ?? (_setting = new SettingPageViewModel()); }
+            set
+            {
+                Set(ref _setting, value);
+            }
+        }
     }
 }

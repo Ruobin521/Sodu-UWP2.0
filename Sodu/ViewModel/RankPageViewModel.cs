@@ -14,6 +14,11 @@ namespace Sodu.ViewModel
         {
             PageCount = 8;
             Title = "排行榜";
+          
+        }
+
+        public override void LoadData()
+        {
             if (Books == null || Books.Count == 0)
             {
                 GetData(1);

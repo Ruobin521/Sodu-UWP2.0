@@ -15,5 +15,14 @@ namespace Sodu
         {
             ContentFrame.Navigate(type);
         }
+
+        public static void GoBack()
+        {
+            if (ContentFrame.CanGoBack)
+            {
+                ContentFrame.GoBack();
+            }
+
+        }
     }
 }

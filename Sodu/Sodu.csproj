@@ -11,8 +11,8 @@
     <AssemblyName>Sodu</AssemblyName>
     <DefaultLanguage>zh-CN</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion>10.0.14393.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.10586.0</TargetPlatformMinVersion>
+    <TargetPlatformVersion>10.0.10586.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.10240.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -97,12 +97,18 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Contants\ConstantValue.cs" />
+    <Compile Include="Converter\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converter\RankChangValueConverter.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="NavigationService.cs" />
+    <Compile Include="Service\CookieHelper.cs" />
+    <Compile Include="Service\NavigationService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\ToastHelper.cs" />
+    <Compile Include="UserControl\OnlineBookShelfItem.xaml.cs">
+      <DependentUpon>OnlineBookShelfItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControl\RankListItem.xaml.cs">
       <DependentUpon>RankListItem.xaml</DependentUpon>
     </Compile>
@@ -111,20 +117,30 @@
     </Compile>
     <Compile Include="ViewModel\BasePageViewModel.cs" />
     <Compile Include="ViewModel\HotAndRecommendPageViewModel.cs" />
+    <Compile Include="ViewModel\LoginViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\OnlineBookShelfPageViewModel.cs" />
     <Compile Include="ViewModel\RankPageViewModel.cs" />
+    <Compile Include="ViewModel\SettingPageViewModel.cs" />
     <Compile Include="ViewModel\ViewModelInstance.cs" />
+    <Compile Include="View\BaseListUserControl.cs" />
     <Compile Include="View\HotAndRecommandPage.xaml.cs">
       <DependentUpon>HotAndRecommandPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\LocalBookShelf.xaml.cs">
       <DependentUpon>LocalBookShelf.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\LoginPage.xaml.cs">
+      <DependentUpon>LoginPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\OnlineBookShelfPage.xaml.cs">
       <DependentUpon>OnlineBookShelfPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\RankPage.xaml.cs">
       <DependentUpon>RankPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\RegisterPage.xaml.cs">
+      <DependentUpon>RegisterPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\SearchPage.xaml.cs">
       <DependentUpon>SearchPage.xaml</DependentUpon>
@@ -143,8 +159,34 @@
     <None Include="Sodu_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\down.png" />
-    <Content Include="Assets\up.png" />
+    <Content Include="Assets\BadgeLogo.scale-400.png" />
+    <Content Include="Assets\Icon\bookshelf1.png" />
+    <Content Include="Assets\Icon\bookshelf2.png" />
+    <Content Include="Assets\Icon\down.png" />
+    <Content Include="Assets\Icon\head.png" />
+    <Content Include="Assets\Icon\liuliang.png" />
+    <Content Include="Assets\Icon\lock%403x.png" />
+    <Content Include="Assets\Icon\mzsm%403x.png" />
+    <Content Include="Assets\Icon\new_blue%403x.png" />
+    <Content Include="Assets\Icon\up.png" />
+    <Content Include="Assets\Icon\user%403x.png" />
+    <Content Include="Assets\Icon\wwan%403x.png" />
+    <Content Include="Assets\Icon\good.png" />
+    <Content Include="Assets\Icon\help.png" />
+    <Content Include="Assets\SplashScreen.scale-100.png" />
+    <Content Include="Assets\SplashScreen.scale-125.png" />
+    <Content Include="Assets\SplashScreen.scale-150.png" />
+    <Content Include="Assets\SplashScreen.scale-400.png" />
+    <Content Include="Assets\Square150x150Logo.scale-100.png" />
+    <Content Include="Assets\Square310x310Logo.scale-100.png" />
+    <Content Include="Assets\Square44x44Logo.scale-100.png" />
+    <Content Include="Assets\Square44x44Logo.scale-125.png" />
+    <Content Include="Assets\Square44x44Logo.scale-150.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-24.png" />
+    <Content Include="Assets\Square71x71Logo.scale-100.png" />
+    <Content Include="Assets\StoreLogo.scale-100.png" />
+    <Content Include="Assets\StoreLogo.scale-125.png" />
+    <Content Include="Assets\StoreLogo.scale-150.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -160,6 +202,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="MainPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControl\OnlineBookShelfItem.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -179,11 +225,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\LoginPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\OnlineBookShelfPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\RankPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\RegisterPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -211,11 +265,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <SDKReference Include="WindowsMobile, Version=10.0.14393.0">
+    <SDKReference Include="WindowsMobile, Version=10.0.10586.0">
       <Name>Windows Mobile Extensions for the UWP</Name>
     </SDKReference>
   </ItemGroup>
-  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

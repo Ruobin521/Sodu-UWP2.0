@@ -1,19 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
-using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Windows.UI.Core;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 using Windows.Web.Http;
-using Windows.Web.Http.Filters;
 using Windows.Web.Http.Headers;
 
 namespace Sodu.Core.Util
@@ -23,14 +17,20 @@ namespace Sodu.Core.Util
 
         public CancellationTokenSource Cts = new CancellationTokenSource();
 
-        private HttpWebRequest _request;
+        HttpWebRequest Request;
 
-        //private readonly Encoding _defauleEncoding = Encoding.GetEncoding("gb2312");
+
+        Encoding DefauleEncoding = Encoding.GetEncoding("GB2312");
+        /// <summary>
+        /// 获取html代码
+        /// </summary>
+        public string Html = string.Empty;
 
         public HttpHelper()
         {
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
         }
+
 
         public async Task<string> WebRequestGet(string url, bool isAddTime = false, Encoding encoding = null)
         {
@@ -41,20 +41,20 @@ namespace Sodu.Core.Util
                 {
                     url = url + "?time=" + GetTimeStamp();
                 }
-                _request = WebRequest.CreateHttp(new Uri(url)); //创建WebRequest对象              
-                _request.Method = "GET";    //设置请求方式为GET : 
-                _request.Headers["Timeout"] = "15000";
-                _request.Headers[HttpRequestHeader.Accept] = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8";
-                _request.Headers[HttpRequestHeader.UserAgent] = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.97 Safari/537.36";
-                _request.Headers[HttpRequestHeader.AcceptEncoding] = "gzip, deflate, sdch"; //设置接收的编码 可以接受 gzip
-                _request.Headers[HttpRequestHeader.AcceptLanguage] = "zh-CN,zh;q=0.8";
-                _request.Headers[HttpRequestHeader.CacheControl] = "max-age=0";
-                _request.Headers[HttpRequestHeader.Connection] = "keep-alive";
-                _request.ContentType = "application/x-www-form-urlencoded";
-                _request.Proxy = null;
-                _request.ContinueTimeout = 350;
+                Request = WebRequest.CreateHttp(new Uri(url)); //创建WebRequest对象              
+                Request.Method = "GET";    //设置请求方式为GET : 
+                Request.Headers["Timeout"] = "15000";
+                Request.Headers[HttpRequestHeader.Accept] = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8";
+                Request.Headers[HttpRequestHeader.UserAgent] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393";
+                Request.Headers[HttpRequestHeader.AcceptEncoding] = "gzip, deflate"; //设置接收的编码 可以接受 gzip
+                Request.Headers[HttpRequestHeader.AcceptLanguage] = "zh-CN,zh;q=0.8";
+                Request.Headers[HttpRequestHeader.CacheControl] = "max-age=0";
+                Request.Headers[HttpRequestHeader.Connection] = "keep-alive";
+                Request.ContentType = "application/x-www-form-urlencoded";
+                Request.Proxy = null;
+                Request.ContinueTimeout = 350;
 
-                html = await GetReponseHtml(_request, encoding);
+                html = await GetReponseHtml(Request, encoding);
 
             }
             catch (Exception)
@@ -66,23 +66,23 @@ namespace Sodu.Core.Util
 
         public async Task<string> WebRequestPost(string url, string postData)
         {
-            _request = WebRequest.CreateHttp(new Uri(url)); //创建WebRequest对象              
-            _request.Method = "POST";    //设置请求方式为GET
-            _request.ContentType = "application/x-www-form-urlencoded";
+            Request = HttpWebRequest.CreateHttp(new Uri(url)); //创建WebRequest对象              
+            Request.Method = "POST";    //设置请求方式为GET
+            Request.ContentType = "application/x-www-form-urlencoded";
 
-            _request.Headers[HttpRequestHeader.Accept] = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8";
-            _request.Headers[HttpRequestHeader.UserAgent] = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.97 Safari/537.36";
-            _request.Headers[HttpRequestHeader.AcceptEncoding] = "gzip, deflate"; //设置接收的编码 可以接受 gzip
-            _request.Proxy = null;
+            Request.Headers[HttpRequestHeader.Accept] = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8";
+            Request.Headers[HttpRequestHeader.UserAgent] = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.97 Safari/537.36";
+            Request.Headers[HttpRequestHeader.AcceptEncoding] = "gzip, deflate"; //设置接收的编码 可以接受 gzip
+            Request.Proxy = null;
 
 
-            using (Stream str = await _request.GetRequestStreamAsync())
+            using (Stream str = await Request.GetRequestStreamAsync())
             {
                 string content = postData;
                 byte[] data = Encoding.UTF8.GetBytes(content);
                 str.Write(data, 0, data.Length);
             }
-            string html = await GetReponseHtml(_request, Encoding.GetEncoding("GB2312"));
+            string html = await GetReponseHtml(Request);
             return html;
 
         }
@@ -114,7 +114,7 @@ namespace Sodu.Core.Util
                 }
                 var bytes = ms.ToArray();
 
-                encoding = encoding ?? GetEncoding(bytes, response.Headers[HttpRequestHeader.ContentType]);
+                encoding = encoding == null ? GetEncoding(bytes, response.Headers[HttpRequestHeader.ContentType]) : encoding;
                 html = encoding.GetString(bytes);
                 await stream.FlushAsync();
             }
@@ -124,7 +124,6 @@ namespace Sodu.Core.Util
             }
             return html;
         }
-
 
         public Encoding GetEncoding(byte[] bytes, string charSet)
         {
@@ -136,21 +135,23 @@ namespace Sodu.Core.Util
                .Groups[1].Value;
                 return !string.IsNullOrEmpty(strCharSet) ? Encoding.GetEncoding(strCharSet) : Encoding.UTF8;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine(ex.Message);
+
             }
             return Encoding.UTF8;
         }
+
+
         /// <summary>
         /// Http Get Request
         /// </summary>
-        /// <param name="Url"></param>
-        /// <param name="encode"></param>
+        /// <param name="url"></param>
+        /// <param name="isAddTime"></param>
         /// <returns></returns>
-        public async Task<string> HttpClientGetRequest2(string url, bool isAddTime = true, HttpCookie cookie = null, Encoding encode = null)
+        public async Task<string> HttpClientGetRequest(string url, bool isAddTime = true)
         {
-            string html = string.Empty;
+            string html;
             try
             {
                 Cts = new CancellationTokenSource();
@@ -164,18 +165,7 @@ namespace Sodu.Core.Util
                 {
                     HttpResponseMessage response = await httpclient.GetAsync(new Uri(url)).AsTask(Cts.Token);
                     Cts.Token.ThrowIfCancellationRequested();
-                    using (GZipStream stream = new GZipStream(
-
-                  (await response.Content.ReadAsInputStreamAsync()).AsStreamForRead(), CompressionMode.Decompress))
-                    {
-                        using (StreamReader reader = new StreamReader(stream))
-                        {
-                            html = reader.ReadToEnd();
-                            reader.Dispose();
-                            stream.Dispose();
-                        }
-
-                    }
+                    html = response.Content.ToString();
                 }
                 catch (TaskCanceledException)
                 {
@@ -203,7 +193,7 @@ namespace Sodu.Core.Util
 
         public async Task<string> HttpClientPostRequest(string url, string postData, Encoding encode = null)
         {
-            string html;
+            string html = string.Empty;
             try
             {
                 HttpClient httpclient = new HttpClient();
@@ -225,7 +215,7 @@ namespace Sodu.Core.Util
                 Cts.Token.ThrowIfCancellationRequested();
                 using (Stream responseStream = (await response.Content.ReadAsInputStreamAsync()).AsStreamForRead())
                 {
-                    using (var reader = new StreamReader(responseStream, Encoding.GetEncoding("GB2312")))
+                    using (var reader = new StreamReader(responseStream, DefauleEncoding))
                     {
                         html = reader.ReadToEnd();
                         reader.Dispose();
@@ -240,15 +230,26 @@ namespace Sodu.Core.Util
             return html;
         }
 
+        public void HttpClientCancleRequest2()
+        {
+            if (Cts.Token.CanBeCanceled)
+            {
+                this.Cts.Cancel();
+            }
+        }
+
         public void HttpClientCancleRequest()
         {
             try
             {
-                _request?.Abort();
+                if (Request != null)
+                {
+                    Request.Abort();
+                }
             }
             catch (Exception)
             {
-                //Ignore
+
             }
 
         }

@@ -135,6 +135,24 @@ namespace Sodu.Core.Entity
             }
         }
 
+        private bool _isNew;
+        /// <summary>
+        ///是否有更新
+        /// </summary>
+        [Ignore]
+        public bool IsNew
+        {
+            get
+            {
+                return _isNew;
+            }
+            set
+            {
+                Set(ref _isNew, value);
+            }
+        }
+
+
         /// <summary>   
         ///更新时间
         /// </summary>

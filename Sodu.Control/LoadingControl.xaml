@@ -8,8 +8,9 @@
     mc:Ignorable="d"
     d:DesignHeight="80"
     d:DesignWidth="80"
+    VerticalAlignment="Center"
+    HorizontalAlignment="Center"
     x:Name="root">
-
     <Grid>
         <ProgressRing HorizontalAlignment="Center"    VerticalAlignment="Center" Height="80" Width="80"   IsActive="{Binding  Path=IsActive,ElementName=root,Mode=TwoWay}" Foreground="#FF3388FF"  FontSize="1"  CharacterSpacing="0"   />
     </Grid>

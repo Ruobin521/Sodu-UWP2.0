@@ -16,7 +16,7 @@ namespace Sodu.ViewModel
 {
     public class BasePageViewModel : ViewModelBase
     {
-        private HttpHelper Http { get; set; }
+        public HttpHelper Http { get; set; }
 
         private ObservableCollection<Book> _books;
         /// <summary>
@@ -104,6 +104,8 @@ namespace Sodu.ViewModel
         public ICommand ItemClickCommand => _itemClickCommand ?? (_itemClickCommand = new RelayCommand<object>(OnItemClickCommand));
         public virtual void OnItemClickCommand(object obj)
         {
+
+
         }
 
         /// <summary>
@@ -116,8 +118,6 @@ namespace Sodu.ViewModel
             NavigationService.NavigateTo(typeof(SearchPage));
         }
 
-
-
         internal async Task<string> GetHtmlData(string url)
         {
             string html = null;
@@ -127,14 +127,12 @@ namespace Sodu.ViewModel
             });
             try
             {
-                if (Http == null)
-                {
-                    Http = new HttpHelper();
-                }
+                Http = new HttpHelper();
                 html = await Http.WebRequestGet(url, true);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 html = null;
             }
             finally
@@ -145,6 +143,44 @@ namespace Sodu.ViewModel
                 });
             }
             return html;
+        }
+
+        internal async Task<string> GetHtmlData2(string url)
+        {
+            string html = null;
+            DispatcherHelper.CheckBeginInvokeOnUI(() =>
+            {
+                IsLoading = true;
+            });
+            try
+            {
+                Http = new HttpHelper();
+                html = await Http.HttpClientGetRequest(url, true);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                html = null;
+            }
+            finally
+            {
+                DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                {
+                    IsLoading = false;
+                });
+            }
+            return html;
+        }
+
+
+
+        /// <summary>
+        /// 加载数据
+        /// </summary>
+        public virtual void LoadData()
+        {
+
+
         }
     }
 }

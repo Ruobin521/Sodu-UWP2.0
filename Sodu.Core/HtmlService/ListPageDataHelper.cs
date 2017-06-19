@@ -10,6 +10,10 @@ namespace Sodu.Core.HtmlService
     {
         public static List<Book> GetHotAndRecommendList(string html)
         {
+            if (string.IsNullOrEmpty(html))
+            {
+                return null;
+            }
             var list = new List<Book>();
             try
             {
@@ -70,9 +74,11 @@ namespace Sodu.Core.HtmlService
         }
         public static ObservableCollection<Book> GetRankListFromHtml(string html)
         {
+            if (string.IsNullOrEmpty(html))
+            {
+                return null;
+            }
             html = html.Replace("\r", "").Replace("\t", "").Replace("\n", "");
-
-
             var matches = Regex.Matches(html, "<div class=\"main-html\".*?<div style=\"width:88px;float:left;\">.*?</div>");
             if (matches.Count == 0)
             {
@@ -111,6 +117,8 @@ namespace Sodu.Core.HtmlService
                     {
                         tEntity.RankChangeValue = "-";
                     }
+                    tEntity.NewestChapterName = DealWithChapterName(tEntity.NewestChapterName);
+                    tEntity.LastReadChapterName = DealWithChapterName(tEntity.LastReadChapterName);
 
                     list.Add(tEntity);
                 }
@@ -121,9 +129,13 @@ namespace Sodu.Core.HtmlService
             }
             return list;
         }
-
         public static List<Book> GetUpdatePageBookList(string html)
         {
+            if (string.IsNullOrEmpty(html))
+            {
+                return null;
+            }
+
             ObservableCollection<Book>[] listArray = new ObservableCollection<Book>[3];
             html = html.Replace("\r", "").Replace("\t", "").Replace("\n", "");
 
@@ -136,9 +148,12 @@ namespace Sodu.Core.HtmlService
             var updateList = CommonGetEntityList(html);
             return updateList;
         }
-
         public static ObservableCollection<Book> GetBookShelftListFromHtml(string html)
         {
+            if (string.IsNullOrEmpty(html))
+            {
+                return null;
+            }
             html = html.Replace("\r", "").Replace("\t", "").Replace("\n", "");
 
             //个人书架
@@ -161,9 +176,14 @@ namespace Sodu.Core.HtmlService
                     MatchCollection divmatches = Regex.Matches(matches[i].ToString(), "<div.*?</div>");
                     t_entity.BookName = Regex.Replace(divmatches[0].ToString(), "<.*?>", "");
                     t_entity.NewestChapterName = Regex.Replace(divmatches[1].ToString(), "<.*?>", "");
+
                     t_entity.UpdateTime = Regex.Replace(divmatches[2].ToString(), "<.*?>", "");
                     t_entity.UpdateCatalogUrl = Regex.Match(divmatches[0].ToString(), "(?<=<a href=\").*?(?=\")").ToString();
                     t_entity.BookId = Regex.Match(divmatches[3].ToString(), "(?<=id=).*?(?=\")").ToString();
+
+                    t_entity.NewestChapterName = DealWithChapterName(t_entity.NewestChapterName);
+                    t_entity.LastReadChapterName = DealWithChapterName(t_entity.LastReadChapterName);
+
                     t_list.Add(t_entity);
                 }
                 catch
@@ -175,6 +195,11 @@ namespace Sodu.Core.HtmlService
         }
         public static List<Book> GetSearchResultkListFromHtml(string html)
         {
+            if (string.IsNullOrEmpty(html))
+            {
+                return null;
+            }
+
             html = html.Replace("\r", "").Replace("\t", "").Replace("\n", "");
             Match t_string = Regex.Match(html, "<form name=\"form2\".*?</form>");
 
@@ -185,10 +210,12 @@ namespace Sodu.Core.HtmlService
             var t_list = CommonGetEntityList(html);
             return t_list;
         }
-
-
         public static List<Book> CommonGetEntityList(string html)
         {
+            if (string.IsNullOrEmpty(html))
+            {
+                return null;
+            }
             var t_list = new List<Book>();
             MatchCollection matches = Regex.Matches(html, "<div class=\"main-html\".*?class=xt1.*?</div>");
             //MatchCollection matches = Regex.Matches(html, "<div style=\"width:188px;float:left;\">.*?</div></div>");
@@ -212,7 +239,8 @@ namespace Sodu.Core.HtmlService
                     t_entity.NewestChapterName = Regex.Replace(match.ToString(), "<.*?>", "");
                     Match match2 = Regex.Match(matches[i].ToString(), "(?<=<.*?class=xt1>).*?(?=</div>)");
                     t_entity.UpdateTime = match2.ToString();
-
+                    t_entity.NewestChapterName = DealWithChapterName(t_entity.NewestChapterName);
+                    t_entity.LastReadChapterName = DealWithChapterName(t_entity.LastReadChapterName);
                     t_list.Add(t_entity);
                 }
                 catch
@@ -224,10 +252,12 @@ namespace Sodu.Core.HtmlService
             }
             return t_list;
         }
-
-
         public static List<Book> GetBookUpdateChapterList(string html)
         {
+            if (string.IsNullOrEmpty(html))
+            {
+                return null;
+            }
             List<Book> list = new List<Book>();
             html = html.Replace("\r", "").Replace("\t", "").Replace("\n", "");
             MatchCollection matches = Regex.Matches(html, "<div class=\"main-html\".*?class=\"xt1.*?</div>");
@@ -251,12 +281,27 @@ namespace Sodu.Core.HtmlService
                 Match match2 = Regex.Match(item.ToString(), "(?<=<.*?class=\"xt1\">).*?(?=</div>)");
                 t_entity.UpdateTime = match2.ToString();
 
+                t_entity.NewestChapterName = DealWithChapterName(t_entity.NewestChapterName);
+                t_entity.LastReadChapterName = DealWithChapterName(t_entity.LastReadChapterName);
+
                 list.Add(t_entity);
             }
 
             return list;
 
         }
+
+        private static string DealWithChapterName(string chapterName)
+        {
+            if (string.IsNullOrEmpty(chapterName))
+            {
+                return chapterName;
+            }
+            chapterName = chapterName.Replace("【卓雅居全文字秒更】", "").Replace("target=_blank", "");
+
+            return chapterName;
+        }
+
 
     }
 }

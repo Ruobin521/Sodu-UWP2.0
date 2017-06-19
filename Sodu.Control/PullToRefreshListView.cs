@@ -38,7 +38,7 @@ namespace Sodu.Control
         // Transform used for moving the Refresh Indicator veticaly while overscrolling
         private CompositeTransform RefreshIndicatorTransform;
         // Main scrollviewer used by the listview
-        private ScrollViewer Scroller;
+        public ScrollViewer Scroller;
         // Transfrom used for moving the content when overscrolling
         private CompositeTransform ContentTransform;
         // Container for main content
@@ -176,30 +176,7 @@ namespace Sodu.Control
             return child;
         }
 
-
-
-        void RegisterRequestEvent()
-        {
-            if (_isHookedScrollEvent)
-            {
-                return;
-            }
-            if (Scroller != null)
-            {
-                _isHookedScrollEvent = true;
-
-                FrameworkElement element = VisualTreeHelper.GetChild(Scroller, 0) as FrameworkElement;
-                if (element != null)
-                {
-                    VisualStateGroup visualStateGroup = FindVisualState(element, "ScrollingIndicatorStates");
-                    if (visualStateGroup != null)
-                    {
-                        visualStateGroup.CurrentStateChanged -= VisualStateGroup_CurrentStateChanged;
-                        visualStateGroup.CurrentStateChanged += VisualStateGroup_CurrentStateChanged;
-                    }
-                }
-            }
-        }
+        
         /// <summary>
         /// 获取指定元素的指定视图状态组。
         /// </summary>

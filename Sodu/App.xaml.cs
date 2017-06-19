@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
@@ -39,6 +40,7 @@ namespace Sodu
             this.InitializeComponent();
             this.Suspending += OnSuspending;
 
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             this.UnhandledException += App_UnhandledException;
         }
 
