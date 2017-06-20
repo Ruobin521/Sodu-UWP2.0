@@ -176,6 +176,7 @@ namespace Sodu.Core.HtmlService
                     MatchCollection divmatches = Regex.Matches(matches[i].ToString(), "<div.*?</div>");
                     t_entity.BookName = Regex.Replace(divmatches[0].ToString(), "<.*?>", "");
                     t_entity.NewestChapterName = Regex.Replace(divmatches[1].ToString(), "<.*?>", "");
+                    t_entity.LastReadChapterName = Regex.Replace(divmatches[1].ToString(), "<.*?>", "");
 
                     t_entity.UpdateTime = Regex.Replace(divmatches[2].ToString(), "<.*?>", "");
                     t_entity.UpdateCatalogUrl = Regex.Match(divmatches[0].ToString(), "(?<=<a href=\").*?(?=\")").ToString();
@@ -207,7 +208,7 @@ namespace Sodu.Core.HtmlService
             {
                 html = html.Replace(t_string.ToString(), "");
             }
-            var t_list = CommonGetEntityList(html);
+            var t_list = GetSearchEntityList(html);
             return t_list;
         }
         public static List<Book> CommonGetEntityList(string html)
@@ -247,6 +248,51 @@ namespace Sodu.Core.HtmlService
                 {
                     t_list = null;
                     return t_list;
+                }
+
+            }
+            return t_list;
+        }
+
+
+        public static List<Book> GetSearchEntityList(string html)
+        {
+            if (string.IsNullOrEmpty(html))
+            {
+                return null;
+            }
+            var t_list = new List<Book>();
+            MatchCollection matches = Regex.Matches(html, "<div class=\"main-html\".*?</div></div>");
+            //MatchCollection matches = Regex.Matches(html, "<div style=\"width:188px;float:left;\">.*?</div></div>");
+            if (matches.Count == 0)
+            {
+                t_list = null;
+                return t_list;
+            }
+
+            Book t_entity;
+            for (int i = 0; i < matches.Count; i++)
+            {
+                t_entity = new Book();
+
+                try
+                {
+                    Match match1 = Regex.Match(matches[i].ToString(), "<a href.*?>(.*?)<.*?onclick.*?addToFav\\((.*?), \'(.*?)\'\\)");
+                    t_entity.BookName = match1.Groups[1].ToString();
+                    t_entity.BookId = match1.Groups[2].ToString();
+                    Match match = Regex.Match(matches[i].ToString(), "<div style=\"width:482px;float:left;\">.*?</div>");
+                    t_entity.UpdateCatalogUrl = Regex.Match(match.ToString(), "(?<=<a href=\").*?(?=\")").ToString();
+                    t_entity.NewestChapterName = Regex.Replace(match.ToString(), "<.*?>", "");
+                    t_entity.LastReadChapterName = Regex.Replace(match.ToString(), "<.*?>", "");
+                    Match match2 = Regex.Match(matches[i].ToString(), "(?<=<.*?class=xt1>).*?(?=</div>)");
+                    t_entity.UpdateTime = match2.ToString();
+                    t_entity.NewestChapterName = DealWithChapterName(t_entity.NewestChapterName);
+                    t_entity.LastReadChapterName = DealWithChapterName(t_entity.LastReadChapterName);
+                    t_list.Add(t_entity);
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
                 }
 
             }

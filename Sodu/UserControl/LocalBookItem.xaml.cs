@@ -13,25 +13,23 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Sodu.Core.Util;
-using Sodu.Service;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
 namespace Sodu.UserControl
 {
-    public sealed partial class OnlineBookShelfItem : Button
+    public sealed partial class LocalBookItem
     {
-        public OnlineBookShelfItem()
+        public LocalBookItem()
         {
             this.InitializeComponent();
-
             if (PlatformHelper.CurrentPlatform == PlatformHelper.Platform.IsPc)
             {
-                this.RightTapped += OnlineBookShelfItem_OnRightTapped;
+                this.RightTapped += LocalBookItem_RightTapped;
             }
         }
 
-        private void OnlineBookShelfItem_OnRightTapped(object sender, RightTappedRoutedEventArgs e)
+        private void LocalBookItem_RightTapped(object sender, RightTappedRoutedEventArgs e)
         {
             FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
         }

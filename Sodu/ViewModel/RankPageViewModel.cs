@@ -3,18 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using Sodu.Core.HtmlService;
+using Sodu.Service;
 
 namespace Sodu.ViewModel
 {
     public class RankPageViewModel : BasePageViewModel
     {
+
+        #region 命令
+
+
+
+        #endregion
+
+
         public RankPageViewModel()
         {
             PageCount = 8;
             Title = "排行榜";
-          
         }
 
         public override void LoadData()
@@ -30,7 +40,7 @@ namespace Sodu.ViewModel
             PageIndex = pageIndex;
             var url = WebPageUrl.GetRankListPage(pageIndex.ToString());
 
-            var html = await GetHtmlData(url);
+            var html = await GetHtmlData(url, true, true);
             var list = ListPageDataHelper.GetRankListFromHtml(html);
             if (list == null)
             {

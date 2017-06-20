@@ -8,11 +8,11 @@
     xmlns:entity="using:Sodu.Core.Entity"
     xmlns:converter="using:Sodu.Converter"
     mc:Ignorable="d"
-    Height="100"
+    Height="90"
     Style="{StaticResource ContentButtonStyle}"
     d:DesignWidth="800"
     Background="White"
-    Margin="0,0,0,4"
+    Margin="0,0,0,0"
    >
     <Button.Resources>
         <converter:RankChangValueConverter x:Key="ChangValueConverter"></converter:RankChangValueConverter>
@@ -22,16 +22,16 @@
     </Button.DataContext>
     <Grid   Padding="15,0">
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="35"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="{Binding BookName}" Grid.Row="0" Foreground="#FF282828" FontWeight="Normal" VerticalAlignment="Center"  FontSize="18"></TextBlock>
-        <TextBlock   Grid.Row="1" Foreground="#FF565656"  FontWeight="Light" VerticalAlignment="Center"  FontSize="16">
+        <TextBlock Text="{Binding BookName}" Grid.Row="0" Foreground="#FF282828" FontWeight="Normal" VerticalAlignment="Center"  FontSize="17"></TextBlock>
+        <TextBlock   Grid.Row="1" Foreground="{StaticResource AppTextColor}"   VerticalAlignment="Center"  FontSize="15">
             <Run Text="最新章节："></Run>
             <Run Text="{Binding NewestChapterName}"></Run>
         </TextBlock>
-        <TextBlock   Grid.Row="2" Foreground="#FF565656"  FontWeight="Light" VerticalAlignment="Center"  FontSize="16">
+        <TextBlock   Grid.Row="2"  Foreground="{StaticResource AppTextColor}"  VerticalAlignment="Center"  FontSize="15">
             <Run Text="更新时间："></Run>
             <Run Text="{Binding UpdateTime}"></Run>
         </TextBlock>
@@ -42,7 +42,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Image Source="{Binding RankChangeValue,Converter={StaticResource ChangValueConverter}}" Height="14" Width="14" Stretch="UniformToFill"></Image>
-            <TextBlock Text="{Binding RankChangeValue}" Grid.Column="1" Foreground="#FF565656" FontWeight="Normal" VerticalAlignment="Center"  FontSize="16"></TextBlock>
+            <TextBlock Text="{Binding RankChangeValue}" Grid.Column="1" Foreground="{StaticResource AppTextColor}" FontWeight="Thin"  VerticalAlignment="Center"  FontSize="16"></TextBlock>
         </Grid>
 
     </Grid>

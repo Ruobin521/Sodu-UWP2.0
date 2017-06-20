@@ -16,9 +16,9 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <TextBlock Text="{Binding Title,ElementName=root}" Foreground="White" FontSize="18" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,5"></TextBlock>
+        <TextBlock Text="{Binding Title,ElementName=root}" Foreground="White" FontSize="18" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,2"></TextBlock>
         <AppBarButton Grid.Column="2" Icon="Refresh" Foreground="White" Command="{Binding RefreshCommand ,ElementName=root}" ></AppBarButton>
-        <AppBarButton Grid.Column="0" Icon="Find" Foreground="White" Command="{Binding SearchCommand,ElementName=root}" RenderTransformOrigin="0.5,0.5" >
+        <AppBarButton x:Name="SearchButton" Grid.Column="0" Icon="Find" Foreground="White" Command="{Binding SearchCommand,ElementName=root}" RenderTransformOrigin="0.5,0.5" >
             <AppBarButton.RenderTransform>
                 <CompositeTransform Rotation="0"/>
             </AppBarButton.RenderTransform>

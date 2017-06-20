@@ -107,9 +107,13 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="Config\AppDataPath.cs" />
+    <Compile Include="DataBase\DbBookShelf.cs" />
+    <Compile Include="DataBase\DbLocalBook.cs" />
+    <Compile Include="Entity\BaseViewModel.cs" />
     <Compile Include="Entity\Book.cs" />
     <Compile Include="Entity\BookCatalog.cs" />
+    <Compile Include="Entity\LocalBook.cs" />
     <Compile Include="Entity\TabbarItem.cs" />
     <Compile Include="HtmlService\LyWebHelper.cs" />
     <Compile Include="HtmlService\ListPageDataHelper.cs" />
@@ -119,7 +123,14 @@
     <Compile Include="Util\PlatformHelper.cs" />
     <EmbeddedResource Include="Properties\Sodu.Core.rd.xml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <SDKReference Include="Microsoft.VCLibs, Version=14.0">
+      <Name>Visual C++ 2015 Runtime for Universal Windows Platform Apps</Name>
+    </SDKReference>
+    <SDKReference Include="SQLite.UWP.2015, Version=3.17.0">
+      <Name>SQLite for Universal Windows Platform</Name>
+    </SDKReference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

@@ -253,6 +253,7 @@
         </Style>
 
 
+
     </UserControl.Resources>
 
     <Grid Background="{StaticResource AppBackColor}">
@@ -277,7 +278,7 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="35"/>
                                 <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="40"/>
+                                <ColumnDefinition Width="55"/>
                             </Grid.ColumnDefinitions>
                             <Path Grid.Column="0"    Style="{StaticResource TitlePathStyle}"    Data="M947.923862 963.760552c0 21.751172-17.619862 39.371034-39.353379 39.371034-21.751172 0-39.371034-17.619862-39.371034-39.371034l-0.353103-3.654621c0-1.553655 0.282483-3.054345 0.441379-4.590345-24.576-172.791172-172.720552-299.767172-353.103448-301.762207-1.447724 0.03531-2.824828 0.229517-4.290207 0.229517-1.430069 0-2.807172-0.194207-4.237241-0.229517-178.317241 1.977379-325.049379 126.146207-352.097103 295.936 0.900414 3.336828 1.536 6.779586 1.536 10.398897l0.370759 3.707586c0 22.086621-17.902345 39.988966-39.97131 39.988966s-39.988966-17.902345-39.988966-39.988966l-0.03531-0.353103L76.711724 963.442759c0.105931-1.165241 0.335448-2.277517 0.459034-3.425103 0-3.301517 0.529655-6.426483 1.271172-9.498483 20.497655-159.302621 127.240828-288.097103 272.525241-343.569655-84.585931-54.201379-139.74069-149.963034-139.74069-259.372138 0-169.224828 131.478069-306.405517 300.702897-306.405517 169.207172 0 300.702897 137.18069 300.702897 306.405517 0 109.373793-55.101793 205.117793-139.652414 259.319172 144.278069 55.031172 250.544552 182.324966 272.189793 340.038621 1.465379 4.13131 2.436414 8.527448 2.436414 13.170759L947.923862 963.760552zM743.494621 347.665655c0-127.947034-103.706483-231.653517-231.653517-231.653517s-231.653517 103.724138-231.653517 231.653517c0 127.929379 103.724138 231.635862 231.653517 231.635862S743.494621 475.595034 743.494621 347.665655z"  UseLayoutRounding="False"></Path>
                             <TextBlock  Text="个人中心" Grid.Column="1"   Grid.ColumnSpan="2" Style="{StaticResource TitleTextStyle}"></TextBlock>
@@ -289,7 +290,7 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="35"/>
                                 <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="40"/>
+                                <ColumnDefinition Width="55"/>
                             </Grid.ColumnDefinitions>
                             <Path Grid.Column="0" Style="{StaticResource  TitlePathStyle}"  Data="M450.56 820.48c4.48 4.48 10.88 7.04 16.64 8.96C471.04 831.36 475.52 832 480 832s8.96-0.64 12.8-2.56c6.4-1.28 12.16-3.84 16.64-8.96l313.6-313.6c14.08-14.08 14.08-35.84 0-49.92-14.08-14.08-35.84-14.08-49.92 0L512 718.08 512 160C512 142.08 497.92 128 480 128 462.08 128 448 142.08 448 160l0 558.08L186.88 456.96c-14.08-14.08-35.84-14.08-49.92 0-14.08 14.08-14.08 35.84 0 49.92L450.56 820.48zM864 896l-768 0C78.08 896 64 910.08 64 928 64 945.92 78.08 960 96 960l768 0c17.92 0 32-14.08 32-32C896 910.08 881.92 896 864 896z"  UseLayoutRounding="False"></Path>
                             <TextBlock Text="下载中心"  Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource TitleTextStyle}"></TextBlock>
@@ -302,7 +303,7 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="35"/>
                                 <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="40"/>
+                                <ColumnDefinition Width="55"/>
                             </Grid.ColumnDefinitions>
                             <Path Grid.Column="0" Style="{StaticResource  TitlePathStyle}"  Data="M511.702 35.498c-160.052 0-301.428 78.672-387.994 199.213l0-80.186c0-24.653-20.044-44.635-44.768-44.635s-44.768 19.983-44.768 44.635l0 178.54c0 24.647 20.044 44.635 44.768 44.635l193.995 0c24.724 0 44.768-19.987 44.768-44.635 0-24.653-20.044-44.635-44.768-44.635l-77.872 0c70.236-98.973 185.782-163.661 316.64-163.661 214.276 0 387.988 173.194 387.988 386.837 0 213.639-173.712 386.837-387.988 386.837-180.606 0-331.942-123.212-375.191-289.797l-0.777 0.242c-6.032-17.535-22.235-30.333-41.873-30.333-24.724 0-44.768 19.983-44.768 44.63 0 4.399 1.324 8.384 2.51 12.394l-0.466 0.147c0.294 1.081 0.833 2.048 1.133 3.123 0.329 0.867 0.548 1.733 0.929 2.576 56.804 199.646 240.059 346.287 458.506 346.287 263.73 0 477.525-213.163 477.525-476.107-0.002-262.949-213.798-476.108-477.529-476.108zM511.702 236.352c-24.724 0-44.768 19.983-44.768 44.635l0 267.81c0 24.653 20.044 44.635 44.768 44.635 0 0 0 0 0.004 0l193.99 0c24.724 0 44.768-19.983 44.768-44.63 0-24.657-20.044-44.635-44.768-44.635l-149.226 0 0-223.18c0-24.653-20.045-44.635-44.769-44.635z"  UseLayoutRounding="False"></Path>
                             <TextBlock Text="历史记录"  Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource TitleTextStyle}"></TextBlock>
@@ -316,7 +317,7 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="35"/>
                                 <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="110"/>
                             </Grid.ColumnDefinitions>
                             <Image Source="../Assets/Icon/bookshelf2.png"  Style="{StaticResource TitleImageStyle}"></Image>
                             <TextBlock Text="自动添加到书架"  Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource TitleTextStyle}"></TextBlock>
@@ -329,7 +330,7 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="35"/>
                                 <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="110"/>
                             </Grid.ColumnDefinitions>
                             <Image Source="../Assets/Icon/bookshelf1.png"  Style="{StaticResource TitleImageStyle}"></Image>
 
@@ -343,7 +344,7 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="35"/>
                                 <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="110"/>
                             </Grid.ColumnDefinitions>
                             <Image Source="../Assets/Icon/wwan@3x.png"  Style="{StaticResource TitleImageStyle}" ></Image>
 
@@ -358,7 +359,7 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="35"/>
                                 <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="40"/>
+                                <ColumnDefinition Width="55"/>
                             </Grid.ColumnDefinitions>
                             <Image Source="../../Assets/Icon/good.png"  Style="{StaticResource TitleImageStyle}"></Image>
                             <TextBlock Text="给个好评"  Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource TitleTextStyle}"></TextBlock>
@@ -371,7 +372,7 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="35"/>
                                 <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="40"/>
+                                <ColumnDefinition Width="55"/>
                             </Grid.ColumnDefinitions>
                             <Image Source="../../Assets/Icon/help.png"  Style="{StaticResource TitleImageStyle}"></Image>
                             <TextBlock Text="使用帮助"  Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource TitleTextStyle}"></TextBlock>
@@ -384,7 +385,7 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="35"/>
                                 <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="40"/>
+                                <ColumnDefinition Width="55"/>
                             </Grid.ColumnDefinitions>
                             <Image Source="../../Assets/Icon/mzsm@3x.png"  Style="{StaticResource TitleImageStyle}"></Image>
                             <TextBlock Text="免责声明"  Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource TitleTextStyle}"></TextBlock>
@@ -402,5 +403,6 @@
                 </StackPanel>
             </ScrollViewer>
         </Grid>
+
     </Grid>
 </UserControl>

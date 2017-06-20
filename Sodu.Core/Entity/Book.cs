@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Xml.Serialization;
-using GalaSoft.MvvmLight;
 using Newtonsoft.Json;
 using SQLite.Net.Attributes;
 
 namespace Sodu.Core.Entity
 {
-    public class Book : ViewModelBase
+    public class Book : BaseViewModel
     {
         [PrimaryKey]// 主键。
         [AutoIncrement]// 自动增长。
@@ -139,7 +138,6 @@ namespace Sodu.Core.Entity
         /// <summary>
         ///是否有更新
         /// </summary>
-        [Ignore]
         public bool IsNew
         {
             get

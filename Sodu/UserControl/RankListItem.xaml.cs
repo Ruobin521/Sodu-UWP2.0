@@ -12,16 +12,26 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Sodu.Core.Util;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
 namespace Sodu.UserControl
 {
-    public sealed partial class RankListItem 
+    public sealed partial class RankListItem
     {
         public RankListItem()
         {
             this.InitializeComponent();
+            if (PlatformHelper.CurrentPlatform == PlatformHelper.Platform.IsPc)
+            {
+                this.RightTapped += RankListItem_RightTapped;
+            }
+        }
+
+        private void RankListItem_RightTapped(object sender, RightTappedRoutedEventArgs e)
+        {
+            FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
         }
     }
 }

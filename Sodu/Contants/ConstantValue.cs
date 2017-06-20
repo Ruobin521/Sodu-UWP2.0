@@ -13,6 +13,5 @@ namespace Sodu.Contants
         public static Color AppMainColor = Color.FromArgb(1, 0, 122, 255);
 
         public static Brush AppMainColorBrush = new SolidColorBrush(AppMainColor);
-
     }
 }

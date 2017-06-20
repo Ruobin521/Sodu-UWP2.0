@@ -25,7 +25,7 @@ namespace Sodu.View
         public OnlineBookShelfPage()
         {
             this.InitializeComponent();
-           // base.CurrentListView = BookListView;
+            base.CurrentListView = BookListView;
         }
     }
 }

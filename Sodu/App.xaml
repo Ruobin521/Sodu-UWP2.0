@@ -10,6 +10,7 @@
         <ResourceDictionary>
             <viewModel:ViewModelInstance  x:Key="Locator"/>
             <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"></converter:BooleanToVisibilityConverter>
+            <converter:CountToVisibilityConverter x:Key="CountToVisibilityConverter"></converter:CountToVisibilityConverter>
             <SolidColorBrush x:Key="AppThemeColor" Color="#FF007AFF"></SolidColorBrush>
             <SolidColorBrush x:Key="AppBackColor" Color="#FFEFEFF4"></SolidColorBrush>
             <SolidColorBrush x:Key="AppTextColor" Color="#FF515151"></SolidColorBrush>

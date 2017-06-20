@@ -45,7 +45,7 @@ namespace Sodu.UserControl
 
         public ICommand RefreshCommand
         {
-            get { return (ICommand) GetValue(RefreshCommandProperty); }
+            get { return (ICommand)GetValue(RefreshCommandProperty); }
             set { SetValue(RefreshCommandProperty, value); }
         }
 

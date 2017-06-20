@@ -9,7 +9,6 @@ namespace Sodu.ViewModel
 {
     public class ViewModelInstance : BasePageViewModel
     {
-
         private static readonly object SynObject = new object();
 
         private static ViewModelInstance _instance;
@@ -34,6 +33,16 @@ namespace Sodu.ViewModel
             }
         }
 
+        private OnlineBookShelfPageViewModel _onLineBookShelf;
+        public OnlineBookShelfPageViewModel OnLineBookShelf
+        {
+            get { return _onLineBookShelf ?? (_onLineBookShelf = new OnlineBookShelfPageViewModel()); }
+            set
+            {
+                Set(ref _onLineBookShelf, value);
+            }
+        }
+
         private RankPageViewModel _rank;
         public RankPageViewModel Rank
         {
@@ -54,15 +63,18 @@ namespace Sodu.ViewModel
             }
         }
 
-        private OnlineBookShelfPageViewModel _onLineBookShelf;
-        public OnlineBookShelfPageViewModel OnLineBookShelf
+
+        private LocalBookPageViewModel _localBookPage;
+        public LocalBookPageViewModel LocalBookPage
         {
-            get { return _onLineBookShelf ?? (_onLineBookShelf = new OnlineBookShelfPageViewModel()); }
+            get { return _localBookPage ?? (_localBookPage = new LocalBookPageViewModel()); }
             set
             {
-                Set(ref _onLineBookShelf, value);
+                Set(ref _localBookPage, value);
             }
         }
+
+
 
         private SettingPageViewModel _setting;
         public SettingPageViewModel Setting
@@ -71,6 +83,17 @@ namespace Sodu.ViewModel
             set
             {
                 Set(ref _setting, value);
+            }
+        }
+
+
+        private SearchPageViewModel _search;
+        public SearchPageViewModel Search
+        {
+            get { return _search ?? (_search = new SearchPageViewModel()); }
+            set
+            {
+                Set(ref _search, value);
             }
         }
     }

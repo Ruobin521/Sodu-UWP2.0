@@ -5,11 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using GalaSoft.MvvmLight;
 
 namespace Sodu.Core.Entity
 {
-    public class TabbarItem : ViewModelBase
+    public class TabbarItem : BaseViewModel
     {
 
         public int Index { get; set; }

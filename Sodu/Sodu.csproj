@@ -97,8 +97,10 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Contants\ConstantValue.cs" />
+    <Compile Include="Converter\CountToVisibilityConverter.cs" />
     <Compile Include="Converter\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converter\RankChangValueConverter.cs" />
+    <Compile Include="Converter\BookCoverConverter.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -106,6 +108,9 @@
     <Compile Include="Service\NavigationService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\ToastHelper.cs" />
+    <Compile Include="UserControl\LocalBookItem.xaml.cs">
+      <DependentUpon>LocalBookItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControl\OnlineBookShelfItem.xaml.cs">
       <DependentUpon>OnlineBookShelfItem.xaml</DependentUpon>
     </Compile>
@@ -117,13 +122,17 @@
     </Compile>
     <Compile Include="ViewModel\BasePageViewModel.cs" />
     <Compile Include="ViewModel\HotAndRecommendPageViewModel.cs" />
+    <Compile Include="ViewModel\LocalBookItemViewModel.cs" />
+    <Compile Include="ViewModel\LocalBookPageViewModel.cs" />
     <Compile Include="ViewModel\LoginViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\OnlineBookShelfPageViewModel.cs" />
     <Compile Include="ViewModel\RankPageViewModel.cs" />
+    <Compile Include="ViewModel\SearchPageViewModel.cs" />
     <Compile Include="ViewModel\SettingPageViewModel.cs" />
     <Compile Include="ViewModel\ViewModelInstance.cs" />
     <Compile Include="View\BaseListUserControl.cs" />
+    <Compile Include="View\CommonPageViewModel.cs" />
     <Compile Include="View\HotAndRecommandPage.xaml.cs">
       <DependentUpon>HotAndRecommandPage.xaml</DependentUpon>
     </Compile>
@@ -162,6 +171,7 @@
     <Content Include="Assets\BadgeLogo.scale-400.png" />
     <Content Include="Assets\Icon\bookshelf1.png" />
     <Content Include="Assets\Icon\bookshelf2.png" />
+    <Content Include="Assets\Icon\cover.png" />
     <Content Include="Assets\Icon\down.png" />
     <Content Include="Assets\Icon\head.png" />
     <Content Include="Assets\Icon\liuliang.png" />
@@ -204,6 +214,10 @@
     <Page Include="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControl\LocalBookItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControl\OnlineBookShelfItem.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -265,6 +279,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <SDKReference Include="Microsoft.VCLibs, Version=14.0">
+      <Name>Visual C++ 2015 Runtime for Universal Windows Platform Apps</Name>
+    </SDKReference>
     <SDKReference Include="WindowsMobile, Version=10.0.10586.0">
       <Name>Windows Mobile Extensions for the UWP</Name>
     </SDKReference>

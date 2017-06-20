@@ -13,10 +13,52 @@ namespace Sodu.Control.SwipeListControl
 {
     public class SwipeListView : ListView
     {
+
+        public ScrollViewer Scroller;
         public SwipeListView()
         {
             DefaultStyleKey = typeof(SwipeListView);
         }
+
+
+        protected override void OnApplyTemplate()
+        {
+            Scroller = this.GetTemplateChild<ScrollViewer>("ScrollViewer");
+            Scroller.ViewChanged += Scroller_ViewChanged;
+
+        }
+        private void Scroller_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
+        {
+            //所有内容垂直高度 - 当前滚动的高度
+            var v1 = Scroller.ExtentHeight - Scroller.VerticalOffset;
+            //可视区域的高度
+            var v2 = Scroller.ViewportHeight;
+            if (v1 <= v2)
+            {
+                if (RequestCommand != null && RequestCommand.CanExecute(null))
+                {
+                    RequestCommand.Execute(null);
+                }
+            }
+        }
+
+        T GetTemplateChild<T>(string name, string message = null) where T : DependencyObject
+        {
+            var child = GetTemplateChild(name) as T;
+
+            if (child == null)
+            {
+                if (message == null)
+                {
+                    message = $"{name} should not be null! Check the default Generic.xaml.";
+                }
+
+                throw new NullReferenceException(message);
+            }
+
+            return child;
+        }
+
 
         protected override DependencyObject GetContainerForItemOverride()
         {
@@ -198,6 +240,18 @@ namespace Sodu.Control.SwipeListControl
             DependencyProperty.Register("ItemRightCommand", typeof(ICommand), typeof(SwipeListView), new PropertyMetadata(null));
         #endregion
 
+        #region RequestCommand
 
+        public ICommand RequestCommand
+        {
+            get { return (ICommand)GetValue(RequestCommandProperty); }
+            set { SetValue(RequestCommandProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for AutoRequestAddCommand.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty RequestCommandProperty =
+            DependencyProperty.Register("RequestCommand", typeof(ICommand), typeof(SwipeListView), new PropertyMetadata(null));
+
+        #endregion
     }
 }

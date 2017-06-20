@@ -153,6 +153,8 @@
     </Style>
 
 
+    
+
     <Style TargetType="swipeListControl:SwipeListViewItem">
         <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}" />
         <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}" />
@@ -543,12 +545,60 @@
         </Setter>
     </Style>
 
+    <Style x:Key="SwipeListViewItemStyle" TargetType="swipeListControl:SwipeListViewItem">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="TabNavigation" Value="Local"/>
+        <Setter Property="Padding" Value="0,0,0,0"/>
+        <Setter Property="Margin" Value="0,0,0,4"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+        <Setter Property="UseSystemFocusVisuals" Value="True"/>
+        <Setter Property="MinWidth" Value="0"/>
+        <!--<Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="swipeListControl:SwipeListViewItem">
+                                <Grid x:Name="LayoutRoot" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
+                                    <Grid.Resources>
+                                        <Style x:Key="BaseContentPresenterStyle" TargetType="ContentPresenter">
+                                            <Setter Property="FontFamily" Value="Segoe UI"/>
+                                            <Setter Property="FontWeight" Value="SemiBold"/>
+                                            <Setter Property="FontSize" Value="15"/>
+                                            <Setter Property="TextWrapping" Value="Wrap"/>
+                                            <Setter Property="LineStackingStrategy" Value="MaxHeight"/>
+                                            <Setter Property="TextLineBounds" Value="Full"/>
+                                            <Setter Property="OpticalMarginAlignment" Value="TrimSideBearings"/>
+                                        </Style>
+                                        <Style x:Key="BodyContentPresenterStyle" BasedOn="{StaticResource BaseContentPresenterStyle}" TargetType="ContentPresenter">
+                                            <Setter Property="FontWeight" Value="Normal"/>
+                                        </Style>
+                                    </Grid.Resources>
+                                    <VisualStateManager.VisualStateGroups>
+                                        <VisualStateGroup x:Name="CommonStates">
+                                            <VisualState x:Name="Normal"/>
+                                            <VisualState x:Name="Disabled">
+                                                <Storyboard>
+                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+                                                        <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlDisabledBaseLowBrush}"/>
+                                                    </ObjectAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                            </VisualState>
+                                        </VisualStateGroup>
+                                    </VisualStateManager.VisualStateGroups>
+                                    <Rectangle x:Name="PressedBackground"   RadiusX="5"  RadiusY="5" Fill="{TemplateBinding Background}" Control.IsTemplateFocusTarget="True"/>
+                                    <ContentPresenter x:Name="ContentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" ContentTransitions="{TemplateBinding ContentTransitions}" Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" Style="{StaticResource BodyContentPresenterStyle}" TextWrapping="NoWrap" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Padding="{TemplateBinding Padding}"/>
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>-->
+    </Style>
+
     <Style TargetType="swipeListControl:SwipeListView">
         <Setter Property="ItemLeftBackground" Value="#007aff"/>
         <Setter Property="ItemRightBackground" Value="#ff3b30"/>
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="TabNavigation" Value="Once" />
         <Setter Property="IsSwipeEnabled" Value="True" />
+        <Setter Property="ItemContainerStyle" Value="{StaticResource  SwipeListViewItemStyle}"></Setter>
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
         <Setter Property="ScrollViewer.HorizontalScrollMode" Value="Disabled" />

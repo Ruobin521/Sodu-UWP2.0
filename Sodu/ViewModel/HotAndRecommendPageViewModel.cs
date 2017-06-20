@@ -27,7 +27,7 @@ namespace Sodu.ViewModel
         public async void GetData()
         {
             var url = WebPageUrl.HomePage;
-            var html = await GetHtmlData(url);
+            var html = await GetHtmlData(url,true,true);
             var list = ListPageDataHelper.GetHotAndRecommendList(html);
             if (list == null || list.Count == 0)
             {

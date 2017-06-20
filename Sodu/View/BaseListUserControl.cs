@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Controls;
 using Sodu.Control;
+using Sodu.Control.SwipeListControl;
 
 namespace Sodu.View
 {
     public class BaseListUserControl : Windows.UI.Xaml.Controls.UserControl
     {
-        public PullToRefreshListView CurrentListView { get; set; }
+        public SwipeListView CurrentListView { get; set; }
 
         public void GoTopOrBottom()
         {

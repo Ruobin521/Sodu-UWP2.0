@@ -1,7 +1,6 @@
 ﻿{
   "dependencies": {
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2",
-    "MvvmLight": "5.3.0",
     "Newtonsoft.Json": "10.0.3",
     "SQLite.Net-PCL": "3.1.1"
   },

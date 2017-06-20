@@ -18,7 +18,7 @@
 
         <ContentControl   Grid.Row="0"  Content="{Binding CurrentContent}"  HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"></ContentControl>
         <Border Grid.Row="1" BorderThickness="1" BorderBrush="DarkGray" Opacity="0.5"></Border>
-        <Grid Grid.Row="2">
+        <Grid Grid.Row="2" Background="#CCFFFFFF">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="{Binding  LoginButtonLength}" />
                 <ColumnDefinition Width="*"/>

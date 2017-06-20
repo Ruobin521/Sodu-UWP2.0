@@ -25,9 +25,7 @@ namespace Sodu.View
         public HotAndRecommandPage()
         {
             this.InitializeComponent();
-            //NavigationCacheMode = NavigationCacheMode.Enabled;
             base.CurrentListView = BookListView;
-
         }
     }
 }
