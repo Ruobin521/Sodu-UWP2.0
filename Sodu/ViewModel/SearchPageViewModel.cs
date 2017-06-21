@@ -43,7 +43,7 @@ namespace Sodu.ViewModel
                 return;
             }
             var searchPara = obj.ToString();
-            var uri = string.Format(WebPageUrl.BookSearchPage, WebUtility.UrlEncode(searchPara));
+            var uri = string.Format(SoduPageValue.BookSearchPage, WebUtility.UrlEncode(searchPara));
             var html = await GetHtmlData(uri,true,false);
             var books = ListPageDataHelper.GetSearchResultkListFromHtml(html);
 

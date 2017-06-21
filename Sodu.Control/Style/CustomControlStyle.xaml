@@ -126,7 +126,7 @@
     </Style>
 
     <Style x:Key="ContentButtonStyle" TargetType="Button">
-        <Setter Property="Background" Value="White"/>
+        <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="Transparent"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="Margin" Value="0"/>
@@ -152,12 +152,12 @@
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState x:Name="Pressed">
-                                    <Storyboard>
+                                    <!--<Storyboard>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="RootGrid">
                                             <DiscreteObjectKeyFrame KeyTime="0"  Value="LightGray"/>
                                         </ObjectAnimationUsingKeyFrames>
                                         <PointerDownThemeAnimation Storyboard.TargetName="RootGrid"/>
-                                    </Storyboard>
+                                    </Storyboard>-->
                                 </VisualState>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>

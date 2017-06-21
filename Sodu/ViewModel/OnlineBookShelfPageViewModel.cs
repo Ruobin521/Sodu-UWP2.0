@@ -54,7 +54,7 @@ namespace Sodu.ViewModel
             }
             item.IsNew = false;
             item.LastReadChapterName = item.NewestChapterName;
-            DbBookShelf.InsertOrUpdateBook(AppDataPath.GetAppCacheDbPath(), item);
+            DbBookShelf.InsertOrUpdateBook(AppDataPath.GetAppCacheDbPath(), item, AppSettingService.GetUserId());
         }
 
         #endregion
@@ -72,10 +72,10 @@ namespace Sodu.ViewModel
                 "2.手机用户可以在当前列表项左右滑动进行相关操作，PC用户可点击鼠标右键进行相关操作。" + "\n" +
                 "3.在排行或热门推荐页面向左滑动(手机用户)或点击鼠标右键(PC用户)选择相应操作即可添加所选项至在线书架。";
 
-            GetCacheData();
+            //     GetCacheData();
         }
 
-        public override void LoadData()
+        public override void LoadData(object obj = null)
         {
             if (IsInit)
             {
@@ -94,7 +94,11 @@ namespace Sodu.ViewModel
 
             Task.Run(() =>
             {
-                var books = DbBookShelf.GetBooks(AppDataPath.GetAppCacheDbPath());
+                if (string.IsNullOrEmpty(AppSettingService.GetUserId()))
+                {
+                    return;
+                }
+                var books = DbBookShelf.GetBooks(AppDataPath.GetAppCacheDbPath(), AppSettingService.GetUserId());
                 DispatcherHelper.CheckBeginInvokeOnUI(() =>
                 {
                     books.ForEach(p => Books.Add(p));
@@ -104,25 +108,45 @@ namespace Sodu.ViewModel
 
         public async void GetData()
         {
-            if (!CookieHelper.CheckLogin())
+            if (!CookieHelper.CheckLogin() || IsLoading)
             {
                 return;
             }
+            try
+            {
+                IsLoading = true;
 
-            var html = await GetHtmlData2(WebPageUrl.BookShelfPage, true, true);
-            var list = ListPageDataHelper.GetBookShelftListFromHtml(html);
-            if (list == null || list.Count == 0)
-            {
-                ToastHelper.ShowMessage("获取在线书架失败");
-            }
-            else
-            {
-                var result = await CompareWithLocalCache(list.ToList());
-                Books?.Clear();
-                foreach (var book in list)
+                var html = await GetHtmlData2(SoduPageValue.BookShelfPage, false, true);
+                var list = ListPageDataHelper.GetBookShelftListFromHtml(html);
+                if (list == null || list.Count == 0)
                 {
-                    Books?.Add(book);
+                    if (html != null && html.Contains(SoduPageValue.BookShelfPage))
+                    {
+                        Books = null;
+                        ToastHelper.ShowMessage("您的在线书架为空");
+                    }
+                    else
+                    {
+                        ToastHelper.ShowMessage("获取在线书架数据失败");
+                    }
                 }
+                else
+                {
+                    var result = await CompareWithLocalCache(list.ToList());
+                    Books?.Clear();
+                    foreach (var book in list)
+                    {
+                        Books?.Add(book);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                IsLoading = false;
             }
         }
 
@@ -138,10 +162,10 @@ namespace Sodu.ViewModel
                          return;
                      }
 
-                     var localCathes = DbBookShelf.GetBooks(AppDataPath.GetAppCacheDbPath());
+                     var localCathes = DbBookShelf.GetBooks(AppDataPath.GetAppCacheDbPath(), AppSettingService.GetUserId());
                      if (localCathes == null || localCathes.Count == 0)
                      {
-                         DbBookShelf.InsertOrUpdateBooks(AppDataPath.GetAppCacheDbPath(), list);
+                         DbBookShelf.InsertOrUpdateBooks(AppDataPath.GetAppCacheDbPath(), list, AppSettingService.GetUserId());
                          return;
                      }
 
@@ -157,7 +181,7 @@ namespace Sodu.ViewModel
                          book.LastReadChapterName = item.LastReadChapterName;
                      }
                      result = true;
-                     DbBookShelf.InsertOrUpdateBooks(AppDataPath.GetAppCacheDbPath(), list);
+                     DbBookShelf.InsertOrUpdateBooks(AppDataPath.GetAppCacheDbPath(), list, AppSettingService.GetUserId());
                  }
                  catch (Exception e)
                  {
@@ -198,21 +222,37 @@ namespace Sodu.ViewModel
             GetData();
         }
 
+        public override void OnItemClickCommand(object obj)
+        {
+            if (obj != null)
+            {
+                OnSetHadReadCommand(obj);
+            }
+            base.OnItemClickCommand(obj);
+        }
+
 
         private async void RemoveItemFromShelf(Book item)
         {
-            var url = WebPageUrl.BookShelfPage + "?id=" + item.BookId;
+            var url = SoduPageValue.BookShelfPage + "?id=" + item.BookId;
             var html = await GetHtmlData2(url, false, false);
             if (html.Contains("取消收藏成功"))
             {
                 ToastHelper.ShowMessage(item.BookName + "已从在线书架移除");
                 Books.Remove(item);
-                DbBookShelf.RemoveBook(AppDataPath.GetAppCacheDbPath(), item);
+                DbBookShelf.RemoveBook(AppDataPath.GetAppCacheDbPath(), item, AppSettingService.GetUserId());
             }
             else
             {
                 ToastHelper.ShowMessage(item.BookName + "移除失败");
             }
+        }
+
+
+        public void ResetData()
+        {
+            Books.Clear();
+            IsInit = false;
         }
 
         #endregion

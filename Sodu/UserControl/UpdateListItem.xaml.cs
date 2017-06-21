@@ -19,11 +19,11 @@ using System.Windows.Input;
 
 namespace Sodu.UserControl
 {
-    public sealed partial class LocalBookItem
+    public sealed partial class UpdateListItem
     {
 
         public static readonly DependencyProperty CommandProperty = DependencyProperty.Register(
-    "Command", typeof(ICommand), typeof(LocalBookItem), new PropertyMetadata(default(ICommand)));
+"Command", typeof(ICommand), typeof(UpdateListItem), new PropertyMetadata(default(ICommand)));
 
         public ICommand Command
         {
@@ -33,25 +33,25 @@ namespace Sodu.UserControl
 
 
         public static readonly DependencyProperty CommandParameterProperty = DependencyProperty.Register(
-            "CommandParameter", typeof(object), typeof(LocalBookItem), new PropertyMetadata(default(object)));
+            "CommandParameter", typeof(object), typeof(UpdateListItem), new PropertyMetadata(default(object)));
 
         public object CommandParameter
         {
             get { return (object)GetValue(CommandParameterProperty); }
             set { SetValue(CommandParameterProperty, value); }
         }
-        public LocalBookItem()
+
+
+        public UpdateListItem()
         {
             this.InitializeComponent();
-            if (PlatformHelper.CurrentPlatform == PlatformHelper.Platform.IsPc)
-            {
-                this.RightTapped += LocalBookItem_RightTapped;
-            }
+            Tapped += UpdateListItem_Tapped;
+
         }
 
-        private void LocalBookItem_RightTapped(object sender, RightTappedRoutedEventArgs e)
+        private void UpdateListItem_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
+            Command?.Execute(CommandParameter);
         }
     }
 }

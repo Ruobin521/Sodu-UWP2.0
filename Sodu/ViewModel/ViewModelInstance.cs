@@ -96,5 +96,29 @@ namespace Sodu.ViewModel
                 Set(ref _search, value);
             }
         }
+
+
+        private UpdateCatalogPageViewModel _updateCatalog;
+        public UpdateCatalogPageViewModel UpdateCatalog
+        {
+            get { return _updateCatalog ?? (_updateCatalog = new UpdateCatalogPageViewModel()); }
+            set
+            {
+                Set(ref _updateCatalog, value);
+            }
+        }
+
+
+
+        private OnlineContentPageViewModel _onlineBookContent;
+        public OnlineContentPageViewModel OnlineBookContent
+        {
+            get { return _onlineBookContent ?? (_onlineBookContent = new OnlineContentPageViewModel()); }
+            set
+            {
+                Set(ref _onlineBookContent, value);
+            }
+        }
+
     }
 }

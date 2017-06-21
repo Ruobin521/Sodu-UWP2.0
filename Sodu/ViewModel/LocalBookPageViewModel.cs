@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Threading;
 using Newtonsoft.Json;
 using Sodu.Core.Config;
 using Sodu.Core.DataBase;
@@ -82,33 +83,42 @@ namespace Sodu.ViewModel
         }
 
 
-        public override void LoadData()
+        public override void LoadData(object obj = null)
         {
-            if (IsLoading)
+            if (IsLoading || LocalBooks.Count > 0)
             {
                 return;
             }
+
+            GetLocalBookFromDb();
         }
 
 
         private void GetLocalBookFromDb()
         {
-            var list = DbLocalBook.GetBooks(AppDataPath.GetLocalBookDbPath());
 
-            if (list == null || list.Count <= 0)
+            Task.Run(async () =>
             {
-                return;
-            }
-
-            foreach (var book in list)
-            {
-                var localVm = new LocalBookItemViewModel()
+                await Task.Delay(100);
+                var list = DbLocalBook.GetBooks(AppDataPath.GetLocalBookDbPath());
+                if (list == null || list.Count <= 0)
                 {
-                    CurrentBook = book
-                };
+                    return;
+                }
 
-                LocalBooks.Add(localVm);
-            }
+                DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                {
+                    foreach (var book in list)
+                    {
+                        var localVm = new LocalBookItemViewModel()
+                        {
+                            CurrentBook = book
+                        };
+                        LocalBooks.Add(localVm);
+                    }
+                });
+            });
+
         }
 
         public override void OnRefreshCommand(object obj)

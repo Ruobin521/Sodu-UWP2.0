@@ -24,6 +24,7 @@ namespace Sodu.Control.SwipeListControl
         protected override void OnApplyTemplate()
         {
             Scroller = this.GetTemplateChild<ScrollViewer>("ScrollViewer");
+            Scroller.ViewChanged -= Scroller_ViewChanged;
             Scroller.ViewChanged += Scroller_ViewChanged;
 
         }
@@ -33,7 +34,7 @@ namespace Sodu.Control.SwipeListControl
             var v1 = Scroller.ExtentHeight - Scroller.VerticalOffset;
             //可视区域的高度
             var v2 = Scroller.ViewportHeight;
-            if (v1 <= v2)
+            if (v1 <= v2 + 1)
             {
                 if (RequestCommand != null && RequestCommand.CanExecute(null))
                 {

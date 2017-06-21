@@ -1,0 +1,21 @@
+﻿<UserControl
+    x:Class="Sodu.Control.CustomLoadingControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Sodu.Control"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+     Height="200"  Width="200"
+   >
+    <Grid Background="#D8000000" CornerRadius="5"  Height="90"  Width="115">
+        <Grid  Height="40" Width="40">
+            <ProgressRing IsActive="True" Foreground="White"     HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></ProgressRing>
+        </Grid>
+        <Grid  HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-15,-15,0">
+            <Border Height="38" Width="38" Background="#FF777474" CornerRadius="90" Padding="5">
+                <Image Source=" ../Assets/Icon/close_in@3x.png"   HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></Image>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

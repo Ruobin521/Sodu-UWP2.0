@@ -24,5 +24,17 @@ namespace Sodu
             }
 
         }
+
+        public static void ClearHistory()
+        {
+            if (ContentFrame.CanGoBack)
+            {
+                ContentFrame.BackStack.Clear();
+            }
+            if (ContentFrame.CanGoForward)
+            {
+                ContentFrame.ForwardStack.Clear();
+            }
+        }
     }
 }

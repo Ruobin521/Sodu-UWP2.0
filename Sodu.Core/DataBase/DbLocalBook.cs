@@ -26,12 +26,12 @@ namespace Sodu.Core.DataBase
                         try
                         {
                             var enumerable = db.Table<LocalBook>()?.ToList();
-                            if (enumerable == null)
+                            if (enumerable == null || enumerable.Count == 0)
                             {
                                 return;
                             }
 
-                            enumerable = !enumerable.Any() ? null : enumerable.ToList().OrderByDescending(p => DateTime.Parse(p.UpdateTime)).ToList();
+                            enumerable =  enumerable.ToList().OrderByDescending(p => DateTime.Parse(p.UpdateTime)).ToList();
 
                             foreach (var localBook in enumerable)
                             {

@@ -23,5 +23,11 @@
                 <CompositeTransform Rotation="0"/>
             </AppBarButton.RenderTransform>
         </AppBarButton>
+
+        <AppBarButton x:Name="BackButton" Grid.Column="0" Icon="Back" Foreground="White" Command="{Binding BackCommand,ElementName=root}" RenderTransformOrigin="0.5,0.5" >
+            <AppBarButton.RenderTransform>
+                <CompositeTransform Rotation="0"/>
+            </AppBarButton.RenderTransform>
+        </AppBarButton>
     </Grid>
 </UserControl>

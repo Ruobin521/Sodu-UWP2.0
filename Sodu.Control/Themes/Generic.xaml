@@ -153,18 +153,18 @@
     </Style>
 
 
-    
 
-    <Style TargetType="swipeListControl:SwipeListViewItem">
+
+    <Style x:Key="SwipeListViewItemStyle"  TargetType="swipeListControl:SwipeListViewItem">
         <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}" />
         <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}" />
-        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Background" Value="White"/>
         <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseHighBrush}" />
         <Setter Property="TabNavigation" Value="Local"/>
         <Setter Property="IsHoldingEnabled" Value="True"/>
         <Setter Property="Padding" Value="12,0,12,0"/>
-        <Setter Property="HorizontalContentAlignment" Value="Left"/>
-        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment" Value="Stretch"/>
         <Setter Property="MinWidth" Value="{ThemeResource ListViewItemMinWidth}"/>
         <Setter Property="MinHeight" Value="{ThemeResource ListViewItemMinHeight}"/>
         <Setter Property="LeftBackground" Value="#007aff"/>
@@ -180,7 +180,7 @@
                                         <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter" />
                                     </Storyboard>
                                 </VisualState>
-                                <!--<VisualState x:Name="PointerOver">
+                                <VisualState x:Name="PointerOver">
                                     <Storyboard>
                                         <DoubleAnimation Storyboard.TargetName="BorderBackground"
                                                     Storyboard.TargetProperty="Opacity"
@@ -194,7 +194,7 @@
                                         </ObjectAnimationUsingKeyFrames>
                                         <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter" />
                                     </Storyboard>
-                                </VisualState>
+                                </VisualState> 
                                 <VisualState x:Name="Pressed">
                                     <Storyboard>
                                         <DoubleAnimation Storyboard.TargetName="BorderBackground"
@@ -210,7 +210,8 @@
                                         <PointerDownThemeAnimation TargetName="ContentPresenter" />
                                     </Storyboard>
                                 </VisualState>
-                                <VisualState x:Name="Selected">
+                                
+                                <!-- <VisualState x:Name="Selected">
                                     <Storyboard>
                                         <DoubleAnimation Storyboard.TargetName="MultiSelectCheck"
                                                     Storyboard.TargetProperty="Opacity"
@@ -229,7 +230,9 @@
                                         <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter" />
                                     </Storyboard>
                                 </VisualState>
-                                <VisualState x:Name="PointerOverSelected">
+                                -->
+
+                                <!--  <VisualState x:Name="PointerOverSelected">
                                     <Storyboard>
                                         <DoubleAnimation Storyboard.TargetName="MultiSelectCheck"
                                                     Storyboard.TargetProperty="Opacity"
@@ -248,7 +251,9 @@
                                         <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter" />
                                     </Storyboard>
                                 </VisualState>
-                                <VisualState x:Name="PressedSelected">
+                                -->
+
+                                <!--   <VisualState x:Name="PressedSelected">
                                     <Storyboard>
                                         <DoubleAnimation Storyboard.TargetName="MultiSelectCheck"
                                                     Storyboard.TargetProperty="Opacity"
@@ -266,7 +271,9 @@
                                         </ObjectAnimationUsingKeyFrames>
                                         <PointerDownThemeAnimation TargetName="ContentPresenter" />
                                     </Storyboard>
-                                </VisualState>-->
+                                </VisualState>
+                                -->
+                                
                             </VisualStateGroup>
                             <!--<VisualStateGroup x:Name="DisabledStates">
                                 <VisualState x:Name="Enabled"/>
@@ -545,8 +552,8 @@
         </Setter>
     </Style>
 
-    <Style x:Key="SwipeListViewItemStyle" TargetType="swipeListControl:SwipeListViewItem">
-        <Setter Property="Background" Value="Transparent"/>
+    <Style TargetType="swipeListControl:SwipeListViewItem">
+        <Setter Property="Background" Value="White"/>
         <Setter Property="TabNavigation" Value="Local"/>
         <Setter Property="Padding" Value="0,0,0,0"/>
         <Setter Property="Margin" Value="0,0,0,4"/>

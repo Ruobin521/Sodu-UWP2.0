@@ -14,13 +14,34 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Sodu.Core.Util;
 using Sodu.Service;
+using System.Windows.Input;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
 namespace Sodu.UserControl
 {
-    public sealed partial class OnlineBookShelfItem : Button
+    public sealed partial class OnlineBookShelfItem
     {
+
+        public static readonly DependencyProperty CommandProperty = DependencyProperty.Register(
+ "Command", typeof(ICommand), typeof(OnlineBookShelfItem), new PropertyMetadata(default(ICommand)));
+
+        public ICommand Command
+        {
+            get { return (ICommand)GetValue(CommandProperty); }
+            set { SetValue(CommandProperty, value); }
+        }
+
+
+        public static readonly DependencyProperty CommandParameterProperty = DependencyProperty.Register(
+            "CommandParameter", typeof(object), typeof(OnlineBookShelfItem), new PropertyMetadata(default(object)));
+
+        public object CommandParameter
+        {
+            get { return (object)GetValue(CommandParameterProperty); }
+            set { SetValue(CommandParameterProperty, value); }
+        }
+
         public OnlineBookShelfItem()
         {
             this.InitializeComponent();
@@ -29,6 +50,13 @@ namespace Sodu.UserControl
             {
                 this.RightTapped += OnlineBookShelfItem_OnRightTapped;
             }
+
+            RootGrid.Tapped += RootGrid_Tapped;
+        }
+
+        private void RootGrid_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+           Command?.Execute(CommandParameter);
         }
 
         private void OnlineBookShelfItem_OnRightTapped(object sender, RightTappedRoutedEventArgs e)

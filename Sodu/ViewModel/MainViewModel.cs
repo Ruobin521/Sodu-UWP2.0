@@ -44,6 +44,7 @@ namespace Sodu.ViewModel
             }
         }
 
+
         private GridLength _loginButtonLength = new GridLength(0);
         public GridLength LoginButtonLength
         {
@@ -185,10 +186,15 @@ namespace Sodu.ViewModel
 
         public void SetLoginAction(bool value)
         {
-            IsLogin = true;
+            IsLogin = value;
+
             if (value)
             {
-                ViewModelInstance.Instance.OnLineBookShelf.GetData();
+                ViewModelInstance.Instance.OnLineBookShelf.LoadData();
+            }
+            else
+            {
+                ViewModelInstance.Instance.OnLineBookShelf.ResetData();
             }
         }
 
@@ -196,7 +202,7 @@ namespace Sodu.ViewModel
         private void CheckLogin()
         {
             var filter = new HttpBaseProtocolFilter();
-            var cookieCollection = filter.CookieManager.GetCookies(new Uri(WebPageUrl.HomePage));
+            var cookieCollection = filter.CookieManager.GetCookies(new Uri(SoduPageValue.HomePage));
             var cookieItem = cookieCollection.FirstOrDefault(p => p.Name.Equals("sodu_user"));
             IsLogin = cookieItem != null;
         }

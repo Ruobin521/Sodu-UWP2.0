@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Windows.Input;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -20,6 +21,27 @@ namespace Sodu.UserControl
 {
     public sealed partial class RankListItem
     {
+
+        public static readonly DependencyProperty CommandProperty = DependencyProperty.Register(
+"Command", typeof(ICommand), typeof(RankListItem), new PropertyMetadata(default(ICommand)));
+
+        public ICommand Command
+        {
+            get { return (ICommand)GetValue(CommandProperty); }
+            set { SetValue(CommandProperty, value); }
+        }
+
+
+        public static readonly DependencyProperty CommandParameterProperty = DependencyProperty.Register(
+            "CommandParameter", typeof(object), typeof(RankListItem), new PropertyMetadata(default(object)));
+
+        public object CommandParameter
+        {
+            get { return (object)GetValue(CommandParameterProperty); }
+            set { SetValue(CommandParameterProperty, value); }
+        }
+
+
         public RankListItem()
         {
             this.InitializeComponent();
@@ -27,11 +49,25 @@ namespace Sodu.UserControl
             {
                 this.RightTapped += RankListItem_RightTapped;
             }
+
+            Tapped += RankListItem_Tapped;
+        }
+
+        private void RankListItem_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            Command?.Execute(CommandParameter);
         }
 
         private void RankListItem_RightTapped(object sender, RightTappedRoutedEventArgs e)
         {
-            FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
+            try
+            {
+                FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
+            }
         }
     }
 }

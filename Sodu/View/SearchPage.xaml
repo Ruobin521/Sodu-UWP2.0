@@ -278,14 +278,15 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="本地书架" Foreground="White" FontSize="18" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,2"></TextBlock>
+            <TextBlock Text="搜索" Foreground="White" FontSize="18" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,2"></TextBlock>
+            <AppBarButton Grid.Column="0" Icon="Back" Foreground="White" Command="{Binding BackCommand}"  />
         </Grid>
         <Grid  Grid.Row="1" Margin="5,2" >
             <RelativePanel Height="40" Margin="0,0,0,0"  >
                 <Button  x:Name="BtnSearch"    RelativePanel.AlignRightWithPanel="True" HorizontalAlignment="Right" RelativePanel.AlignVerticalCenterWithPanel="True"   Command="{Binding SearchCommand}" CommandParameter="{Binding ElementName=TxtSearch,Path=Text}"
                          Style="{StaticResource ButtonStyle1}" Height="38" Width="90" FontSize="16" VerticalAlignment="Center" Content="搜索" />
-                <TextBox   x:Name="TxtSearch"   KeyUp="TxtSearch_OnKeyUp" RelativePanel.AlignVerticalCenterWithPanel="True" RelativePanel.AlignLeftWithPanel="True"  RelativePanel.LeftOf="BtnSearch"  VerticalAlignment="Center"  Text="{Binding SearchPara,Mode=TwoWay}"  
-                           Style="{StaticResource  CusotmSearchTextBoxStyle}"  BorderThickness="1,1,0,1"    FontSize="22"  HorizontalAlignment="Stretch" Height="38" ></TextBox>
+                <TextBox   x:Name="TxtSearch"   KeyUp="TxtSearch_OnKeyUp" PlaceholderText="输入搜索名称，支持拼音"  RelativePanel.AlignVerticalCenterWithPanel="True" RelativePanel.AlignLeftWithPanel="True"  RelativePanel.LeftOf="BtnSearch"  VerticalAlignment="Center"  Text="{Binding SearchPara,Mode=TwoWay}"  
+                           Style="{StaticResource  CusotmSearchTextBoxStyle}"  BorderThickness="1,1,0,1"    FontSize="18"  HorizontalAlignment="Stretch" Height="38" ></TextBox>
             </RelativePanel>
         </Grid>
 
@@ -314,6 +315,6 @@
             </swipeListControl:SwipeListView.ItemTemplate>
         </swipeListControl:SwipeListView>
 
-        <control:LoadingControl IsActive="{Binding IsLoading}" Grid.Row="1" Grid.RowSpan="2"></control:LoadingControl>
+        <control:LoadingControl IsActive="{Binding IsLoading}" Grid.Row="1" Grid.RowSpan="2"  Margin="0,0,0,120"></control:LoadingControl>
     </Grid>
 </Page>

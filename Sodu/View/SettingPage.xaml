@@ -312,7 +312,7 @@
                     </Button>
 
                     <Border Height="15"></Border>
-                    <Button Style="{StaticResource ItemButtonStyle}" Command="{Binding  PersonnalCenterCommand}">
+                    <Button Style="{StaticResource ItemButtonStyle}">
                         <Grid Style="{StaticResource GridItemStyle}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="35"/>
@@ -325,7 +325,7 @@
                         </Grid>
                     </Button>
 
-                    <Button Style="{StaticResource ItemButtonStyle}" Command="{Binding  PersonnalCenterCommand}">
+                    <Button Style="{StaticResource ItemButtonStyle}" >
                         <Grid Style="{StaticResource GridItemStyle}" >
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="35"/>
@@ -339,7 +339,7 @@
                         </Grid>
                     </Button>
 
-                    <Button Style="{StaticResource ItemButtonStyle}" Command="{Binding  PersonnalCenterCommand}">
+                    <Button Style="{StaticResource ItemButtonStyle}">
                         <Grid Style="{StaticResource GridItemStyle}" >
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="35"/>
@@ -354,7 +354,7 @@
                     </Button>
 
 
-                    <Button Style="{StaticResource ItemButtonStyle}" Command="{Binding  PersonnalCenterCommand}" Margin="0,20,0,8">
+                    <Button Style="{StaticResource ItemButtonStyle}" Command="{Binding  CommentCommand}" Margin="0,20,0,8">
                         <Grid Style="{StaticResource GridItemStyle}" >
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="35"/>
@@ -367,20 +367,8 @@
                         </Grid>
                     </Button>
 
-                    <Button Style="{StaticResource ItemButtonStyle}" Command="{Binding  PersonnalCenterCommand}">
-                        <Grid Style="{StaticResource GridItemStyle}" >
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="35"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="55"/>
-                            </Grid.ColumnDefinitions>
-                            <Image Source="../../Assets/Icon/help.png"  Style="{StaticResource TitleImageStyle}"></Image>
-                            <TextBlock Text="使用帮助"  Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource TitleTextStyle}"></TextBlock>
-                            <Path  Grid.Column="2" Style="{StaticResource  ArrowPathStyle}"    Data="M742.226498 488.815975 325.631382 72.217788c-12.111852-12.105712-31.746028-12.105712-43.85481 0-12.108782 12.111852-12.108782 31.742958 0 43.85481l394.668735 394.668735-394.668735 394.668735c-12.108782 12.111852-12.108782 31.742958 0 43.85481 12.108782 12.108782 31.742958 12.108782 43.85481 0l416.595117-416.598186C754.332211 520.558933 754.332211 500.924757 742.226498 488.815975z" UseLayoutRounding="False"></Path>
-                        </Grid>
-                    </Button>
 
-                    <Button Style="{StaticResource ItemButtonStyle}" Command="{Binding  PersonnalCenterCommand}">
+                    <Button Style="{StaticResource ItemButtonStyle}" Command="{Binding  MzsmCommand}">
                         <Grid Style="{StaticResource GridItemStyle}" >
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="35"/>
@@ -393,12 +381,12 @@
                         </Grid>
                     </Button>
 
-                    <Button Style="{StaticResource CustomButtonStyle}" Command="{Binding ExitCommand}" Height="40" Width="120" HorizontalAlignment="Center"  Content="退出" Margin="0,15,0,0"></Button>
-
                     <TextBlock Style="{StaticResource TitleTextStyle}" HorizontalAlignment="Center" Margin="0,20,0,0">
                         <Run Text="当前版本："></Run>
-                        <Run Text="2.0"></Run>
+                        <Run Text="{Binding AppVersion}"></Run>
                     </TextBlock>
+
+                    <Button Style="{StaticResource CustomButtonStyle}" Command="{Binding ExitCommand}" Height="40" Width="120" HorizontalAlignment="Center"  Content="退出" Margin="0,15,0,0"></Button>
 
                 </StackPanel>
             </ScrollViewer>

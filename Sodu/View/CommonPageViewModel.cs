@@ -44,7 +44,10 @@ namespace Sodu.View
             string html = null;
             DispatcherHelper.CheckBeginInvokeOnUI(() =>
             {
-                IsLoading = isShowLoading;
+                if (isShowLoading)
+                {
+                    IsLoading = true;
+                }
             });
             try
             {
@@ -60,7 +63,10 @@ namespace Sodu.View
             {
                 DispatcherHelper.CheckBeginInvokeOnUI(() =>
                 {
-                    IsLoading = false;
+                    if (isShowLoading)
+                    {
+                        IsLoading = false;
+                    }
                 });
             }
             return html;
@@ -71,7 +77,10 @@ namespace Sodu.View
             string html = null;
             DispatcherHelper.CheckBeginInvokeOnUI(() =>
             {
-                IsLoading = isShowLoading;
+                if (isShowLoading)
+                {
+                    IsLoading = true;
+                }
             });
             try
             {
@@ -87,7 +96,10 @@ namespace Sodu.View
             {
                 DispatcherHelper.CheckBeginInvokeOnUI(() =>
                 {
-                    IsLoading = false;
+                    if (isShowLoading)
+                    {
+                        IsLoading = false;
+                    }
                 });
             }
             return html;
@@ -110,14 +122,26 @@ namespace Sodu.View
             {
                 return;
             }
-            var url = string.Format(WebPageUrl.AddToShelfPage, book.BookId);
-            var html = await GetHtmlData2(url,false, false);
+
+            if (!ViewModelInstance.Instance.Main.IsLogin)
+            {
+                ToastHelper.ShowMessage("您尚未登陆，请登录后操作");
+                return;
+            }
+            if (ViewModelInstance.Instance.OnLineBookShelf.Books.FirstOrDefault(p => p.BookId == book.BookId) != null)
+            {
+                ToastHelper.ShowMessage("您已添加该小说至在线书架");
+                return;
+            }
+
+            var url = string.Format(SoduPageValue.AddToShelfPage, book.BookId);
+            var html = await GetHtmlData2(url, false, false);
 
             if (html.Contains("{\"success\":true}"))
             {
                 var temp = book.Clone();
                 temp.LastReadChapterName = temp.NewestChapterName;
-                var result = DbBookShelf.InsertOrUpdateBook(AppDataPath.GetAppCacheDbPath(), temp);
+                var result = DbBookShelf.InsertOrUpdateBook(AppDataPath.GetAppCacheDbPath(), temp, AppSettingService.GetKeyValue(SettingKey.UserName) as string);
                 ViewModelInstance.Instance.OnLineBookShelf.Books.Insert(0, temp);
                 ToastHelper.ShowMessage("添加到在线书架成功");
             }
@@ -128,6 +152,14 @@ namespace Sodu.View
         }
 
 
+        private ICommand _backCommand;
+        public ICommand BackCommand => _backCommand ?? (_backCommand = new RelayCommand<object>(OnBackCommand));
+
+        public void OnBackCommand(object obj)
+        {
+            NavigationService.GoBack();
+        }
+
 
 
         /// <summary>
@@ -136,10 +168,11 @@ namespace Sodu.View
         private ICommand _itemClickCommand;
         public ICommand ItemClickCommand => _itemClickCommand ?? (_itemClickCommand = new RelayCommand<object>(OnItemClickCommand));
 
-        public virtual void OnItemClickCommand(object obj)
+        public virtual async void OnItemClickCommand(object obj)
         {
-
-
+            NavigationService.NavigateTo(typeof(UpdateCatalogPage));
+            await Task.Delay(100);
+            ViewModelInstance.Instance.UpdateCatalog.LoadData(obj);
         }
 
         #endregion

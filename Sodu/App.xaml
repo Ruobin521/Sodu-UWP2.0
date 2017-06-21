@@ -13,7 +13,7 @@
             <converter:CountToVisibilityConverter x:Key="CountToVisibilityConverter"></converter:CountToVisibilityConverter>
             <SolidColorBrush x:Key="AppThemeColor" Color="#FF007AFF"></SolidColorBrush>
             <SolidColorBrush x:Key="AppBackColor" Color="#FFEFEFF4"></SolidColorBrush>
-            <SolidColorBrush x:Key="AppTextColor" Color="#FF515151"></SolidColorBrush>
+            <SolidColorBrush x:Key="AppTextColor" Color="#FF8C8C8C"></SolidColorBrush>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Sodu.Control/Style/CustomControlStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>

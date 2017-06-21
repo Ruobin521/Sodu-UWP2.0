@@ -22,15 +22,9 @@
         
     </Page.Resources>
 
-
     <Grid Background="{StaticResource AppBackColor}">
         <Grid.RowDefinitions>
             <RowDefinition Height="44"/>
-            <RowDefinition Height="140"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="80"/>
-            <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -41,43 +35,56 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="登陆" Foreground="White" FontSize="18" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0"></TextBlock>
-            <AppBarButton Grid.Column="0" Icon="Back" Foreground="White" Click="AppBarButton_Click"  />
+            <AppBarButton Grid.Column="0" Icon="Back" Foreground="White"  Command="{Binding  BackCommand}"  />
         </Grid>
 
-        <Image Source="../Assets/Icon/head.png" Height="100" Width="100" Grid.Row="1"></Image>
+        <Grid  Grid.Row="1" MaxWidth="600">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0"/>
+                <RowDefinition Height="140"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="80"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Image Source="../Assets/Icon/head.png" Height="100" Width="100" Grid.Row="1"></Image>
 
-        <Grid Grid.Row="2" Height="45" Margin="30,15" Background="Transparent">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="17*"/>
-                <ColumnDefinition Width="133*"/>
-            </Grid.ColumnDefinitions>
-            <Image Source="../Assets/Icon/user@3x.png" Height="25" Width="25" Margin="0,0,0,5"></Image>
-            <TextBox Grid.Column="1"  Text="{Binding UserName,Mode=TwoWay}" Height="25"  PlaceholderText="请输入用户名"  BorderThickness="0" BorderBrush="Transparent" Background="Transparent"></TextBox>
-            <Border Height="1" BorderThickness="1" BorderBrush="Gray" Grid.Column="0" Grid.ColumnSpan="2" 
+            <Grid Grid.Row="2" Height="45" Margin="30,15" Background="Transparent">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="17*"/>
+                    <ColumnDefinition Width="133*"/>
+                </Grid.ColumnDefinitions>
+                <Image Source="../Assets/Icon/user@3x.png" Height="25" Width="25" Margin="0,0,0,5"></Image>
+                <TextBox Grid.Column="1"  Text="{Binding UserName,Mode=TwoWay}" Height="25"  PlaceholderText="请输入用户名"  BorderThickness="0" BorderBrush="Transparent" Background="Transparent"></TextBox>
+                <Border Height="1" BorderThickness="1" BorderBrush="Gray" Grid.Column="0" Grid.ColumnSpan="2" 
                     VerticalAlignment="Bottom" Margin="0,15,0,3"></Border>
-        </Grid>
+            </Grid>
 
-        <Grid Grid.Row="3" Height="45" Margin="30,15" Background="Transparent">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="17*"/>
-                <ColumnDefinition Width="133*"/>
-            </Grid.ColumnDefinitions>
-            <Image Source="../Assets/Icon/lock@3x.png" Height="25" Width="25" Margin="0,0,0,5"></Image>
-            <PasswordBox Grid.Column="1" Password="{Binding PassWd,Mode=TwoWay}"  Height="25" 
+            <Grid Grid.Row="3" Height="45" Margin="30,15" Background="Transparent">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="17*"/>
+                    <ColumnDefinition Width="133*"/>
+                </Grid.ColumnDefinitions>
+                <Image Source="../Assets/Icon/lock@3x.png" Height="25" Width="25" Margin="0,0,0,5"></Image>
+                <PasswordBox Grid.Column="1" Password="{Binding PassWd,Mode=TwoWay}"  Height="25" 
                          PlaceholderText="请输入密码" Background="Transparent" FontSize="16" BorderThickness="0" BorderBrush="Transparent" 
                          ></PasswordBox>
-            <Border Height="1" BorderThickness="1" BorderBrush="Gray" Grid.Column="0" Grid.ColumnSpan="2" 
+                <Border Height="1" BorderThickness="1" BorderBrush="Gray" Grid.Column="0" Grid.ColumnSpan="2" 
                     VerticalAlignment="Bottom" Margin="0,0,0,3"></Border>
-        </Grid>
+            </Grid>
 
-        <Button x:Name="BtnLogin" Grid.Row="4" Width="250" Height="35" Margin="0,0,0,0" Command="{Binding LoginCommand}" Style="{StaticResource CustomButtonStyle}" Content="登陆" HorizontalAlignment="Center"  ></Button>
+            <Button x:Name="BtnLogin" Grid.Row="4" Width="250" Height="35" Margin="0,0,0,0" Command="{Binding LoginCommand}" Style="{StaticResource CustomButtonStyle}" Content="登陆" HorizontalAlignment="Center"  ></Button>
 
-        <Button Grid.Row="5" Width="200" Height="35" Style="{StaticResource CustomButtonStyle}"  Command="{Binding ToRegisterCommand}"
+            <Button Grid.Row="5" Width="200" Height="35" Style="{StaticResource CustomButtonStyle}"  Command="{Binding ToRegisterCommand}"
                 Background="Transparent" Content="还没有账号？点击注册" HorizontalAlignment="Center"
                 FontFamily="微软雅黑"  FontWeight="Light" FontSize="12"
                 Foreground="Gray"></Button>
 
-        <control:LoadingControl Grid.Row="1" Grid.RowSpan="3" Margin="0,120,0,0" IsActive="{Binding IsLoading}" VerticalAlignment="Center" HorizontalAlignment="Center"  ></control:LoadingControl>
+            <control:LoadingControl Grid.Row="1" Grid.RowSpan="3" Margin="0,120,0,0" IsActive="{Binding IsLoading}" VerticalAlignment="Center" HorizontalAlignment="Center"  ></control:LoadingControl>
 
+        </Grid>
     </Grid>
+
+  
 </Page>

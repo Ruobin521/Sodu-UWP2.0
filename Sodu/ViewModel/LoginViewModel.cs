@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,22 +17,11 @@ using Sodu.View;
 
 namespace Sodu.ViewModel
 {
-    public class LoginViewModel : ViewModelBase
+    public class LoginViewModel : CommonPageViewModel
     {
 
-        private HttpHelper Http { get; set; }
 
-        private bool _isLoading;
-        /// <summary>
-        ///正在加载
-        /// </summary>
-        public bool IsLoading
-        {
-            get { return _isLoading; }
-            set { Set(ref _isLoading, value); }
-        }
-
-
+        #region 属性
 
         private string _userName;
 
@@ -54,17 +44,48 @@ namespace Sodu.ViewModel
             set { Set(ref _passWd, value); }
         }
 
+        private string _passWd2;
+        /// <summary>
+        /// 密码2
+        /// </summary>
+        public string PassWd2
+        {
+            get { return _passWd2; }
+            set { Set(ref _passWd2, value); }
+        }
+
+
+
+        #endregion
+
+        #region 命令
+
         private ICommand _loginCommand;
         public ICommand LoginCommand
         {
             get
             {
                 return _loginCommand ?? (
-                 _loginCommand = new RelayCommand<object>(
-                      (obj) =>
-                      {
-                          OnLoginCommand();
-                      }));
+                           _loginCommand = new RelayCommand<object>(
+                               (obj) =>
+                               {
+                                   OnLoginCommand();
+                               }));
+            }
+        }
+
+
+        private ICommand _registerCommand;
+        public ICommand RegisterCommand
+        {
+            get
+            {
+                return _registerCommand ?? (
+                           _registerCommand = new RelayCommand<object>(
+                               (obj) =>
+                               {
+                                   OnRegisterCommand();
+                               }));
             }
         }
 
@@ -74,27 +95,70 @@ namespace Sodu.ViewModel
             get
             {
                 return _toRegisterCommand ?? (
-                 _toRegisterCommand = new RelayCommand<object>(
-                      (obj) =>
-                      {
-                          NavigationService.NavigateTo(typeof(RegisterPage));
-                      }));
+                           _toRegisterCommand = new RelayCommand<object>(
+                               (obj) =>
+                               {
+                                   NavigationService.NavigateTo(typeof(RegisterPage));
+                               }));
             }
         }
 
 
 
+        private ICommand _logoutCommand;
+        public ICommand LogoutCommand
+        {
+            get
+            {
+                return _logoutCommand ?? (
+                           _logoutCommand = new RelayCommand<object>(
+                               (obj) =>
+                               {
+                                   OnLogoutCommand();
+
+                               }));
+            }
+        }
+
+
+        #endregion
+
+        #region 构造函数
+
+        public LoginViewModel()
+        {
+            if (CookieHelper.CheckLogin())
+            {
+                UserName = AppSettingService.GetKeyValue(SettingKey.UserName) as string;
+            }
+        }
+
+
+        #endregion
+
+
+        #region 方法
+
         private void OnLoginCommand()
         {
-            if (!CheckInput())
+            if (!CheckLoginInput())
             {
-                ToastHelper.ShowMessage("请输入用户名密码");
                 return;
             }
 
             LoginAction();
         }
+        private bool CheckLoginInput()
+        {
+            if (string.IsNullOrEmpty(UserName) || string.IsNullOrEmpty(UserName.Trim()) || string.IsNullOrEmpty(PassWd) || string.IsNullOrEmpty(PassWd.Trim()))
+            {
+                ToastHelper.ShowMessage("请输入用户名密码");
+                return false;
+            }
 
+
+            return true;
+        }
         private async void LoginAction()
         {
             if (IsLoading)
@@ -108,13 +172,12 @@ namespace Sodu.ViewModel
                 var postdata = "username=" + this.UserName + "&userpass=" + this.PassWd;
 
                 Http = new HttpHelper();
-                var html = await Http.HttpClientPostRequest(WebPageUrl.LoginPostPage, postdata);
+                var html = await Http.HttpClientPostRequest(SoduPageValue.LoginPostPage, postdata);
                 if (html != null && html.Contains("{\"success\":true}"))
                 {
-                    ToastHelper.ShowMessage("登陆成功");
-
+                    AppSettingService.SetKeyValue(SettingKey.UserName, UserName);
+                    CookieHelper.SetCookie(SoduPageValue.LoginPostPage, true);
                     ViewModelInstance.Instance.Main.SetLoginAction(true);
-                    CookieHelper.SetCookie(WebPageUrl.LoginPostPage, true);
                     NavigationService.GoBack();
                 }
                 else
@@ -132,18 +195,80 @@ namespace Sodu.ViewModel
             }
         }
 
-
-        private bool CheckInput()
+        private void OnRegisterCommand()
         {
-            if (string.IsNullOrEmpty(UserName) || string.IsNullOrEmpty(UserName.Trim()) || string.IsNullOrEmpty(PassWd) || string.IsNullOrEmpty(PassWd.Trim()))
+            if (!CheckRegisterInput())
             {
+                return;
+            }
+
+            RegisterAction();
+        }
+        private bool CheckRegisterInput()
+        {
+            if (string.IsNullOrEmpty(UserName) || string.IsNullOrEmpty(UserName.Trim()) || string.IsNullOrEmpty(PassWd) || string.IsNullOrEmpty(PassWd.Trim()) || string.IsNullOrEmpty(PassWd2) || string.IsNullOrEmpty(PassWd2.Trim()))
+            {
+                ToastHelper.ShowMessage("请输入用户名密码");
                 return false;
             }
 
-
+            if (!PassWd.Equals(PassWd2))
+            {
+                ToastHelper.ShowMessage("两次密码输入不一致，请确认");
+                return false;
+            }
             return true;
+        }
+        private async void RegisterAction()
+        {
+            if (IsLoading)
+            {
+                return;
+            }
+
+            IsLoading = true;
+            try
+            {
+                var postdata = "username=" + WebUtility.UrlEncode(UserName) + "&userpass=" + this.PassWd;
+
+                Http = new HttpHelper();
+                var html = await Http.HttpClientPostRequest(SoduPageValue.RegisterPostPage, postdata);
+                if (html != null && html.Contains("{\"success\":true}"))
+                {
+                    ToastHelper.ShowMessage("注册成功");
+
+                    AppSettingService.SetKeyValue(SettingKey.UserName, UserName);
+                    ViewModelInstance.Instance.Main.SetLoginAction(true);
+                    CookieHelper.SetCookie(SoduPageValue.LoginPostPage, true);
+                    NavigationService.NavigateTo(typeof(MainPage));
+                    NavigationService.ClearHistory();
+                }
+                else
+                {
+                    ToastHelper.ShowMessage("注册失败，该用户名可能已经被注册");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                IsLoading = false;
+            }
         }
 
 
+        private void OnLogoutCommand()
+        {
+            CookieHelper.SetCookie(SoduPageValue.HomePage, false);
+            AppSettingService.SetKeyValue(SettingKey.UserName, null);
+            ViewModelInstance.Instance.Main.SetLoginAction(false);
+            NavigationService.ClearHistory();
+            NavigationService.NavigateTo(typeof(MainPage));
+            NavigationService.NavigateTo(typeof(LoginPage));
+        }
+
+        #endregion
     }
 }

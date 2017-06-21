@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -25,6 +26,15 @@ namespace Sodu.View
         public RegisterPage()
         {
             this.InitializeComponent();
+            KeyUp += LoginPage_KeyUp;
+        }
+
+        private void LoginPage_KeyUp(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == VirtualKey.Enter)
+            {
+                this.BtnLogin.Command?.Execute(null);
+            }
         }
     }
 }

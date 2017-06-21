@@ -104,6 +104,7 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Service\AppSettingService.cs" />
     <Compile Include="Service\CookieHelper.cs" />
     <Compile Include="Service\NavigationService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -113,6 +114,9 @@
     </Compile>
     <Compile Include="UserControl\OnlineBookShelfItem.xaml.cs">
       <DependentUpon>OnlineBookShelfItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControl\UpdateListItem.xaml.cs">
+      <DependentUpon>UpdateListItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControl\RankListItem.xaml.cs">
       <DependentUpon>RankListItem.xaml</DependentUpon>
@@ -127,9 +131,11 @@
     <Compile Include="ViewModel\LoginViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\OnlineBookShelfPageViewModel.cs" />
+    <Compile Include="ViewModel\OnlineContentPageViewModel.cs" />
     <Compile Include="ViewModel\RankPageViewModel.cs" />
     <Compile Include="ViewModel\SearchPageViewModel.cs" />
     <Compile Include="ViewModel\SettingPageViewModel.cs" />
+    <Compile Include="ViewModel\UpdateCatalogPageViewModel.cs" />
     <Compile Include="ViewModel\ViewModelInstance.cs" />
     <Compile Include="View\BaseListUserControl.cs" />
     <Compile Include="View\CommonPageViewModel.cs" />
@@ -144,6 +150,12 @@
     </Compile>
     <Compile Include="View\OnlineBookShelfPage.xaml.cs">
       <DependentUpon>OnlineBookShelfPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\OnlineContentPage.xaml.cs">
+      <DependentUpon>OnlineContentPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\PersonalCenterPage.xaml.cs">
+      <DependentUpon>PersonalCenterPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\RankPage.xaml.cs">
       <DependentUpon>RankPage.xaml</DependentUpon>
@@ -169,6 +181,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\BadgeLogo.scale-400.png" />
+    <Content Include="Assets\Icon\close_in%403x.png" />
     <Content Include="Assets\Icon\bookshelf1.png" />
     <Content Include="Assets\Icon\bookshelf2.png" />
     <Content Include="Assets\Icon\cover.png" />
@@ -223,6 +236,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="UserControl\UpdateListItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="UserControl\RankListItem.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -246,6 +263,14 @@
     <Page Include="View\OnlineBookShelfPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\OnlineContentPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\PersonalCenterPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\RankPage.xaml">
       <SubType>Designer</SubType>

@@ -8,7 +8,6 @@
     xmlns:control="using:Sodu.Control"
     DataContext="{Binding  Instance.Main,Source={StaticResource Locator}}"
     mc:Ignorable="d">
-
     <Grid  Background="{StaticResource AppBackColor}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>

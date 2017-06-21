@@ -15,27 +15,35 @@ namespace Sodu.Service
         {
             HttpBaseProtocolFilter filter = new HttpBaseProtocolFilter();
             HttpCookieCollection cookieCollection = filter.CookieManager.GetCookies(new Uri(url));
+            HttpCookie cookie = null;
             foreach (var cookieItem in cookieCollection)
             {
                 if (cookieItem.Name == "sodu_user")
                 {
-                    if (isRember)
-                    {
-                        //设置cookie存活时间，如果为null，则表示只在一个会话中生效。
-                        cookieItem.Expires = new DateTimeOffset(DateTime.Now.AddDays(365));
-                    }
-                    else
-                    {
-                        cookieItem.Expires = null;
-                    }
-                    filter.CookieManager.SetCookie(cookieItem, false);
+                    cookie = cookieItem;
                 }
             }
+
+            if (cookie == null)
+            {
+                return;
+            }
+            if (isRember)
+            {
+                //设置cookie存活时间，如果为null，则表示只在一个会话中生效。
+                cookie.Expires = new DateTimeOffset(DateTime.Now.AddDays(365));
+                filter.CookieManager.SetCookie(cookie, false);
+            }
+            else
+            {
+                filter.CookieManager.DeleteCookie(cookie);
+            }
+
         }
         public static bool CheckLogin()
         {
             var filter = new HttpBaseProtocolFilter();
-            var cookieCollection = filter.CookieManager.GetCookies(new Uri(WebPageUrl.HomePage));
+            var cookieCollection = filter.CookieManager.GetCookies(new Uri(SoduPageValue.HomePage));
             var cookieItem = cookieCollection.FirstOrDefault(p => p.Name.Equals("sodu_user"));
             return cookieItem != null;
         }

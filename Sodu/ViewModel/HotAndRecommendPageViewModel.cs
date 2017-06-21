@@ -16,7 +16,7 @@ namespace Sodu.ViewModel
         }
 
 
-        public override void LoadData()
+        public override void LoadData(object obj = null)
         {
             if (Books == null || Books.Count == 0)
             {
@@ -26,8 +26,8 @@ namespace Sodu.ViewModel
 
         public async void GetData()
         {
-            var url = WebPageUrl.HomePage;
-            var html = await GetHtmlData(url,true,true);
+            var url = SoduPageValue.HomePage;
+            var html = await GetHtmlData(url, true, true);
             var list = ListPageDataHelper.GetHotAndRecommendList(html);
             if (list == null || list.Count == 0)
             {

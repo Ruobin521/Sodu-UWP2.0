@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Sodu.Core.HtmlService
 {
-    public class WebPageUrl
+    public class SoduPageValue
     {
         /// <summary>
         /// 首页地址

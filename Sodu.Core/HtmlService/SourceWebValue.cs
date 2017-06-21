@@ -7,25 +7,25 @@ using System.Threading.Tasks;
 
 namespace Sodu.Core.HtmlService
 {
-    public class LyWebHelper
+    public class SourceWebValue
     {
         /// 第七中文
-        public string Dqzw { get; } = "www.d7zy.com";
+        public const string Dqzw = "www.d7zy.com";
 
         /// <summary>
         /// 7度书屋
         /// </summary>
-        public string Qdsw { get; } = "www.7dsw.com";
+        public const string Qdsw = "www.7dsw.com";
 
         /// <summary>
         /// 第九中文网
         /// </summary>
-        public string Dijiuzww { get; } = "dijiuzww.com";
+        public const string Dijiuzww = "dijiuzww.com";
 
         /// <summary>
         /// 清风小说
         /// </summary>
-        public string Qfxs { get; } = "www.qfxs.cc";
+        public const string Qfxs = "www.qfxs.cc";
 
         /// <summary>
         /// 窝窝小说网2
@@ -34,38 +34,37 @@ namespace Sodu.Core.HtmlService
         /// <summary>
         /// 大海中文
         /// </summary>
-        public string Dhzw { get; } = "www.dhzw.com";
+        public const string Dhzw = "www.dhzw.com";
 
         /// <summary>
         /// 少年文学
         /// </summary>
-        public string Snwx { get; } = "www.snwx.com";
-
+        public const string Snwx = "www.snwx.com";
 
         /// <summary>
         /// 爱上中文
         /// </summary>
-        public string Aszw { get; } = "www.aszw8.com";
+        public const string Aszw = "www.aszw8.com";
 
         /// <summary>
         /// 手牵手小说
         /// </summary>
-        public string Sqsxs { get; } = "www.sqsxs.com";
+        public const string Sqsxs = "www.sqsxs.com";
 
         /// <summary>
         /// 找书网
         /// </summary>
-        public string Zsw { get; } = "www.zhaodaoshu.com";
+        public const string Zsw = "www.zhaodaoshu.com";
 
         /// <summary>
         /// 去笔趣阁
         /// </summary>
-        public string Xbiquge { get; } = "www.xbiquge.net";
+        public const string Xbiquge = "www.xbiquge.net";
 
         /// <summary>
         /// 古古
         /// </summary>
-        public string Ggxs { get; } = "www.55xs.com";
+        public const string Ggxs = "www.55xs.com";
 
         /// <summary>
         /// 倚天中文
@@ -74,27 +73,27 @@ namespace Sodu.Core.HtmlService
         /// <summary>
         /// 书路小说
         /// </summary>
-        public string Shu6 { get; } = "www.shu6.cc";
+        public const string Shu6 = "www.shu6.cc";
 
         /// <summary>
         /// 风华居
         /// </summary>
-        public string Fenghuaju { get; } = "www.fenghuaju.cc";
+        public const string Fenghuaju = "www.fenghuaju.cc";
 
         /// <summary>
         ///云来阁
         /// </summary>
-        public string Ylg { get; } = "www.yunlaige.com";
+        public const string Ylg = "www.yunlaige.com";
 
         /// <summary>
         ///4k中文
         /// </summary>
-        public string Fourkzw { get; } = "www.4kzw.com";
+        public const string Fourkzw = "www.4kzw.com";
 
         /// <summary>
         ///幼狮书盟
         /// </summary>
-        public string Yssm { get; } = "www.youshishumeng.com";
+        public const string Yssm = "www.youshishumeng.com";
 
         /// <summary>
         ///80小说
@@ -103,12 +102,12 @@ namespace Sodu.Core.HtmlService
         /// <summary>
         ///木鱼哥
         /// </summary>
-        public string Myg { get; } = "www.muyuge.com";
+        public const string Myg = "www.muyuge.com";
 
         /// <summary>
         ///木鱼哥
         /// </summary>
-        public string Myg2 { get; } = "www.muyuge.net";
+        public const string Myg2 = "www.muyuge.net";
 
         /// <summary>
         ///VIVI小说网（顶点小说）
@@ -118,12 +117,12 @@ namespace Sodu.Core.HtmlService
         /// <summary>
         ///轻语小说
         /// </summary>
-        public string Qyxs { get; } = "www.qingyuxiaoshuo.com";
+        public const string Qyxs = "www.qingyuxiaoshuo.com";
 
         /// <summary>
         /// 乐文
         /// </summary>
-        public string Lww { get; } = "www.lwtxt.net";
+        public const string Lww = "www.lwtxt.net";
 
         /// <summary>
         /// 去笔趣阁
@@ -136,42 +135,44 @@ namespace Sodu.Core.HtmlService
         /// <summary>
         /// 秋水轩
         /// </summary>
-        public string Qsx { get; } = "www.qiushuixuan.cc";
+        public const string Qsx = "www.qiushuixuan.cc";
 
         /// <summary>
         /// 卓雅居
         /// </summary>
-        public string Zyj { get; } = "www.zhuoyaju.com";
+        public const string Zyj = "www.zhuoyaju.com";
 
         /// <summary>
         /// 81xs
         /// </summary>
-        public string Xs81 { get; } = "www.81xsw.com";
+        public const string Xs81 = "www.81xsw.com";
 
         /// <summary>
         /// 风云
         /// </summary>
-        public string Fyxs { get; } = "www.baoliny.com";
+        public const string Fyxs = "www.baoliny.com";
 
         /// <summary>
         /// 大书包
         /// </summary>
-        public string Dsb { get; } = "www.dashubao.cc";
+        public const string Dsb = "www.dashubao.cc";
 
         /// <summary>
         /// 漂流地
         /// </summary>
-        public string Pld { get; } = "piaoliudi.com";
+        public const string Pld = "piaoliudi.com";
 
         /// <summary>
         /// 齐鲁文学
         /// </summary>
-        public string Qlwx { get; } = "www.76wx.com";
+        public const string Qlwx = "www.76wx.com";
 
 
         public static bool CheckUrl(string url)
         {
-            return GetPropertyInfoArray().FirstOrDefault(p => p == url) != null;
+            var uri = new Uri(url);
+            var host = uri.Host;
+            return GetPropertyInfoArray().FirstOrDefault(p => p == host) != null;
         }
 
         private static List<string> GetPropertyInfoArray()
@@ -179,13 +180,12 @@ namespace Sodu.Core.HtmlService
             var values = new List<string>();
             try
             {
-                var type = typeof(LyWebHelper);
-                var obj = Activator.CreateInstance(type);
-                PropertyInfo[] props = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                var type = typeof(SourceWebValue);
+                var props = type.GetFields();
 
                 foreach (var pro in props)
                 {
-                    var temp = pro.GetValue(obj, null);
+                    var temp = pro.GetValue(null);
                     if (temp != null)
                     {
                         values.Add(temp.ToString());

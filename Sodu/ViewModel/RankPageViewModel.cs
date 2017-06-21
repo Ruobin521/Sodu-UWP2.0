@@ -27,7 +27,7 @@ namespace Sodu.ViewModel
             Title = "排行榜";
         }
 
-        public override void LoadData()
+        public override void LoadData(object obj = null)
         {
             if (Books == null || Books.Count == 0)
             {
@@ -38,7 +38,7 @@ namespace Sodu.ViewModel
         public async void GetData(int pageIndex)
         {
             PageIndex = pageIndex;
-            var url = WebPageUrl.GetRankListPage(pageIndex.ToString());
+            var url = SoduPageValue.GetRankListPage(pageIndex.ToString());
 
             var html = await GetHtmlData(url, true, true);
             var list = ListPageDataHelper.GetRankListFromHtml(html);
@@ -79,9 +79,5 @@ namespace Sodu.ViewModel
             GetData(PageIndex + 1);
         }
 
-        public override void OnItemClickCommand(object obj)
-        {
-
-        }
     }
 }

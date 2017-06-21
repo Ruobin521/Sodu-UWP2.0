@@ -36,7 +36,7 @@ namespace Sodu.ViewModel
         }
 
 
-        private int _pageCount;
+        private int _pageCount = -1;
         /// <summary>
         ///页面数量
         /// </summary>
@@ -109,7 +109,7 @@ namespace Sodu.ViewModel
         /// <summary>
         /// 初始化时加载数据
         /// </summary>
-        public virtual void LoadData()
+        public virtual void LoadData(object obj = null)
         {
 
         }

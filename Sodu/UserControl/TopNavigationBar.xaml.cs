@@ -49,9 +49,31 @@ namespace Sodu.UserControl
             set { SetValue(RefreshCommandProperty, value); }
         }
 
+        public static readonly DependencyProperty BackCommandProperty = DependencyProperty.Register(
+            "BackCommand", typeof(ICommand), typeof(TopNavigationBar), new PropertyMetadata(default(ICommand)));
+
+        public ICommand BackCommand
+        {
+            get { return (ICommand)GetValue(BackCommandProperty); }
+            set { SetValue(BackCommandProperty, value); }
+        }
+
         public TopNavigationBar()
         {
             this.InitializeComponent();
+
+            this.Loaded += (sender, e) =>
+            {
+                if (SearchCommand == null)
+                {
+                    SearchButton.Visibility = Visibility.Collapsed;
+                }
+
+                if (BackCommand == null)
+                {
+                    BackButton.Visibility = Visibility.Collapsed;
+                }
+            };
         }
     }
 }

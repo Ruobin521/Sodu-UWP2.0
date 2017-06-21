@@ -314,11 +314,11 @@ namespace Sodu.Core.HtmlService
                 Book t_entity = new Book();
                 t_entity.NewestChapterUrl = Regex.Match(matches2[0].ToString(), "(?<=&chapterurl=).*?(?=\")").ToString();
 
-                //bool value = WebSet.CheckUrl(t_entity.NewestChapterUrl);
-                //if (!value)
-                //{
-                //    continue;
-                //}
+                bool value = SourceWebValue.CheckUrl(t_entity.NewestChapterUrl);
+                if (!value)
+                {
+                    continue;
+                }
                 t_entity.NewestChapterName = Regex.Match(matches2[0].ToString(), "(?<=alt=\").*?(?=\")").ToString();
 
                 //  t_entity.ChapterName = Regex.Replace(matches2[0].ToString(), "<.*?>", "").ToString();

@@ -25,14 +25,21 @@ namespace Sodu.View
     {
         public SearchPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
+
+            Loaded += SearchPage_Loaded;
+        }
+
+        private void SearchPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            TxtSearch.Focus(FocusState.Pointer);
         }
 
         private void TxtSearch_OnKeyUp(object sender, KeyRoutedEventArgs e)
         {
             if (e.Key == VirtualKey.Enter)
             {
-                this.BtnSearch.Command?.Execute(this.TxtSearch.Text);
+                BtnSearch.Command?.Execute(this.TxtSearch.Text);
             }
         }
     }

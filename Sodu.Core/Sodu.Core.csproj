@@ -113,14 +113,18 @@
     <Compile Include="Entity\BaseViewModel.cs" />
     <Compile Include="Entity\Book.cs" />
     <Compile Include="Entity\BookCatalog.cs" />
+    <Compile Include="Entity\BookShelfSchema.cs" />
     <Compile Include="Entity\LocalBook.cs" />
     <Compile Include="Entity\TabbarItem.cs" />
-    <Compile Include="HtmlService\LyWebHelper.cs" />
+    <Compile Include="HtmlService\AnalisysSourceWebHtmlHelper.cs" />
+    <Compile Include="HtmlService\SourceHtmlHelper.cs" />
+    <Compile Include="HtmlService\SourceWebValue.cs" />
     <Compile Include="HtmlService\ListPageDataHelper.cs" />
-    <Compile Include="HtmlService\WebPageUrl.cs" />
+    <Compile Include="HtmlService\SoduPageValue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\HttpHelper.cs" />
     <Compile Include="Util\PlatformHelper.cs" />
+    <Compile Include="Util\SettingHelper.cs" />
     <EmbeddedResource Include="Properties\Sodu.Core.rd.xml" />
   </ItemGroup>
   <ItemGroup>

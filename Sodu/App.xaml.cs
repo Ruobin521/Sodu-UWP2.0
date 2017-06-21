@@ -74,15 +74,15 @@ namespace Sodu
                 // 创建要充当导航上下文的框架，并导航到第一页
                 RootFrame = new Frame();
                 DispatcherHelper.Initialize();
-                RootFrame.Navigated += RootFrame_Navigated;
 
                 if (PlatformHelper.CurrentPlatform == PlatformHelper.Platform.IsPc)
                 {
-                    SystemNavigationManager.GetForCurrentView().BackRequested += (sender, args) =>
-                    {
-                        args.Handled = true;
-                        OnAppBack();
-                    };
+                    //RootFrame.Navigated += RootFrame_Navigated;
+                    //SystemNavigationManager.GetForCurrentView().BackRequested += (sender, args) =>
+                    //{
+                    //    args.Handled = true;
+                    //    OnAppBack();
+                    //};
                     //rootFrame.KeyUp -= RootFrame_KeyUp;
                     //rootFrame.KeyUp += RootFrame_KeyUp;
 
