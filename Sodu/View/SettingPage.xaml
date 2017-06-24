@@ -29,16 +29,7 @@
             <Setter Property="Stretch" Value="Fill"/>
         </Style>
 
-        <Style x:Key="ArrowPathStyle" TargetType="Path">
-            <Setter Property="HorizontalAlignment" Value="Left"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Margin" Value="10,0,0,0"/>
-            <Setter Property="Fill" Value="#FF555555"/>
-            <Setter Property="StrokeThickness" Value="0"/>
-            <Setter Property="Height" Value="15"/>
-            <Setter Property="Width" Value="10"/>
-            <Setter Property="Stretch" Value="Fill"/>
-        </Style>
+     
 
         <Style x:Key="CustomToggleSwitchStyle" TargetType="ToggleSwitch">
             <Setter Property="Foreground" Value="Black"/>
@@ -273,7 +264,8 @@
         <Grid Grid.Row="1"  Margin="0,5,0,10">
             <ScrollViewer   HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                 <StackPanel Orientation="Vertical">
-                    <Button Style="{StaticResource ItemButtonStyle}" Command="{Binding  PersonnalCenterCommand}">
+                    <Button Style="{StaticResource ItemButtonStyle}" Command="{Binding  PersonnalCenterCommand}" 
+                            Visibility="{Binding IsPro,Converter={StaticResource BooleanToVisibilityConverter} }">
                         <Grid Style="{StaticResource GridItemStyle}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="35"/>
@@ -285,7 +277,22 @@
                             <Path  Grid.Column="2" Style="{StaticResource ArrowPathStyle}"  Data="M742.226498 488.815975 325.631382 72.217788c-12.111852-12.105712-31.746028-12.105712-43.85481 0-12.108782 12.111852-12.108782 31.742958 0 43.85481l394.668735 394.668735-394.668735 394.668735c-12.108782 12.111852-12.108782 31.742958 0 43.85481 12.108782 12.108782 31.742958 12.108782 43.85481 0l416.595117-416.598186C754.332211 520.558933 754.332211 500.924757 742.226498 488.815975z" UseLayoutRounding="False"></Path>
                         </Grid>
                     </Button>
-                    <Button Style="{StaticResource ItemButtonStyle}" Command="{Binding  PersonnalCenterCommand}">
+
+                    <Button Style="{StaticResource ItemButtonStyle}" Command="{Binding  BuyProCommand}" 
+                            Visibility="{Binding IsFree,Converter={StaticResource BooleanToVisibilityConverter} }">
+                        <Grid Style="{StaticResource GridItemStyle}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="35"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="55"/>
+                            </Grid.ColumnDefinitions>
+                            <Path Grid.Column="0"    Style="{StaticResource TitlePathStyle}"    
+                                  Data="M955.008 131.392c0-11.264-9.152-20.48-20.48-20.48L89.728 110.912c-11.52 0-20.736 9.216-20.736 20.48l0 241.152c0 34.752 12.224 66.624 32.512 92.288l0 448.192 821.184 0L922.688 464.832c20.16-25.664 32.32-57.536 32.32-92.288L955.008 131.392zM110.144 152.128l803.648 0 0 220.416c0 62.528-53.888 113.216-120.256 113.216-66.112 0-120.064-50.688-120.064-113.216 0-11.264-9.152-20.48-20.48-20.48s-20.672 9.216-20.672 20.48c0 62.528-53.952 113.216-120.128 113.216-66.368 0-120.256-50.688-120.256-113.216 0-11.264-9.344-20.48-20.608-20.48s-20.608 9.216-20.608 20.48c0 62.528-53.824 113.216-120.192 113.216-34.56 0-65.92-13.824-87.68-36.288L142.848 448.064 141.056 448.064c-19.072-20.224-30.912-46.4-30.912-75.52L110.144 152.128zM142.72 872.128 142.72 501.824c25.28 15.936 55.36 24.96 87.68 24.96 60.352 0 113.152-31.744 140.8-78.72 27.776 47.04 80.384 78.72 140.864 78.72 60.288 0 113.152-31.744 140.8-78.72 27.648 47.04 80.384 78.72 140.544 78.72 32.576 0 62.72-9.024 88-24.96l0 370.304L142.72 872.128z"  UseLayoutRounding="False"></Path>
+                            <TextBlock  Text="购买专业版，解锁更多功能" Grid.Column="1"   Grid.ColumnSpan="2" Style="{StaticResource TitleTextStyle}"></TextBlock>
+                            <Path  Grid.Column="2" Style="{StaticResource ArrowPathStyle}"  Data="M742.226498 488.815975 325.631382 72.217788c-12.111852-12.105712-31.746028-12.105712-43.85481 0-12.108782 12.111852-12.108782 31.742958 0 43.85481l394.668735 394.668735-394.668735 394.668735c-12.108782 12.111852-12.108782 31.742958 0 43.85481 12.108782 12.108782 31.742958 12.108782 43.85481 0l416.595117-416.598186C754.332211 520.558933 754.332211 500.924757 742.226498 488.815975z" UseLayoutRounding="False"></Path>
+                        </Grid>
+                    </Button>
+                    <Button Style="{StaticResource ItemButtonStyle}" Command="{Binding  DownloadCenterCommand}">
                         <Grid Style="{StaticResource GridItemStyle}"  >
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="35"/>
@@ -298,7 +305,7 @@
                         </Grid>
                     </Button>
 
-                    <Button Style="{StaticResource ItemButtonStyle}" Command="{Binding  PersonnalCenterCommand}">
+                    <Button Style="{StaticResource ItemButtonStyle}" Command="{Binding  }">
                         <Grid Style="{StaticResource GridItemStyle}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="35"/>

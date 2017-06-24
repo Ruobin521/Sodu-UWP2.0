@@ -22,7 +22,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid  Height="75" Width="55">
-            <Image Source="{Binding CurrentBook.BookId,Converter={StaticResource BookCoverConverter}}" Stretch="Fill" ></Image>
+            <Image Source="{Binding CurrentBook.Id,Converter={StaticResource BookCoverConverter}}" Stretch="Fill" ></Image>
             <Border Background="#FF007AFF" Height="14" Width="25" HorizontalAlignment="Right" VerticalAlignment="Bottom" CornerRadius="1" Visibility="{Binding IsLocal,Converter={StaticResource BooleanToVisibilityConverter}}">
                 <TextBlock FontSize="8" Text="在线" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
             </Border>

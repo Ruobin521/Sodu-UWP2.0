@@ -23,11 +23,21 @@
                 <CompositeTransform Rotation="0"/>
             </AppBarButton.RenderTransform>
         </AppBarButton>
+        <AppBarButton x:Name="BackButton" Grid.Column="0"  Foreground="White" Command="{Binding BackCommand,ElementName=root}" RenderTransformOrigin="0.5,0.5" >
+            <AppBarButton.Content> 
+                <Path Fill="White" Stretch="Fill" Height="20" Width="15"  
+                    Data="M407.168 520l258.368-257.36c8.928-8.896 8.928-23.312 0-32.208s-23.392-8.896-32.336 0L359.856 502.752c-0.432 0.368-0.992 0.512-1.392 0.928-4.528 4.512-6.704 10.416-6.656 16.336-0.064 5.904 2.128 11.824 6.656 16.32 0.4 0.4 0.944 0.528 1.36 0.912l273.392 272.336c8.944 8.88 23.408 8.88 32.336 0s8.928-23.312 0-32.192L407.168 520z"></Path>
+            </AppBarButton.Content>
+        </AppBarButton>
 
-        <AppBarButton x:Name="BackButton" Grid.Column="0" Icon="Back" Foreground="White" Command="{Binding BackCommand,ElementName=root}" RenderTransformOrigin="0.5,0.5" >
+
+        <!--<AppBarButton x:Name="BackButton" Grid.Column="0"  Foreground="White" Command="{Binding BackCommand,ElementName=root}" RenderTransformOrigin="0.5,0.5" >
+            <AppBarButton.Icon>
+                <PathIcon  Data="M407.168 520l258.368-257.36c8.928-8.896 8.928-23.312 0-32.208s-23.392-8.896-32.336 0L359.856 502.752c-0.432 0.368-0.992 0.512-1.392 0.928-4.528 4.512-6.704 10.416-6.656 16.336-0.064 5.904 2.128 11.824 6.656 16.32 0.4 0.4 0.944 0.528 1.36 0.912l273.392 272.336c8.944 8.88 23.408 8.88 32.336 0s8.928-23.312 0-32.192L407.168 520z"></PathIcon>
+            </AppBarButton.Icon>
             <AppBarButton.RenderTransform>
                 <CompositeTransform Rotation="0"/>
             </AppBarButton.RenderTransform>
-        </AppBarButton>
+        </AppBarButton>-->
     </Grid>
 </UserControl>

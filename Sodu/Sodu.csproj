@@ -17,7 +17,8 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WindowsXamlEnableOverview>true</WindowsXamlEnableOverview>
-    <PackageCertificateKeyFile>Sodu_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateKeyFile>Sodu_StoreKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateThumbprint>E2A7DE2CAFB2480DFCCCC62085E36144224887B5</PackageCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -99,6 +100,8 @@
     <Compile Include="Contants\ConstantValue.cs" />
     <Compile Include="Converter\CountToVisibilityConverter.cs" />
     <Compile Include="Converter\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converter\ImageUrlConverter.cs" />
+    <Compile Include="Converter\LightValueConverter.cs" />
     <Compile Include="Converter\RankChangValueConverter.cs" />
     <Compile Include="Converter\BookCoverConverter.cs" />
     <Compile Include="MainPage.xaml.cs">
@@ -109,6 +112,10 @@
     <Compile Include="Service\NavigationService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\ToastHelper.cs" />
+    <Compile Include="UserControl\ContentPage.xaml.cs">
+      <DependentUpon>ContentPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControl\CoverImage.cs" />
     <Compile Include="UserControl\LocalBookItem.xaml.cs">
       <DependentUpon>LocalBookItem.xaml</DependentUpon>
     </Compile>
@@ -138,7 +145,16 @@
     <Compile Include="ViewModel\UpdateCatalogPageViewModel.cs" />
     <Compile Include="ViewModel\ViewModelInstance.cs" />
     <Compile Include="View\BaseListUserControl.cs" />
+    <Compile Include="View\CatalogPage.xaml.cs">
+      <DependentUpon>CatalogPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\CommonPageViewModel.cs" />
+    <Compile Include="View\DownloadCenterPage.xaml.cs">
+      <DependentUpon>DownloadCenterPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\HistoryPage.xaml.cs">
+      <DependentUpon>HistoryPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\HotAndRecommandPage.xaml.cs">
       <DependentUpon>HotAndRecommandPage.xaml</DependentUpon>
     </Compile>
@@ -156,6 +172,9 @@
     </Compile>
     <Compile Include="View\PersonalCenterPage.xaml.cs">
       <DependentUpon>PersonalCenterPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ProVersionPage.xaml.cs">
+      <DependentUpon>ProVersionPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\RankPage.xaml.cs">
       <DependentUpon>RankPage.xaml</DependentUpon>
@@ -177,6 +196,7 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <None Include="Sodu_StoreKey.pfx" />
     <None Include="Sodu_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
@@ -187,8 +207,10 @@
     <Content Include="Assets\Icon\cover.png" />
     <Content Include="Assets\Icon\down.png" />
     <Content Include="Assets\Icon\head.png" />
+    <Content Include="Assets\Icon\lineSpace_max%403x.png" />
     <Content Include="Assets\Icon\liuliang.png" />
     <Content Include="Assets\Icon\lock%403x.png" />
+    <Content Include="Assets\Icon\maxLight%403x.png" />
     <Content Include="Assets\Icon\mzsm%403x.png" />
     <Content Include="Assets\Icon\new_blue%403x.png" />
     <Content Include="Assets\Icon\up.png" />
@@ -196,6 +218,7 @@
     <Content Include="Assets\Icon\wwan%403x.png" />
     <Content Include="Assets\Icon\good.png" />
     <Content Include="Assets\Icon\help.png" />
+    <Content Include="Assets\Icon\screen.png" />
     <Content Include="Assets\SplashScreen.scale-100.png" />
     <Content Include="Assets\SplashScreen.scale-125.png" />
     <Content Include="Assets\SplashScreen.scale-150.png" />
@@ -210,6 +233,7 @@
     <Content Include="Assets\StoreLogo.scale-100.png" />
     <Content Include="Assets\StoreLogo.scale-125.png" />
     <Content Include="Assets\StoreLogo.scale-150.png" />
+    <None Include="Package.StoreAssociation.xml" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -228,6 +252,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="UserControl\ContentPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControl\LocalBookItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -245,6 +273,18 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UserControl\TopNavigationBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CatalogPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\DownloadCenterPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\HistoryPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -271,6 +311,10 @@
     <Page Include="View\PersonalCenterPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\ProVersionPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\RankPage.xaml">
       <SubType>Designer</SubType>

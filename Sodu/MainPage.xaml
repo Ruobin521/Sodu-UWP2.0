@@ -26,15 +26,31 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <control:TabbarButton  Grid.Column="0" DataContext="{Binding TabbarItemList[0]}" CommandParameter="{Binding Index}" Command="{Binding Instance.Main.TabSwitchCommand,Source={StaticResource Locator}}"  IsSelectedItem="{Binding IsSelected}"  Label="{Binding Title}"  Content="{Binding PathData}"  />
+            <control:TabbarButton  Grid.Column="0" DataContext="{Binding TabbarItemList[0]}" 
+                                   CommandParameter="{Binding Index}" Command="{Binding Instance.Main.TabSwitchCommand,Source={StaticResource Locator}}" 
+                                   IsSelectedItem="{Binding IsSelected}"  Label="{Binding Title}" 
+                                   PathData="{Binding PathData}"  />
 
-            <control:TabbarButton  Grid.Column="1" DataContext="{Binding TabbarItemList[1]}" CommandParameter="{Binding Index}" Command="{Binding Instance.Main.TabSwitchCommand,Source={StaticResource Locator}}"  IsSelectedItem="{Binding IsSelected}"     Label="{Binding Title}"   Content="{Binding PathData}"  />
+            <control:TabbarButton  Grid.Column="1" DataContext="{Binding TabbarItemList[1]}" 
+                                   CommandParameter="{Binding Index}" Command="{Binding Instance.Main.TabSwitchCommand,Source={StaticResource Locator}}" 
+                                   IsSelectedItem="{Binding IsSelected}"   
+                                   Label="{Binding Title}"  
+                                   PathData="{Binding PathData}"  />
 
-            <control:TabbarButton  Grid.Column="2" DataContext="{Binding TabbarItemList[2]}" CommandParameter="{Binding Index}" Command="{Binding Instance.Main.TabSwitchCommand,Source={StaticResource Locator}}"  IsSelectedItem="{Binding IsSelected}"    Label="{Binding Title}"  Content="{Binding PathData}"  />
+            <control:TabbarButton  Grid.Column="2" DataContext="{Binding TabbarItemList[2]}"
+                                   CommandParameter="{Binding Index}" Command="{Binding Instance.Main.TabSwitchCommand,Source={StaticResource Locator}}"
+                                   IsSelectedItem="{Binding IsSelected}"    Label="{Binding Title}"  
+                                   PathData="{Binding PathData}"  />
 
-            <control:TabbarButton  Grid.Column="3" DataContext="{Binding TabbarItemList[3]}" CommandParameter="{Binding Index}" Command="{Binding Instance.Main.TabSwitchCommand,Source={StaticResource Locator}}"  IsSelectedItem="{Binding IsSelected}"  Label="{Binding Title}"  Content="{Binding PathData}"  />
+            <control:TabbarButton  Grid.Column="3" DataContext="{Binding TabbarItemList[3]}" 
+                                   CommandParameter="{Binding Index}" Command="{Binding Instance.Main.TabSwitchCommand,Source={StaticResource Locator}}"  
+                                   IsSelectedItem="{Binding IsSelected}"  Label="{Binding Title}"  
+                                   PathData="{Binding PathData}"  />
 
-            <control:TabbarButton  Grid.Column="4" DataContext="{Binding TabbarItemList[4]}" CommandParameter="{Binding Index}" Command="{Binding Instance.Main.TabSwitchCommand,Source={StaticResource Locator}}"  IsSelectedItem="{Binding IsSelected}"  Label="{Binding Title}"   Content="{Binding PathData}"/>
+            <control:TabbarButton  Grid.Column="4" DataContext="{Binding TabbarItemList[4]}"
+                                   CommandParameter="{Binding Index}" Command="{Binding Instance.Main.TabSwitchCommand,Source={StaticResource Locator}}"
+                                   IsSelectedItem="{Binding IsSelected}"  Label="{Binding Title}"
+                                   PathData="{Binding PathData}"/>
         </Grid>
     </Grid>
 </Page>

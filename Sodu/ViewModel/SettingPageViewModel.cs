@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.ApplicationModel;
 using Windows.System;
-using Windows.System.Profile;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using Sodu.Core.Util;
 using Sodu.View;
 
 namespace Sodu.ViewModel
@@ -22,8 +18,8 @@ namespace Sodu.ViewModel
     {
 
         #region 属性
-
-
+        public bool IsFree => !App.IsPro;
+        public bool IsPro => App.IsPro;
 
         private string _appVersion;
         /// <summary>
@@ -40,6 +36,8 @@ namespace Sodu.ViewModel
                 Set(ref _appVersion, value);
             }
         }
+
+
 
         #endregion
 
@@ -59,6 +57,53 @@ namespace Sodu.ViewModel
                       }));
             }
         }
+
+
+
+        private ICommand _buyProCommand;
+        public ICommand BuyProCommand
+        {
+            get
+            {
+                return _buyProCommand ?? (
+                 _buyProCommand = new RelayCommand<object>(
+                      (obj) =>
+                      {
+                          NavigationService.NavigateTo(typeof(ProVersionPage));
+                      }));
+            }
+        }
+
+        private ICommand _historyCommand;
+        public ICommand HistoryCommand
+        {
+            get
+            {
+                return _historyCommand ?? (
+                 _historyCommand = new RelayCommand<object>(
+                      (obj) =>
+                      {
+                          NavigationService.NavigateTo(typeof(HistoryPage));
+                      }));
+            }
+        }
+
+        private ICommand _downloadCenterCommand;
+        public ICommand DownloadCenterCommand
+        {
+            get
+            {
+                return _downloadCenterCommand ?? (
+                 _downloadCenterCommand = new RelayCommand<object>(
+                      (obj) =>
+                      {
+                          NavigationService.NavigateTo(typeof(DownloadCenterPage));
+                      }));
+            }
+        }
+
+
+
 
 
         private ICommand _exitCommand;
@@ -86,11 +131,17 @@ namespace Sodu.ViewModel
                      async (obj) =>
                       {
                           //免费版本
-                          await Launcher.LaunchUriAsync(new Uri("ms-windows-store://review/?ProductId=9nblggh4sk4v"));
 
-                          //捐赠版本
-                          // await Launcher.LaunchUriAsync(new Uri("ms-windows-store://review/?ProductId=9nblggh51vh6"));
+                          if (IsFree)
+                          {
+                              await Launcher.LaunchUriAsync(new Uri("ms-windows-store://review/?ProductId=9nblggh4sk4v"));
+                          }
 
+                          if (IsPro)
+                          {
+                              //捐赠版本
+                              await Launcher.LaunchUriAsync(new Uri("ms-windows-store://review/?ProductId=9nblggh51vh6"));
+                          }
                       }));
             }
         }
@@ -115,7 +166,7 @@ namespace Sodu.ViewModel
                              FullSizeDesired = false,
                          };
 
-                         dialog.PrimaryButtonClick += (_s, _e) => { };
+                         dialog.PrimaryButtonClick += (s, e) => { };
                          await dialog.ShowAsync();
 
                      }));
@@ -134,9 +185,12 @@ namespace Sodu.ViewModel
 
         public void InitData()
         {
+            var str = Package.Current.Id;
             string version = $"{Package.Current.Id.Version.Major}.{Package.Current.Id.Version.Minor}.{Package.Current.Id.Version.Build}";
-            _appVersion = version;
+            _appVersion = version + "  " + (IsPro ? "专业版" : "免费版");
         }
+
+
 
 
         #endregion

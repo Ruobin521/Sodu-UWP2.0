@@ -20,7 +20,9 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using GalaSoft.MvvmLight.Threading;
 using Sodu.Contants;
+using Sodu.Core.HtmlService;
 using Sodu.Core.Util;
+using Sodu.Service;
 using static Windows.Phone.UI.Input.HardwareButtons;
 
 namespace Sodu
@@ -30,6 +32,9 @@ namespace Sodu
     /// </summary>
     sealed partial class App : Application
     {
+
+        public static bool IsPro;
+
         public static Frame RootFrame;
         /// <summary>
         /// 初始化单一实例应用程序对象。这是执行的创作代码的第一行，
@@ -42,6 +47,15 @@ namespace Sodu
 
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             this.UnhandledException += App_UnhandledException;
+
+            var package = Windows.ApplicationModel.Package.Current;
+
+            IsPro = package.DisplayName.Equals("小说搜索阅读 UWP");
+
+            if (!IsPro)
+            {
+                CookieHelper.SetCookie(SoduPageValue.HomePage, false);
+            }
         }
 
         private void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
@@ -125,10 +139,7 @@ namespace Sodu
 
         public void OnAppBack()
         {
-            if (RootFrame.CanGoBack)
-            {
-                RootFrame.GoBack();
-            }
+            NavigationService.GoBack();
         }
 
         private void RootFrame_Navigated(object sender, NavigationEventArgs e)

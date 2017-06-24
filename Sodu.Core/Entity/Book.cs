@@ -22,11 +22,23 @@ namespace Sodu.Core.Entity
         [Unique]
         public string BookId { get; set; }
 
-        /// <summary>
-        ///书名
-        /// </summary>
-        public string BookName { get; set; }
 
+
+        private string _bookName;
+        /// <summary>
+        ///最新章节名称
+        /// </summary>
+        public string BookName
+        {
+            get
+            {
+                return _bookName;
+            }
+            set
+            {
+                Set(ref _bookName, value);
+            }
+        }
 
         private string _newestChapterName;
         /// <summary>
@@ -42,7 +54,6 @@ namespace Sodu.Core.Entity
             {
                 Set(ref _newestChapterName, value);
             }
-
         }
         /// <summary>
         ///当前章节正文地址

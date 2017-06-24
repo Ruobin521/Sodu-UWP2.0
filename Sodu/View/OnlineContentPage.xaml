@@ -7,13 +7,511 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModel="using:Sodu.ViewModel"
     xmlns:control="using:Sodu.Control"
-    DataContext="{Binding  Instance.OnlineBookContent,Source={StaticResource Locator}}"
-    mc:Ignorable="d">
-    <Grid  >
-        <ScrollViewer>
-            <TextBlock Text="{Binding ContentText}" TextWrapping="Wrap" LineHeight="30" Foreground="Black" FontSize="20"></TextBlock>
-        </ScrollViewer>
+    xmlns:converter="using:Sodu.Converter"
+    mc:Ignorable="d"
+    x:Name="Root"
+    DataContext="{Binding  Instance.OnlineBookContent,Source={StaticResource Locator}}">
 
-        <control:CustomLoadingControl ></control:CustomLoadingControl>
+    <Page.Resources>
+        <x:String  x:Key="DayPathData">M862.634 601.336h0.028c-31.641 164.953-175.247 289.575-347.794 289.575-195.75 0-354.431-160.312-354.431-358.059 0-162.506 107.409-298.997 254.278-342.647 3.459-1.547 7.284-2.419 11.334-2.419 15.666 0 28.35 12.825 28.35 28.631-108.928 277.341 112.247 477.928 380.812 349.313 15.666 0 28.35 12.825 28.35 28.631 0 2.447-0.394 4.753-0.928 6.975z</x:String>
+        <x:String  x:Key="MoonPathData">Refresh</x:String>
+        <x:String  x:Key="CatalogPathData">M103.053241 264.933517l49.399172 0c17.319724 0 31.355586-15.872 31.355586-45.144276 0-29.289931-14.018207-43.590621-31.355586-43.590621L103.053241 176.198621c-17.319724 0-31.355586 14.30069-31.355586 43.590621C71.697655 249.061517 85.715862 264.933517 103.053241 264.933517zM329.074759 264.933517l583.115034 0c22.174897 0 40.112552-15.872 40.112552-45.144276 0-29.289931-17.95531-43.590621-40.112552-43.590621L329.074759 176.198621c-22.157241 0-40.112552 14.30069-40.112552 43.590621C288.962207 249.061517 306.899862 264.933517 329.074759 264.933517zM154.394483 492.279172l-52.082759 0c-16.260414 0-29.431172 17.496276-29.431172 43.378759 0 25.935448 13.170759 46.062345 29.431172 46.062345l52.082759 0c16.260414 0 33.809655-20.144552 33.809655-46.062345C188.204138 509.793103 170.654897 492.279172 154.394483 492.279172zM912.189793 492.279172 329.074759 492.279172c-22.157241 0-40.112552 17.496276-40.112552 43.378759 0 25.935448 17.95531 46.062345 40.112552 46.062345l583.115034 0c22.174897 0 40.112552-20.144552 40.112552-46.062345C952.302345 509.793103 934.36469 492.279172 912.189793 492.279172zM155.365517 774.338207 105.207172 774.338207c-15.730759 0-28.460138 17.584552-28.460138 43.449379s12.729379 47.65131 28.460138 47.65131L155.365517 865.438897c15.730759 0 32.820966-21.786483 32.820966-47.65131S171.096276 774.338207 155.365517 774.338207zM912.189793 774.338207 329.074759 774.338207c-22.157241 0-40.112552 17.584552-40.112552 43.449379s17.95531 46.415448 40.112552 46.415448l583.115034 0c22.174897 0 40.112552-20.550621 40.112552-46.415448S934.36469 774.338207 912.189793 774.338207z</x:String>
+        <x:String  x:Key="DownloadPathData">M633.341091 671.637814c-11.326976-11.328-29.694299-11.328-41.022299 0l-44.363394 45.106314 0-237.407038c0-16.020882-12.986779-29.007661-29.006637-29.007661l-8.867972 0c-16.020882 0-29.007661 12.985756-29.007661 29.007661l0 241.248529-48.14144-48.947805c-11.328-11.328-29.694299-11.328-41.022299 0l-6.27082 6.27082c-11.328 11.326976-11.329023 29.694299 0 41.022299L490.889705 825.944202c5.975085 5.976108 13.909801 8.79634 21.736047 8.466835 7.825222 0.328481 15.759939-2.491751 21.735024-8.466835l105.251136-107.013269c11.328-11.328 11.328-29.695323 0-41.022299L633.341091 671.637814zM916.318 403.171386c-20.911262-24.651446-48.196699-44.821835-79.002308-55.130621-6.601348-74.843592-38.726-142.075833-88.228437-192.724373C693.638385 99.288331 616.835162 64.328098 533.007965 64.328098c-61.839417 0-119.489418 18.824741-167.898965 51.543933-44.008306 29.134551-80.095199 69.474304-104.071264 117.881804-52.156894 8.515954-99.245352 34.063817-133.572158 71.257927-39.607066 42.131563-63.371306 99.05604-63.371306 161.357991 0 64.992223 25.965371 124.155694 68.212568 166.737512l-0.652869 0c41.905412 42.911322 99.357915 69.322855 163.399487 69.466118l0-70.370721c-44.683688-0.14224-85.406159-18.486026-114.549919-48.400337-29.714765-30.029944-47.756677-71.267137-47.756677-117.433596 0-43.924395 17.162892-83.816964 44.447305-113.3987 27.28646-29.582759 65.360614-48.854685 107.380636-51.096748 13.202697-0.448208 25.313525-8.516977 30.80561-21.515013 18.482957-43.917232 49.288566-80.670298 87.803765-106.667392 36.738739-24.650423 81.627089-39.442314 129.823787-39.442314 65.131393 0 124.543527 26.89351 167.44257 70.370721 42.687218 43.924395 69.532633 103.978143 69.532633 170.763199 0 16.5837 11.44261 31.374568 28.164456 34.512025 26.406416 4.929266 49.28959 18.376533 66.013483 38.098713 15.402805 19.721157 25.312502 44.820811 25.312502 72.161506 0 31.374568-12.110829 58.716286-32.354895 79.334883-19.363 20.171412-46.647413 32.720216-76.784804 32.720216l-0.669242 0-11.195993 0 0 70.370721 11.195993 0 0.881067 0c48.847521-0.896416 93.085048-21.512966 125.422548-53.338812 32.125675-33.167401 52.369741-78.43642 52.369741-129.085984C958.339046 475.78417 942.056198 434.994162 916.318 403.171386zM894.954437 928.496879c0 16.019859-12.986779 29.007661-29.007661 29.007661L156.013775 957.50454c-16.020882 0-29.007661-12.986779-29.007661-29.007661l0-6.943133c0-16.019859 12.986779-29.007661 29.007661-29.007661l709.934025 0c16.019859 0 29.007661 12.986779 29.007661 29.007661L894.95546 928.496879z</x:String>
+        <x:String  x:Key="SettingPathData">M40.666163 869.888H22.234163c-15.872 0-26.624-15.872-20.48-30.72l271.36-678.912c3.584-8.704 11.776-13.824 20.48-13.824H338.138163c9.216 0 17.408 5.632 20.48 13.824L630.490163 839.68c5.632 14.848-5.12 30.72-20.48 30.72h-22.528c-9.216 0-17.408-5.632-20.48-13.824l-67.072-167.424c-3.584-8.704-11.776-13.824-20.48-13.824H148.698163c-9.216 0-17.408 5.632-20.48 13.824l-67.072 166.912c-3.072 8.192-11.264 13.824-20.48 13.824z m145.92-253.952h251.904c15.872 0 26.624-15.872 20.992-30.208L335.066163 261.632c-7.168-18.944-33.792-18.944-41.472 0l-127.488 323.072c-6.656 15.36 4.096 31.232 20.48 31.232zM938.202163 561.152c12.288 0 22.016-9.728 22.016-22.016v-24.576c-2.56-73.216-41.984-108.032-117.248-105.472-68.096 0-109.056 23.552-121.856 70.144-2.56 9.728-11.264 15.872-20.992 15.872h-16.384c-14.848 0-25.6-14.336-21.504-28.672 23.04-74.752 83.456-112.128 181.248-112.128 117.248 2.56 177.152 57.344 179.712 164.352v238.592c-2.048 30.208-1.536 59.904 1.024 88.576 1.024 13.312-8.704 24.576-22.016 24.576h-16.384c-11.776 0-21.504-9.216-22.016-20.992l-2.56-53.248-4.096 7.68c-28.672 44.032-79.872 68.608-154.624 74.24h-4.096c-105.472-5.632-161.28-55.296-166.4-148.48 2.56-67.584 36.352-116.224 101.888-144.896 33.792-12.8 90.112-20.992 168.448-23.552h35.84z m-239.616 167.936c2.56 65.024 40.448 99.328 113.664 101.888 101.376-2.56 151.04-67.072 149.504-193.536 0-11.776-10.24-21.504-22.016-21.504h-13.824c-154.624-2.56-229.888 34.816-227.328 113.152z</x:String>
+
+  
+        <converter:LightValueConverter x:Key="LightValueConverter"></converter:LightValueConverter>
+        <KeyTime x:Key="SbKeyTime">0:0:0.35</KeyTime>
+        <Storyboard x:Name="MenuBarHide">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="TopBar">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="{StaticResource SbKeyTime}" Value="-45">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <PowerEase/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="BottomBar">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="{StaticResource SbKeyTime}" Value="55">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <PowerEase  />
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="TopBar">
+                <DiscreteObjectKeyFrame KeyTime="{StaticResource SbKeyTime}">
+                    <DiscreteObjectKeyFrame.Value>
+                        <Visibility>Collapsed</Visibility>
+                    </DiscreteObjectKeyFrame.Value>
+                </DiscreteObjectKeyFrame>
+            </ObjectAnimationUsingKeyFrames>
+
+
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="BottomBar">
+                <DiscreteObjectKeyFrame KeyTime="{StaticResource SbKeyTime}">
+                    <DiscreteObjectKeyFrame.Value>
+                        <Visibility>Collapsed</Visibility>
+                    </DiscreteObjectKeyFrame.Value>
+                </DiscreteObjectKeyFrame>
+            </ObjectAnimationUsingKeyFrames>
+
+        </Storyboard>
+        <Storyboard x:Name="MenuBarShow">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="TopBar">
+                <EasingDoubleKeyFrame KeyTime="0" Value="-45"/>
+                <EasingDoubleKeyFrame KeyTime="{StaticResource SbKeyTime}" Value="0">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <PowerEase  />
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="BottomBar">
+                <EasingDoubleKeyFrame KeyTime="0" Value="55"/>
+                <EasingDoubleKeyFrame KeyTime="{StaticResource SbKeyTime}" Value="0">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <PowerEase />
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="TopBar">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.0">
+                    <DiscreteObjectKeyFrame.Value>
+                        <Visibility>Visible</Visibility>
+                    </DiscreteObjectKeyFrame.Value>
+                </DiscreteObjectKeyFrame>
+            </ObjectAnimationUsingKeyFrames>
+
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="BottomBar">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.0">
+                    <DiscreteObjectKeyFrame.Value>
+                        <Visibility>Visible</Visibility>
+                    </DiscreteObjectKeyFrame.Value>
+                </DiscreteObjectKeyFrame>
+            </ObjectAnimationUsingKeyFrames>
+        </Storyboard>
+
+
+        <Style x:Key="CustomSliderStyle" TargetType="Slider">
+            <Setter Property="Background" Value="LightGray"/>
+            <Setter Property="BorderThickness" Value="{ThemeResource SliderBorderThemeThickness}"/>
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlHighlightAccentBrush}"/>
+            <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
+            <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}"/>
+            <Setter Property="ManipulationMode" Value="None"/>
+            <Setter Property="UseSystemFocusVisuals" Value="True"/>
+            <Setter Property="IsThumbToolTipEnabled" Value="False"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Slider">
+                        <Grid Margin="{TemplateBinding Padding}">
+                            <Grid.Resources>
+                                <Style x:Key="SliderThumbStyle" TargetType="Thumb">
+                                    <Setter Property="BorderThickness" Value="0"/>
+                                    <Setter Property="Background" Value="White"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Thumb">
+                                                <Border  BorderBrush="{TemplateBinding BorderBrush}" 
+                                                         BorderThickness="{TemplateBinding BorderThickness}" 
+                                                         Background="White" 
+                                                         CornerRadius="90"/>
+                                            </ControlTemplate>
+
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Grid.Resources>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal"/>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <ContentPresenter x:Name="HeaderContentPresenter" ContentTemplate="{TemplateBinding HeaderTemplate}" Content="{TemplateBinding Header}" Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}" FontWeight="{ThemeResource SliderHeaderThemeFontWeight}" Margin="0,0,0,20" TextWrapping="Wrap" Visibility="Collapsed" x:DeferLoadStrategy="Lazy"/>
+                            <Grid x:Name="SliderContainer" Background="Transparent" Control.IsTemplateFocusTarget="True" Grid.Row="1">
+                                <Grid x:Name="HorizontalTemplate" MinHeight="44">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="20"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="18"/>
+                                    </Grid.RowDefinitions>
+                                    <Rectangle x:Name="HorizontalTrackRect" Grid.ColumnSpan="3" Fill="{TemplateBinding Background}" Height="{ThemeResource SliderTrackThemeHeight}" Grid.Row="1"/>
+                                    <Rectangle x:Name="HorizontalDecreaseRect" Fill="{TemplateBinding Foreground}" Grid.Row="1"/>
+                                    <TickBar x:Name="TopTickBar" Grid.ColumnSpan="3" Fill="{TemplateBinding Foreground}" Height="{ThemeResource SliderOutsideTickBarThemeHeight}" Margin="0,0,0,0" Visibility="Collapsed" VerticalAlignment="Bottom"/>
+                                    <TickBar x:Name="HorizontalInlineTickBar" Grid.ColumnSpan="3" Fill="{ThemeResource SystemControlBackgroundAltHighBrush}" Height="{ThemeResource SliderTrackThemeHeight}" Grid.Row="1" Visibility="Collapsed"/>
+                                    <TickBar x:Name="BottomTickBar" Grid.ColumnSpan="3" Fill="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" Height="{ThemeResource SliderOutsideTickBarThemeHeight}" Margin="0,0,0,0" Grid.Row="2" Visibility="Collapsed" VerticalAlignment="Top"/>
+                                    <Thumb x:Name="HorizontalThumb" AutomationProperties.AccessibilityView="Raw" Background="{TemplateBinding Foreground}" 
+                                           Grid.Column="1" DataContext="{TemplateBinding Value}" 
+                                           Height="15"  Width="15" 
+                                           Grid.Row="0" Grid.RowSpan="3" Style="{StaticResource SliderThumbStyle}" />
+                                </Grid>
+                                <Grid x:Name="VerticalTemplate" MinWidth="44" Visibility="Collapsed">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="18"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="18"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Rectangle x:Name="VerticalTrackRect" Grid.Column="1" Fill="{TemplateBinding Background}" Grid.RowSpan="3" Width="{ThemeResource SliderTrackThemeHeight}"/>
+                                    <Rectangle x:Name="VerticalDecreaseRect" Grid.Column="1" Fill="{TemplateBinding Foreground}" Grid.Row="2"/>
+                                    <TickBar x:Name="LeftTickBar" Fill="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" HorizontalAlignment="Right" Margin="0,0,4,0" Grid.RowSpan="3" Visibility="Collapsed" Width="{ThemeResource SliderOutsideTickBarThemeHeight}"/>
+                                    <TickBar x:Name="VerticalInlineTickBar" Grid.Column="1" Fill="{ThemeResource SystemControlBackgroundAltHighBrush}" Grid.RowSpan="3" Visibility="Collapsed" Width="{ThemeResource SliderTrackThemeHeight}"/>
+                                    <TickBar x:Name="RightTickBar" Grid.Column="2" Fill="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" HorizontalAlignment="Left" Margin="4,0,0,0" Grid.RowSpan="3" Visibility="Collapsed" Width="{ThemeResource SliderOutsideTickBarThemeHeight}"/>
+                                    <Thumb x:Name="VerticalThumb" AutomationProperties.AccessibilityView="Raw" Background="{ThemeResource SystemControlForegroundAccentBrush}" Grid.ColumnSpan="3" Grid.Column="0" DataContext="{TemplateBinding Value}" Height="8" Grid.Row="1" Style="{StaticResource SliderThumbStyle}" Width="24"/>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SettingButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="{ThemeResource SystemControlBackgroundBaseLowBrush}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="{ThemeResource SystemControlForegroundTransparentBrush}"/>
+            <Setter Property="BorderThickness" Value="{ThemeResource ButtonBorderThemeThickness}"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Height" Value="27"/>
+            <Setter Property="Width" Value="50"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}"/>
+            <Setter Property="UseSystemFocusVisuals" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid x:Name="RootGrid" Background="{TemplateBinding Background}" >
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal">
+                                        <Storyboard>
+                                            <PointerUpThemeAnimation Storyboard.TargetName="RootGrid"/>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="ContentPresenter">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource  AppThemeColor}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource AppThemeColor}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <PointerDownThemeAnimation Storyboard.TargetName="RootGrid"/>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <ContentPresenter x:Name="ContentPresenter"
+                                              AutomationProperties.AccessibilityView="Raw" 
+                                              BorderBrush="{TemplateBinding BorderBrush}" 
+                                              BorderThickness="{TemplateBinding BorderThickness}" 
+                                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                                              ContentTransitions="{TemplateBinding ContentTransitions}"
+                                              Content="{TemplateBinding Content}" 
+                                              HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              Padding="{TemplateBinding Padding}" 
+                                              VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              CornerRadius="4"
+                                              />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="CustomColorListViewItemStyle" TargetType="ListViewItem">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="TabNavigation" Value="Local"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+            <Setter Property="UseSystemFocusVisuals" Value="True"/>
+            <Setter Property="MinWidth" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListViewItem">
+                        <Grid x:Name="LayoutRoot" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
+                            <Grid.Resources>
+                                <Style x:Key="BaseContentPresenterStyle" TargetType="ContentPresenter">
+                                    <Setter Property="FontFamily" Value="Segoe UI"/>
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                    <Setter Property="FontSize" Value="15"/>
+                                    <Setter Property="TextWrapping" Value="Wrap"/>
+                                    <Setter Property="LineStackingStrategy" Value="MaxHeight"/>
+                                    <Setter Property="TextLineBounds" Value="Full"/>
+                                    <Setter Property="OpticalMarginAlignment" Value="TrimSideBearings"/>
+                                </Style>
+                                <Style x:Key="BodyContentPresenterStyle" BasedOn="{StaticResource BaseContentPresenterStyle}" TargetType="ContentPresenter">
+                                    <Setter Property="FontWeight" Value="Normal"/>
+                                    <Setter Property="FontSize" Value="15"/>
+                                </Style>
+                            </Grid.Resources>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal"/>
+                                    <VisualState x:Name="Disabled">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlDisabledBaseLowBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Fill" Storyboard.TargetName="PressedBackground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="Transparent"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Selected">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="SelectedPath">
+                                                <DiscreteObjectKeyFrame KeyTime="0:0:0.0">
+                                                    <DiscreteObjectKeyFrame.Value>
+                                                        <Visibility>Visible</Visibility>
+                                                    </DiscreteObjectKeyFrame.Value>
+                                                </DiscreteObjectKeyFrame>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <Rectangle x:Name="PressedBackground"   RadiusX="5"  RadiusY="5" Fill="{TemplateBinding Background}" Control.IsTemplateFocusTarget="True"/>
+                            <ContentPresenter x:Name="ContentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" ContentTransitions="{TemplateBinding ContentTransitions}" Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" Style="{StaticResource BodyContentPresenterStyle}" TextWrapping="NoWrap" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                            <Path x:Name="SelectedPath" Stretch="Uniform" Height="15" Width="15"  
+                                  Visibility="Collapsed"
+                                  Fill="{StaticResource AppThemeColor}"
+                                Data="M924.480402 223.141126c-14.159488-13.278421-36.490076-12.644995-49.76952 1.550309L404.986731 724.811874l-256.594029-252.826216c-13.878079-13.666254-36.172851-13.525038-49.839105 0.352017-13.666254 13.842263-13.490246 36.172851 0.387833 49.804313l282.306644 278.115182c0.105401 0.105401 0.246617 0.141216 0.352017 0.246617s0.141216 0.246617 0.246617 0.352017c2.218528 2.113127 4.895497 3.310396 7.467065 4.719488 1.267876 0.73985 2.359744 1.831718 3.698229 2.359744 4.15667 1.619894 8.558933 2.465145 12.926404 2.465145 4.614088 0 9.228175-0.915859 13.525038-2.747577 1.443885-0.598634 2.571568-1.831718 3.910053-2.606361 2.641153-1.549286 5.38873-2.852978 7.643074-5.142114 0.105401-0.105401 0.141216-0.281409 0.246617-0.387833 0.070608-0.105401 0.211824-0.141216 0.317225-0.246617l494.415506-526.362102C939.378717 258.785951 938.63989 236.490156 924.480402 223.141126z"></Path>
+
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+
+
+
+    </Page.Resources>
+
+    <Grid   Tapped="UIElement_OnTapped" Background="{Binding SelectedColor.Item1}">
+        <Grid x:Name="TopBar" Visibility="Visible" Background="#FF191919" BorderThickness="0" Height="44" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5"
+              Tapped="Prevent_OnTapped">
+            <Grid.RenderTransform>
+                <CompositeTransform/>
+            </Grid.RenderTransform>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="{Binding CurrentBook.BookName}" Foreground="White" FontSize="18" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,2"></TextBlock>
+            <AppBarButton  Grid.Column="0"  Foreground="White" Command="{Binding BackCommand}"  >
+                <AppBarButton.Content>
+                    <Path Fill="White" Stretch="Fill" Height="20" Width="15"  
+                    Data="M407.168 520l258.368-257.36c8.928-8.896 8.928-23.312 0-32.208s-23.392-8.896-32.336 0L359.856 502.752c-0.432 0.368-0.992 0.512-1.392 0.928-4.528 4.512-6.704 10.416-6.656 16.336-0.064 5.904 2.128 11.824 6.656 16.32 0.4 0.4 0.944 0.528 1.36 0.912l273.392 272.336c8.944 8.88 23.408 8.88 32.336 0s8.928-23.312 0-32.192L407.168 520z"></Path>
+                </AppBarButton.Content>
+            </AppBarButton>
+        </Grid>
+        <Grid VerticalAlignment="Bottom" Background="Transparent">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="55"/>
+            </Grid.RowDefinitions>
+            <ScrollViewer Style="{StaticResource ContentScrollViewerStyle}">
+                <Grid x:Name="FontSetingPanel" Background="#F2131313" Height="Auto"   Tapped="Prevent_OnTapped" Visibility="Visible">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="60"/>
+                        <RowDefinition Height="60"/>
+                        <RowDefinition Height="60"/>
+                        <RowDefinition Height="Auto" MinHeight="60"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Image Grid.Column="0" Height="25" Width="25" Margin="10,0"   Source="../Assets/Icon/maxLight@3x.png"   ></Image>
+                        <Slider   Grid.Column="1" Style="{StaticResource CustomSliderStyle}"  
+                              Minimum="20" Maximum="100"  Orientation="Horizontal" Width="150"  Value="{Binding LightValue,Mode=TwoWay}"   ></Slider>
+                        <Image Grid.Column="2" Height="35" Width="35" Margin="10,0"   Source="../Assets/Icon/maxLight@3x.png"   ></Image>
+
+
+                        <control:SettingButton Grid.Column="3"   Command="{Binding LandsacpeCommand}" Click="ButtonBase_OnClick"
+                            BorderThickness="1" BorderBrush="White" Padding="2">
+                            <control:SettingButton.Content>
+                                <Image Source="../Assets/Icon/screen.png" Stretch="Uniform"></Image>
+                            </control:SettingButton.Content>
+                        </control:SettingButton>
+                    </Grid>
+
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="间距" Foreground="White" FontSize="14" VerticalAlignment="Center" Margin="10,0"></TextBlock>
+                        <control:SettingButton Grid.Column="1"   Command="{Binding LineHeightCommand}" CommandParameter="-"
+                            BorderThickness="1" BorderBrush="White" Padding="4">
+                            <control:SettingButton.Content>
+                                <Image Source="../Assets/Icon/lineSpace_max@3x.png" Stretch="Uniform"></Image>
+                            </control:SettingButton.Content>
+                        </control:SettingButton>
+
+                        <control:SettingButton Grid.Column="2"    Command="{Binding LineHeightCommand}" CommandParameter="+"
+                            BorderThickness="1" BorderBrush="White" Padding="0">
+                            <control:SettingButton.Content>
+                                <Image Source="../Assets/Icon/lineSpace_max@3x.png" Stretch="Uniform"></Image>
+                            </control:SettingButton.Content>
+                        </control:SettingButton>
+
+                        <TextBlock Grid.Column="3" Text="{Binding LineHeight}" Foreground="White" FontSize="14" VerticalAlignment="Center" Margin="10,0"></TextBlock>
+
+                    </Grid>
+
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="40"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="字体" Foreground="White" FontSize="14" VerticalAlignment="Center" Margin="10,0"></TextBlock>
+                        <Button Grid.Column="1"   Content="Aa+" Command="{Binding FontSizeChangedCommand}" CommandParameter="+"
+                            BorderThickness="1" BorderBrush="White" Style="{StaticResource SettingButtonStyle}" Padding="0,0,0,3">
+                        </Button>
+
+                        <Button Grid.Column="2"  Content="Aa-"  Command="{Binding FontSizeChangedCommand}" CommandParameter="-"
+                            BorderThickness="1" BorderBrush="White" Style="{StaticResource SettingButtonStyle}" Padding="0,0,0,3">
+                        </Button>
+                        <TextBlock Grid.Column="3" Text="{Binding FontSize}" Foreground="White" FontSize="14" VerticalAlignment="Center" Margin="10,0"></TextBlock>
+
+
+
+                    </Grid>
+
+                    <Grid Grid.Row="3">
+                        <ListView   ItemContainerStyle="{StaticResource   CustomColorListViewItemStyle}"  
+                                SelectionMode="Single"
+                                ItemsSource="{Binding  ContentColors}"  
+                                SelectedItem="{Binding  SelectedColor,Mode=TwoWay}"
+                                VerticalAlignment="Stretch"   
+                                HorizontalAlignment="Stretch"   Margin="0,0,0,0">
+                            <ListView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <ItemsWrapGrid  Orientation="Horizontal"></ItemsWrapGrid>
+                                </ItemsPanelTemplate>
+                            </ListView.ItemsPanel>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Ellipse Fill="{Binding Item1}" HorizontalAlignment="Center"  Width="35" Height="35" Margin="5"></Ellipse>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+
+                    </Grid>
+
+                </Grid>
+            </ScrollViewer>
+            <Grid  Grid.Row="1" x:Name="BottomBar"  Tapped="Prevent_OnTapped" Background="#FF191919"  Height="55"  RenderTransformOrigin="0.5,0.5">
+                <Grid.RenderTransform>
+                    <CompositeTransform/>
+                </Grid.RenderTransform>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <control:TabbarButton  Grid.Column="0"  Foreground="#FFADADAD"  Label="夜间"
+                                    PathData="{StaticResource DayPathData}"
+                                    HighLightBackColor="Black"  Command="{Binding NightModeCommand}"/>
+
+                <control:TabbarButton  Grid.Column="1"  Foreground="#FFADADAD"  Label="目录"
+                                    PathData="{StaticResource CatalogPathData}" 
+                                        Command="{Binding Catalogcommand}"
+                                    HighLightBackColor="Black" />
+
+                <control:TabbarButton  Grid.Column="2"  Foreground="#FFADADAD"  Label="缓存"
+                                    PathData="{StaticResource DownloadPathData}"
+                                    HighLightBackColor="Black"/>
+
+                <control:TabbarButton x:Name="BtnFontSetingPanel"  Grid.Column="3"  Foreground="#FFADADAD"  Label="设置"
+                                    PathData="{StaticResource SettingPathData}"  Click="BtnFontSetingPanel_OnClick"
+                                   HighLightBackColor="Black"/>
+            </Grid>
+        </Grid>
+
+        <control:CustomLoadingControl  IsActive="{Binding IsLoading}" VerticalAlignment="Center" Margin="0,0,0,100" Canvas.ZIndex="-1"/>
+
+        <Grid Canvas.ZIndex="-5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="20"/>
+            </Grid.RowDefinitions>
+            <Grid VerticalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="50"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Style="{StaticResource InfoTextStyle}" Text="{Binding CurrentCatalog.CatalogName}"    />
+                <TextBlock  Style="{StaticResource InfoTextStyle}" Grid.Column="1" Text="{Binding CurrentTime}" Margin="0"  />
+            </Grid>
+            <Grid Grid.Row="2" VerticalAlignment="Center">
+                <TextBlock Style="{StaticResource InfoTextStyle}">
+                <Run Text="电量：" ></Run>
+                <Run Text="{Binding BatteryValue}" ></Run>
+                </TextBlock>
+
+                <TextBlock Style="{StaticResource InfoTextStyle}" HorizontalAlignment="Center"  >
+                  <Run Text="55"></Run>
+                  <Run Text="/"></Run>
+                  <Run Text="1000"></Run>
+                </TextBlock>
+
+                <TextBlock  Foreground="{Binding SelectedColor.Item2}"  HorizontalAlignment="Right"  Margin="0,0,10,0">
+                  <Run Text="55"></Run>
+                  <Run Text="/"></Run>
+                  <Run Text="1000"></Run>
+                </TextBlock>
+            </Grid>
+
+            <ScrollViewer Canvas.ZIndex="-1" Padding="10,8" Grid.Row="1" Style="{StaticResource ContentScrollViewerStyle}" >
+                <TextBlock Text="{Binding ContentText}"  TextWrapping="Wrap" LineHeight="30" Foreground="{Binding SelectedColor.Item2}" FontSize="{Binding FontSize}"></TextBlock>
+            </ScrollViewer>
+        </Grid>
+
+        <Grid x:Name="BlackControl" Visibility="Collapsed" Background="Black" IsHitTestVisible="False" Canvas.ZIndex="99" Opacity="{Binding LightValue,Converter={StaticResource LightValueConverter}}"></Grid>
+
     </Grid>
 </Page>

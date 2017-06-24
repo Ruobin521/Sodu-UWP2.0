@@ -30,15 +30,19 @@ namespace Sodu.Control.SwipeListControl
         }
         private void Scroller_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
         {
+           
             //所有内容垂直高度 - 当前滚动的高度
             var v1 = Scroller.ExtentHeight - Scroller.VerticalOffset;
             //可视区域的高度
             var v2 = Scroller.ViewportHeight;
             if (v1 <= v2 + 1)
             {
-                if (RequestCommand != null && RequestCommand.CanExecute(null))
+                if (e.IsIntermediate)
                 {
-                    RequestCommand.Execute(null);
+                    if (RequestCommand != null && RequestCommand.CanExecute(null))
+                    {
+                        RequestCommand.Execute(null);
+                    }
                 }
             }
         }

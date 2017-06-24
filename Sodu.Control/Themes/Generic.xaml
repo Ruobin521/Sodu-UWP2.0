@@ -8,11 +8,13 @@
 
     <Style  TargetType="local:TabbarButton" >
         <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="Black"/>
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
         <Setter Property="VerticalAlignment" Value="Stretch"/>
         <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
         <Setter Property="FontWeight" Value="Normal"/>
         <Setter Property="MinWidth" Value="0"/>
+        <Setter Property="FontSize" Value="12"/>
         <Setter Property="MinHeight" Value="0"/>
         <Setter Property="UseSystemFocusVisuals" Value="True"/>
         <Setter Property="Template">
@@ -29,13 +31,7 @@
                                 <VisualState x:Name="Pressed">
                                     <Storyboard>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="Root">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="LightGray"/>
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="Content">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltBaseHighBrush}"/>
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="TextLabel">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltBaseHighBrush}"/>
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{Binding  HighLightBackColor, RelativeSource={RelativeSource Mode=TemplatedParent}}"/>
                                         </ObjectAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
@@ -54,18 +50,18 @@
                                 <VisualState x:Name="InputModeDefault"/>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
-                        <Grid x:Name="ContentRoot">
+                        <Grid x:Name="ContentRoot" Padding="{TemplateBinding Padding}">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="20"/>
                             </Grid.RowDefinitions>
-                            <ContentPresenter Grid.Row="0" x:Name="Content"  AutomationProperties.AccessibilityView="Raw" Foreground="{Binding  PathFill, RelativeSource={RelativeSource Mode=TemplatedParent}}"   HorizontalAlignment="Stretch" >
+                            <ContentPresenter Grid.Row="0" x:Name="Content"  AutomationProperties.AccessibilityView="Raw"   HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Padding="2">
                                 <ContentPresenter.Content>
-                                    <Path  Fill="{Binding  PathFill, RelativeSource={RelativeSource Mode=TemplatedParent}}" 
-                                           Data="{TemplateBinding Content}" Height="22"  Width="22"  Stretch="UniformToFill" ></Path>
+                                    <Path  Fill="{TemplateBinding Foreground}" 
+                                           Data="{Binding  PathData, RelativeSource={RelativeSource Mode=TemplatedParent}}" Height="24"  Width="24"  Stretch="Uniform"  ></Path>
                                 </ContentPresenter.Content>
                             </ContentPresenter>
-                            <TextBlock Grid.Row="1" x:Name="TextLabel" Foreground="{Binding  PathFill, RelativeSource={RelativeSource Mode=TemplatedParent}}"  FontSize="12" FontFamily="{TemplateBinding FontFamily}" Margin="0,0,0,0" TextAlignment="Center" TextWrapping="Wrap" Text="{TemplateBinding Label}"/>
+                            <TextBlock Grid.Row="1" x:Name="TextLabel" Foreground="{TemplateBinding Foreground}"  FontSize="{TemplateBinding FontSize}" FontFamily="{TemplateBinding FontFamily}" Margin="0,0,0,0" TextAlignment="Center" TextWrapping="Wrap" Text="{TemplateBinding Label}"/>
                         </Grid>
                     </Grid>
                 </ControlTemplate>
@@ -151,9 +147,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-
-
-
 
     <Style x:Key="SwipeListViewItemStyle"  TargetType="swipeListControl:SwipeListViewItem">
         <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}" />
@@ -662,6 +655,62 @@
                                 Padding="{TemplateBinding Padding}"/>
                         </ScrollViewer>
                     </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:SettingButton" >
+        <Setter Property="Background" Value="{ThemeResource SystemControlBackgroundBaseLowBrush}"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="BorderBrush" Value="{ThemeResource SystemControlForegroundTransparentBrush}"/>
+        <Setter Property="BorderThickness" Value="{ThemeResource ButtonBorderThemeThickness}"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Height" Value="27"/>
+        <Setter Property="Width" Value="50"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}"/>
+        <Setter Property="UseSystemFocusVisuals" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:SettingButton">
+                    <Grid x:Name="RootGrid" Background="{TemplateBinding Background}" >
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal">
+                                    <Storyboard>
+                                        <PointerUpThemeAnimation Storyboard.TargetName="RootGrid"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="ContentPresenter">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource  AppThemeColor}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource AppThemeColor}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <PointerDownThemeAnimation Storyboard.TargetName="RootGrid"/>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <ContentPresenter x:Name="ContentPresenter"
+                                              AutomationProperties.AccessibilityView="Raw" 
+                                              BorderBrush="{TemplateBinding BorderBrush}" 
+                                              BorderThickness="{TemplateBinding BorderThickness}" 
+                                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                                              ContentTransitions="{TemplateBinding ContentTransitions}"
+                                              Content="{TemplateBinding Content}" 
+                                              HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              Padding="{TemplateBinding Padding}" 
+                                              VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              CornerRadius="4"
+                                              />
+                    </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

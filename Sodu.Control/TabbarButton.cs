@@ -31,16 +31,6 @@ namespace Sodu.Control
             "SelectedPathFill", typeof(Brush), typeof(TabbarButton), new PropertyMetadata(new SolidColorBrush(Color.FromArgb(255, 0, 138, 255))));
 
 
-        public Brush PathFill
-        {
-            get { return (Brush)GetValue(PathFillProperty); }
-            set { SetValue(PathFillProperty, value); }
-        }
-
-        public static readonly DependencyProperty PathFillProperty = DependencyProperty.Register(
-            "PathFill", typeof(Brush), typeof(TabbarButton), new PropertyMetadata(new SolidColorBrush(Colors.Black)));
-
-
 
         public static readonly DependencyProperty IsSelectedItemProperty = DependencyProperty.Register(
             "IsSelectedItem", typeof(bool), typeof(TabbarButton), new PropertyMetadata(default(bool), IsSelectedChanged));
@@ -50,7 +40,7 @@ namespace Sodu.Control
             var btn = (d as TabbarButton);
             if (btn != null)
             {
-                btn.PathFill = btn.IsSelectedItem ? btn.SelectedPathFill : btn.CommonPathFill;
+                btn.Foreground = btn.IsSelectedItem ? btn.SelectedPathFill : btn.CommonPathFill;
             }
         }
         public bool IsSelectedItem
@@ -59,9 +49,32 @@ namespace Sodu.Control
             set { SetValue(IsSelectedItemProperty, value); }
         }
 
+
+
+        public static readonly DependencyProperty PathDataProperty = DependencyProperty.Register(
+            "PathData", typeof(string), typeof(TabbarButton), new PropertyMetadata(default(string)));
+
+        public string PathData
+        {
+            get { return (string) GetValue(PathDataProperty); }
+            set { SetValue(PathDataProperty, value); }
+        }
+
+
+
+        public static readonly DependencyProperty HighLightBackColorProperty = DependencyProperty.Register(
+            "HighLightBackColor", typeof(Brush), typeof(TabbarButton), new PropertyMetadata(new SolidColorBrush(Colors.DarkGray)));
+
+        public Brush HighLightBackColor
+        {
+            get { return (Brush) GetValue(HighLightBackColorProperty); }
+            set { SetValue(HighLightBackColorProperty, value); }
+        }
+
         public TabbarButton()
         {
             DefaultStyleKey = typeof(TabbarButton);
+            
         }
     }
 }

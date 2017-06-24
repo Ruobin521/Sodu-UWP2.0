@@ -1,0 +1,256 @@
+﻿<Page
+    x:Class="Sodu.View.CatalogPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Sodu.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    x:Name="Root"
+        DataContext="{Binding  Instance.OnlineBookContent,Source={StaticResource Locator}}">
+    <Page.Resources>
+        <Style x:Key="CatalogListViewStyle" TargetType="ListView">
+            <Setter Property="IsTabStop" Value="False"/>
+            <Setter Property="TabNavigation" Value="Once"/>
+            <Setter Property="IsSwipeEnabled" Value="True"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.HorizontalScrollMode" Value="Disabled"/>
+            <Setter Property="ScrollViewer.IsHorizontalRailEnabled" Value="False"/>
+            <Setter Property="ScrollViewer.VerticalScrollMode" Value="Enabled"/>
+            <Setter Property="ScrollViewer.IsVerticalRailEnabled" Value="True"/>
+            <Setter Property="ScrollViewer.ZoomMode" Value="Disabled"/>
+            <Setter Property="ScrollViewer.IsDeferredScrollingEnabled" Value="False"/>
+            <Setter Property="ScrollViewer.BringIntoViewOnFocusChange" Value="True"/>
+            <Setter Property="ItemContainerTransitions">
+                <Setter.Value>
+                    <TransitionCollection>
+                        <AddDeleteThemeTransition/>
+                        <ContentThemeTransition/>
+                        <ReorderThemeTransition/>
+                        <EntranceThemeTransition IsStaggeringEnabled="False"/>
+                    </TransitionCollection>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="ItemsPanel">
+                <Setter.Value>
+                    <ItemsPanelTemplate>
+                        <ItemsStackPanel Orientation="Vertical"/>
+                    </ItemsPanelTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListView">
+                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
+                            <ScrollViewer x:Name="ScrollViewer"
+                                          AutomationProperties.AccessibilityView="Raw" 
+                                          BringIntoViewOnFocusChange="{TemplateBinding ScrollViewer.BringIntoViewOnFocusChange}" 
+                                          HorizontalScrollMode="{TemplateBinding ScrollViewer.HorizontalScrollMode}" 
+                                          HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}" 
+                                          IsHorizontalRailEnabled="{TemplateBinding ScrollViewer.IsHorizontalRailEnabled}" 
+                                          IsHorizontalScrollChainingEnabled="{TemplateBinding ScrollViewer.IsHorizontalScrollChainingEnabled}"
+                                          IsVerticalScrollChainingEnabled="{TemplateBinding ScrollViewer.IsVerticalScrollChainingEnabled}" 
+                                          IsVerticalRailEnabled="{TemplateBinding ScrollViewer.IsVerticalRailEnabled}"
+                                          IsDeferredScrollingEnabled="{TemplateBinding ScrollViewer.IsDeferredScrollingEnabled}" 
+                                          TabNavigation="{TemplateBinding TabNavigation}"
+                                          VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}"
+                                          VerticalScrollMode="{TemplateBinding ScrollViewer.VerticalScrollMode}" 
+                                          ZoomMode="{TemplateBinding ScrollViewer.ZoomMode}"
+                                          Style="{StaticResource ContentScrollViewerStyle}">
+                                <ItemsPresenter FooterTransitions="{TemplateBinding FooterTransitions}" FooterTemplate="{TemplateBinding FooterTemplate}" Footer="{TemplateBinding Footer}" HeaderTemplate="{TemplateBinding HeaderTemplate}" Header="{TemplateBinding Header}" HeaderTransitions="{TemplateBinding HeaderTransitions}" Padding="{TemplateBinding Padding}"/>
+                            </ScrollViewer>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="CustomListViewItemStyle2" TargetType="ListViewItem">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="TabNavigation" Value="Local"/>
+            <Setter Property="Padding" Value="0,0,0,0"/>
+            <Setter Property="Margin" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+            <Setter Property="UseSystemFocusVisuals" Value="True"/>
+            <Setter Property="MinWidth" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListViewItem">
+                        <Grid x:Name="LayoutRoot" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
+                            <Grid.Resources>
+                                <Style x:Key="BaseContentPresenterStyle" TargetType="ContentPresenter">
+                                    <Setter Property="FontFamily" Value="Segoe UI"/>
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                    <Setter Property="FontSize" Value="15"/>
+                                    <Setter Property="TextWrapping" Value="Wrap"/>
+                                    <Setter Property="LineStackingStrategy" Value="MaxHeight"/>
+                                    <Setter Property="TextLineBounds" Value="Full"/>
+                                    <Setter Property="OpticalMarginAlignment" Value="TrimSideBearings"/>
+                                </Style>
+                                <Style x:Key="BodyContentPresenterStyle" BasedOn="{StaticResource BaseContentPresenterStyle}" TargetType="ContentPresenter">
+                                    <Setter Property="FontWeight" Value="Normal"/>
+                                </Style>
+                            </Grid.Resources>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal"/>
+                                    <VisualState x:Name="Disabled">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlDisabledBaseLowBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Fill" Storyboard.TargetName="PressedBackground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="LightGray"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+
+                                    <!--   <VisualState x:Name="SelectedPressed">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Fill" Storyboard.TargetName="PressedBackground">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ContentButtonPressedBackground}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="PointerOver">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Fill" Storyboard.TargetName="PressedBackground">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ContentButtonPointerOverBackground}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Selected"/>-->
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <Rectangle x:Name="PressedBackground"  Fill="{TemplateBinding Background}" Control.IsTemplateFocusTarget="True"/>
+                            <ContentPresenter x:Name="ContentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" ContentTransitions="{TemplateBinding ContentTransitions}" Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" Style="{StaticResource BodyContentPresenterStyle}" TextWrapping="NoWrap" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Padding="{TemplateBinding Padding}"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Page.Resources>
+    <Grid Background="#FFE6E6E6">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="44"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="55"/>
+        </Grid.RowDefinitions>
+        <Grid x:Name="TopBar" Visibility="Visible" Background="#FF191919" BorderThickness="0" Height="44" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5"
+               >
+            <Grid.RenderTransform>
+                <CompositeTransform/>
+            </Grid.RenderTransform>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="{Binding CurrentBook.BookName}" Foreground="White" FontSize="18" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,2"></TextBlock>
+        </Grid>
+
+        <ListView Grid.Row="1" 
+                  ItemClick="ListViewBase_OnItemClick"
+                  ItemsSource="{Binding CurrentBook.CatalogList}"
+                  SelectionMode="None"
+                  ItemContainerStyle="{StaticResource CustomListViewItemStyle2}" Style="{StaticResource CatalogListViewStyle}">
+
+            <ListView.Header>
+                <Grid>
+                    <Grid Height="Auto" MinHeight="200" MaxHeight="400" Background="Transparent" Margin="10,10,10,10" BorderBrush="#FF555555">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="75"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="100"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Image Grid.Row="0" Grid.Column="0" Source="../Assets/Icon/cover.png" Height="100" Width="75" Stretch="Fill" />
+                        <Grid Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Margin="10,0,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition Height="32"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" FontSize="20" Text="{Binding CurrentBook.BookName}" LineHeight="32"></TextBlock>
+                            <TextBlock Grid.Row="1" FontSize="16"  LineHeight="32" Foreground="#FF555555">
+                            <Run Text="作者："></Run>
+                            <Run Text="{Binding CurrentBook.AuthorName}"></Run>
+                            </TextBlock>
+
+
+                            <TextBlock Grid.Row="2" FontSize="16"  LineHeight="32" Foreground="#FF555555">
+                            <Run Text="来源："></Run>
+                            <Run Text="{Binding CurrentBook.LyWeb}"></Run>
+                            </TextBlock>
+                        </Grid>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" FontSize="16"  Text="简介：" VerticalAlignment="Center"
+                               Foreground="#FF555555">
+                        </TextBlock>
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" FontSize="16"
+                               TextWrapping="Wrap" TextTrimming="WordEllipsis"
+                               Text="{Binding CurrentBook.Description}" 
+                               VerticalAlignment="Center"  
+                               Foreground="#FF555555">
+                        </TextBlock>
+                    </Grid>
+                    <Border Height="1" BorderBrush="#FF555555" BorderThickness="0,0,0,1" VerticalAlignment="Bottom"></Border>
+                </Grid>
+
+            </ListView.Header>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Background="Transparent" Height="Auto" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="55"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="1" Foreground="#FF555555" FontSize="16" VerticalAlignment="Center" Margin="0,0,3,0">
+                    <Run Text="{Binding Index}"></Run>
+                    <Run Text="."></Run>
+                        </TextBlock>
+                        <TextBlock Text="{Binding CatalogName}" Grid.Column="2" Foreground="Black" FontSize="16" VerticalAlignment="Center"></TextBlock>
+                        <Path  Grid.Column="3" Style="{StaticResource ArrowPathStyle}"  Data="M742.226498 488.815975 325.631382 72.217788c-12.111852-12.105712-31.746028-12.105712-43.85481 0-12.108782 12.111852-12.108782 31.742958 0 43.85481l394.668735 394.668735-394.668735 394.668735c-12.108782 12.111852-12.108782 31.742958 0 43.85481 12.108782 12.108782 31.742958 12.108782 43.85481 0l416.595117-416.598186C754.332211 520.558933 754.332211 500.924757 742.226498 488.815975z" UseLayoutRounding="False"></Path>
+                        <Border Grid.Column="1" Grid.ColumnSpan="3" Height="1" BorderBrush="DarkGray" BorderThickness="0,0,0,1" VerticalAlignment="Bottom"></Border>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <Grid x:Name="BottomBar" Grid.Row="2" Visibility="Visible" Background="#FF191919"
+              BorderThickness="0"   VerticalAlignment="Stretch" RenderTransformOrigin="0.5,0.5"
+               >
+            <Grid.RenderTransform>
+                <CompositeTransform/>
+            </Grid.RenderTransform>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="1" Height="35" Width="35" Padding="0" 
+                    Style="{StaticResource CloseButtonStyle}"  HorizontalAlignment="Center" 
+                    Command="{Binding CatalogCloseCommand}">
+                <Border   Background="Red" CornerRadius="90" Padding="5" 
+                          HorizontalAlignment="Center">
+                    <Image Source=" ../Assets/Icon/close_in@3x.png"   HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></Image>
+                </Border>
+            </Button>
+
+        </Grid>
+
+    </Grid>
+</Page>

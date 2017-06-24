@@ -6,6 +6,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Navigation;
+using Windows.UI.Xaml.Printing;
 using Sodu.Core.Entity;
 using Sodu.Core.HtmlService;
 using Sodu.View;
@@ -27,7 +29,6 @@ namespace Sodu.ViewModel
         }
 
 
-
         #endregion
 
 
@@ -43,6 +44,14 @@ namespace Sodu.ViewModel
         {
 
         }
+
+
+        private void ContentFrame_Navigated(object sender, Windows.UI.Xaml.Navigation.NavigationEventArgs e)
+        {
+
+
+        }
+
 
         public override void LoadData(object obj = null)
         {
@@ -97,8 +106,6 @@ namespace Sodu.ViewModel
                     url = url.Insert(url.Length - 5, "_" + pageIndex);
                 }
 
-                Debug.WriteLine("-------------开始加载------------" + IsLoading + "------" + PageIndex);
-
                 var html = await GetHtmlData(url, false, true);
                 var list = ListPageDataHelper.GetBookUpdateChapterList(html);
                 if (list == null)
@@ -122,12 +129,20 @@ namespace Sodu.ViewModel
                     if (pageIndex == 1)
                     {
                         Books.Clear();
-                        list.ForEach(p => Books.Add(p));
+
+                        foreach (var item in list)
+                        {
+                            item.BookName = CurrentBook.BookName;
+                            item.BookId = CurrentBook.BookId;
+                            Books.Add(item);
+                        }
                     }
                     else
                     {
                         foreach (var item in list)
                         {
+                            item.BookName = CurrentBook.BookName;
+                            item.BookId = CurrentBook.BookId;
                             Books.Add(item);
                         }
                     }
@@ -181,9 +196,9 @@ namespace Sodu.ViewModel
             }
 
             NavigationService.NavigateTo(typeof(OnlineContentPage));
-            ViewModelInstance.Instance.OnlineBookContent.LoadData((Book)obj);
-
-
+            var vm = new OnlineContentPageViewModel();
+            ViewModelInstance.Instance.OnlineBookContent = vm;
+            vm.LoadData((Book)obj);
         }
 
 

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Windows.UI;
+using Windows.UI.ViewManagement;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Threading;
@@ -105,6 +107,31 @@ namespace Sodu.View
             return html;
         }
 
+
+        public async void HideStatusBar(bool isContent = false)
+        {
+            if (PlatformHelper.IsMobileDevice)
+            {
+                StatusBar statusBar = StatusBar.GetForCurrentView();
+                statusBar.ForegroundColor = Colors.White;
+                statusBar.BackgroundOpacity = 1;
+                statusBar.BackgroundColor = isContent ? Color.FromArgb(255, 25, 25, 25) : Contants.ConstantValue.AppMainColor;
+                await statusBar.HideAsync();
+            }
+        }
+
+        public async void ShowStatusBar(bool isContent = false)
+        {
+            if (PlatformHelper.IsMobileDevice)
+            {
+                StatusBar statusBar = StatusBar.GetForCurrentView();
+                statusBar.ForegroundColor = Colors.White;
+                statusBar.BackgroundOpacity = 1;
+                statusBar.BackgroundColor = isContent ? Color.FromArgb(255, 25, 25, 25) : Contants.ConstantValue.AppMainColor;
+                await statusBar.ShowAsync();
+            }
+        }
+
         #endregion
 
         #region 命令
@@ -155,7 +182,7 @@ namespace Sodu.View
         private ICommand _backCommand;
         public ICommand BackCommand => _backCommand ?? (_backCommand = new RelayCommand<object>(OnBackCommand));
 
-        public void OnBackCommand(object obj)
+        public virtual void OnBackCommand(object obj)
         {
             NavigationService.GoBack();
         }

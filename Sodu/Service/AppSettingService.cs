@@ -17,18 +17,18 @@ namespace Sodu.Service
 
         //字体大小 
         FontSize,
-        //字体颜色
-        TextColor,
-        //背景颜色
-        ContentBackground,
-        //阅读模式（日间，夜间）
-        ReadContentMode,
+        //总共八种颜色可选，记录选中的index
+        ContentColorIndex,
+        //是否为夜间模式
+        IsNightMode,
         //横屏
-        IsHorizontal,
+        IsLandscape,
         //行高
         LineHeight,
         //亮度
         LightValue,
+        //阅读模式（分页动画，滚动）
+        IsScroll,
 
     }
 
@@ -47,6 +47,7 @@ namespace Sodu.Service
             var value = SettingHelper.GetValueByContainer(ContainerName, key.ToString());
             return value;
         }
+
 
         public static string GetUserId()
         {

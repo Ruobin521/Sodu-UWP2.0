@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="f283f05c-c14a-4301-9e84-b544f3d6abf3" Publisher="CN=ruobi" Version="2.0.1.0" />
-  <mp:PhoneIdentity PhoneProductId="f283f05c-c14a-4301-9e84-b544f3d6abf3" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
+  <Identity Name="54654Ruobin.UWP" Publisher="CN=9128903A-89E3-4AC2-B599-5FD871F0CB69" Version="2.0.0.0" />
+  <mp:PhoneIdentity PhoneProductId="61432481-9a25-4928-b96c-608b04fb325f" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
-    <DisplayName>Sodu</DisplayName>
+    <DisplayName>小说搜索阅读 UWP</DisplayName>
     <PublisherDisplayName>Ruobin</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
@@ -21,6 +21,8 @@
         <uap:SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="white" />
         <uap:InitialRotationPreference>
           <uap:Rotation Preference="portrait" />
+          <uap:Rotation Preference="landscape" />
+          <uap:Rotation Preference="landscapeFlipped" />
         </uap:InitialRotationPreference>
       </uap:VisualElements>
     </Application>

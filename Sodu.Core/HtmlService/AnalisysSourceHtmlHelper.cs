@@ -8,7 +8,7 @@ using Sodu.Core.Entity;
 
 namespace Sodu.Core.HtmlService
 {
-    public class AnalisysSourceWebHtmlHelper
+    public class AnalisysSourceHtmlHelper
     {
         public static object AnalisysHtml(string url, string html, AnalisysType type, string bookName = null)
         {
@@ -155,6 +155,7 @@ namespace Sodu.Core.HtmlService
             if (match2 != null && match2.Groups.Count >= 2)
             {
                 intro = match2.Groups[1].ToString();
+                intro = ReplaceSymbol(intro);
             }
 
             //封面
@@ -168,7 +169,7 @@ namespace Sodu.Core.HtmlService
 
             //作者
             string author = null;
-            var match4 = Regex.Match(html, coverRegex, RegexOptions.IgnoreCase);
+            var match4 = Regex.Match(html, authorRegex, RegexOptions.IgnoreCase);
             if (match4 != null && match4.Groups.Count >= 2)
             {
                 author = match4.Groups[1].ToString();

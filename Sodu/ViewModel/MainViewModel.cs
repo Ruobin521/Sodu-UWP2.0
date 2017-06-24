@@ -176,7 +176,7 @@ namespace Sodu.ViewModel
 
             (item.ContentElement.DataContext as BasePageViewModel)?.LoadData();
 
-            if (index == 4 && !IsLogin && !_hasShow)
+            if (index == 4 && !IsLogin && !_hasShow && App.IsPro)
             {
                 _hasShow = true;
                 await Task.Delay(500);

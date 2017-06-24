@@ -15,7 +15,7 @@ namespace Sodu.Core.HtmlService
         CatalogPageData
     }
 
-    public class SourceHtmlHelper
+    public class AnalisysSourceHelper
     {
         private static readonly HttpHelper Http = new HttpHelper();
 
@@ -33,7 +33,7 @@ namespace Sodu.Core.HtmlService
         /// <returns></returns>
         public static string GetCatalogPageUrl(string url)
         {
-            var catalogUrl = AnalisysSourceWebHtmlHelper.AnalisysHtml(url, null, type: AnalisysType.CatalogPageUrl);
+            var catalogUrl = AnalisysSourceHtmlHelper.AnalisysHtml(url, null, type: AnalisysType.CatalogPageUrl);
             return catalogUrl?.ToString();
         }
 
@@ -45,7 +45,7 @@ namespace Sodu.Core.HtmlService
         public static async Task<string> GetCatalogContent(string url)
         {
             var html = await GetHtmlByUrl(url);
-            html = AnalisysSourceWebHtmlHelper.AnalisysHtml(url, html, AnalisysType.Content)?.ToString();
+            html = AnalisysSourceHtmlHelper.AnalisysHtml(url, html, AnalisysType.Content)?.ToString();
             return html;
         }
 
@@ -54,11 +54,14 @@ namespace Sodu.Core.HtmlService
         /// 解析目录页数据
         /// </summary>
         /// <param name="url"></param>
-        /// <returns>目录列表，简介，作者，封面地址</returns>
-        public static Tuple<List<BookCatalog>, string, string, string> GetCatalogPageData(string url)
+        /// <returns>目录列表，简介，封面地址,作者</returns>
+        public static async Task<Tuple<List<BookCatalog>, string, string, string>> GetCatalogPageData(string url)
         {
+            var html = await GetHtmlByUrl(url);
 
-            return new Tuple<List<BookCatalog>, string, string, string>(null, null, null, null);
+            var value = AnalisysSourceHtmlHelper.AnalisysHtml(url, html, AnalisysType.CatalogPageData);
+
+            return value as Tuple<List<BookCatalog>, string, string, string>;
         }
     }
 }
