@@ -78,7 +78,9 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ListViewItem">
-                        <Grid x:Name="LayoutRoot" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
+                        <Grid x:Name="LayoutRoot"
+                              BorderThickness="{TemplateBinding BorderThickness}" 
+                              Background="{TemplateBinding Background}">
                             <Grid.Resources>
                                 <Style x:Key="BaseContentPresenterStyle" TargetType="ContentPresenter">
                                     <Setter Property="FontFamily" Value="Segoe UI"/>
@@ -135,15 +137,15 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
+        
     </Page.Resources>
-    <Grid Background="#FFE6E6E6">
+    <Grid Background="{StaticResource AppBackColor}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="44"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="55"/>
         </Grid.RowDefinitions>
-        <Grid x:Name="TopBar" Visibility="Visible" Background="#FF191919" BorderThickness="0" Height="44" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5"
+        <Grid x:Name="TopBar" Visibility="Visible" Background="#FF191919" BorderThickness="0" Height="55" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5"
                >
             <Grid.RenderTransform>
                 <CompositeTransform/>
@@ -154,14 +156,26 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="{Binding CurrentBook.BookName}" Foreground="White" FontSize="18" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,2"></TextBlock>
+            <AppBarButton  Grid.Column="0"  Foreground="White" Command="{Binding CatalogCloseCommand}"  >
+                <AppBarButton.Content>
+                    <Path Fill="White" Stretch="Fill" Height="20" Width="15"  
+                    Data="M407.168 520l258.368-257.36c8.928-8.896 8.928-23.312 0-32.208s-23.392-8.896-32.336 0L359.856 502.752c-0.432 0.368-0.992 0.512-1.392 0.928-4.528 4.512-6.704 10.416-6.656 16.336-0.064 5.904 2.128 11.824 6.656 16.32 0.4 0.4 0.944 0.528 1.36 0.912l273.392 272.336c8.944 8.88 23.408 8.88 32.336 0s8.928-23.312 0-32.192L407.168 520z"></Path>
+                </AppBarButton.Content>
+            </AppBarButton>
+            <Button x:Name="ScroolButton" Style="{StaticResource CloseButtonStyle}" 
+                    VerticalAlignment="Center" Margin="10"
+                    Grid.Column="2" Click="ScroolButton_OnClick"   Foreground="White">
+                <Button.Content>
+                    <TextBlock Text="到底部" Foreground="White" VerticalAlignment="Center"></TextBlock>
+                </Button.Content>
+            </Button>
         </Grid>
 
-        <ListView Grid.Row="1" 
-                  ItemClick="ListViewBase_OnItemClick"
+        <ListView Grid.Row="1" x:Name="CatalogList"
                   ItemsSource="{Binding CurrentBook.CatalogList}"
                   SelectionMode="None"
-                  ItemContainerStyle="{StaticResource CustomListViewItemStyle2}" Style="{StaticResource CatalogListViewStyle}">
-
+                  ItemContainerStyle="{StaticResource CustomListViewItemStyle2}" 
+                  Style="{StaticResource CatalogListViewStyle}">
             <ListView.Header>
                 <Grid>
                     <Grid Height="Auto" MinHeight="200" MaxHeight="400" Background="Transparent" Margin="10,10,10,10" BorderBrush="#FF555555">
@@ -174,7 +188,7 @@
                             <RowDefinition Height="30"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <Image Grid.Row="0" Grid.Column="0" Source="../Assets/Icon/cover.png" Height="100" Width="75" Stretch="Fill" />
+                        <Image Grid.Row="0" Grid.Column="0" Source="{Binding CurrentBook,Converter={StaticResource BookCoverConverter}}" Height="100" Width="75" Stretch="Fill" />
                         <Grid Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Margin="10,0,0,0">
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
@@ -211,21 +225,25 @@
             </ListView.Header>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Grid Background="Transparent" Height="Auto" >
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="20"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="55"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="1" Foreground="#FF555555" FontSize="16" VerticalAlignment="Center" Margin="0,0,3,0">
+                    <Button Style="{StaticResource CatalogItemButtonStyle}" 
+                            Command="{Binding  Instance.OnlineBookContent.CatalogSelectedCommand,Source={StaticResource Locator}}"
+                            CommandParameter="{Binding}">
+                        <Grid Background="Transparent" Height="45"  VerticalAlignment="Center">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="55"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="1" Foreground="#FF555555" FontSize="16" VerticalAlignment="Center" Margin="0,0,3,0">
                     <Run Text="{Binding Index}"></Run>
                     <Run Text="."></Run>
-                        </TextBlock>
-                        <TextBlock Text="{Binding CatalogName}" Grid.Column="2" Foreground="Black" FontSize="16" VerticalAlignment="Center"></TextBlock>
-                        <Path  Grid.Column="3" Style="{StaticResource ArrowPathStyle}"  Data="M742.226498 488.815975 325.631382 72.217788c-12.111852-12.105712-31.746028-12.105712-43.85481 0-12.108782 12.111852-12.108782 31.742958 0 43.85481l394.668735 394.668735-394.668735 394.668735c-12.108782 12.111852-12.108782 31.742958 0 43.85481 12.108782 12.108782 31.742958 12.108782 43.85481 0l416.595117-416.598186C754.332211 520.558933 754.332211 500.924757 742.226498 488.815975z" UseLayoutRounding="False"></Path>
-                        <Border Grid.Column="1" Grid.ColumnSpan="3" Height="1" BorderBrush="DarkGray" BorderThickness="0,0,0,1" VerticalAlignment="Bottom"></Border>
-                    </Grid>
+                            </TextBlock>
+                            <TextBlock Text="{Binding CatalogName}" Grid.Column="2" Foreground="Black" FontSize="16" VerticalAlignment="Center"></TextBlock>
+                            <Path  Grid.Column="3" Style="{StaticResource ArrowPathStyle}"  Data="M742.226498 488.815975 325.631382 72.217788c-12.111852-12.105712-31.746028-12.105712-43.85481 0-12.108782 12.111852-12.108782 31.742958 0 43.85481l394.668735 394.668735-394.668735 394.668735c-12.108782 12.111852-12.108782 31.742958 0 43.85481 12.108782 12.108782 31.742958 12.108782 43.85481 0l416.595117-416.598186C754.332211 520.558933 754.332211 500.924757 742.226498 488.815975z" UseLayoutRounding="False"></Path>
+                            <Border Grid.Column="1" Grid.ColumnSpan="3" Height="1" BorderBrush="DarkGray" BorderThickness="0,0,0,1" VerticalAlignment="Bottom"></Border>
+                        </Grid>
+                    </Button>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

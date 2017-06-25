@@ -109,10 +109,12 @@
   <ItemGroup>
     <Compile Include="Config\AppDataPath.cs" />
     <Compile Include="DataBase\DbBookShelf.cs" />
+    <Compile Include="DataBase\DbHistory.cs" />
     <Compile Include="DataBase\DbLocalBook.cs" />
     <Compile Include="Entity\BaseViewModel.cs" />
     <Compile Include="Entity\Book.cs" />
     <Compile Include="Entity\BookCatalog.cs" />
+    <Compile Include="Entity\BookHistorySchema.cs" />
     <Compile Include="Entity\BookShelfSchema.cs" />
     <Compile Include="Entity\LocalBook.cs" />
     <Compile Include="Entity\TabbarItem.cs" />

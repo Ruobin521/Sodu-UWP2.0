@@ -25,5 +25,15 @@ namespace Sodu.ViewModel
         }
 
 
+        public LocalBookItemViewModel()
+        {
+
+        }
+
+        public LocalBookItemViewModel(Book book)
+        {
+            CurrentBook = book;
+        }
+
     }
 }

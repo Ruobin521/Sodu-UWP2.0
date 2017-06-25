@@ -1,32 +1,32 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Command;
+using Sodu.Core.Entity;
+using Sodu.Core.HtmlService;
+using Sodu.Core.Util;
+using Sodu.Service;
+using Sodu.View;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.Graphics.Display;
-using Windows.UI.Xaml.Controls;
-using GalaSoft.MvvmLight;
-using Sodu.Core.Entity;
-using Sodu.Core.HtmlService;
-using Sodu.View;
 using Windows.Phone.Devices.Power;
-using Windows.System;
 using Windows.UI;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
-using GalaSoft.MvvmLight.Command;
-using Sodu.Core.Util;
-using Sodu.Service;
+using GalaSoft.MvvmLight.Threading;
+using Sodu.Core.Config;
+using Sodu.Core.DataBase;
 
 namespace Sodu.ViewModel
 {
     public class OnlineContentPageViewModel : CommonPageViewModel
     {
         #region 属性
+
+
 
         /// <summary>
         /// 缓存数据（url,pages ,content）
@@ -111,6 +111,16 @@ namespace Sodu.ViewModel
             }
         }
 
+        private bool _isRetry;
+        /// <summary>
+        ///是否需要重新加载
+        /// </summary>
+        public bool IsRetry
+        {
+            get { return _isRetry; }
+            set { Set(ref _isRetry, value); }
+        }
+
 
         #endregion
 
@@ -118,13 +128,60 @@ namespace Sodu.ViewModel
         private ICommand _catalogCloseCommand;
         public ICommand CatalogCloseCommand => _catalogCloseCommand ?? (_catalogCloseCommand = new RelayCommand<object>(OnCatalogCloseCommand));
 
-        public virtual void OnCatalogCloseCommand(object obj)
+        public void OnCatalogCloseCommand(object obj)
         {
             NavigationService.GoBack();
             HideStatusBar(true);
         }
 
+        private ICommand _catalogSelectedCommand;
+        public ICommand CatalogSelectedCommand => _catalogSelectedCommand ?? (_catalogSelectedCommand = new RelayCommand<object>(OnCatalogSelectedCommand));
 
+        public void OnCatalogSelectedCommand(object obj)
+        {
+            NavigationService.GoBack();
+            SetCurrentContent(obj as BookCatalog);
+        }
+
+
+        private ICommand _retryCommand;
+        public ICommand RetryCommand => _retryCommand ?? (_retryCommand = new RelayCommand<object>(OnRetryCommand));
+
+        public async void OnRetryCommand(object obj)
+        {
+            IsRetry = false;
+            await Task.Delay(50);
+            SetCurrentContent(CurrentCatalog);
+        }
+
+        private ICommand _addToLocalShelfCommand;
+        public ICommand AddToLocalShelfCommand => _addToLocalShelfCommand ?? (_addToLocalShelfCommand = new RelayCommand<object>(OnAddToLocalShelfCommand));
+
+        public async void OnAddToLocalShelfCommand(object obj)
+        {
+            var dialog = new MessageDialog("是否添加本小说到本地收藏?", "收藏提示");
+
+            dialog.Commands.Add(new UICommand("确定", cmd =>
+            {
+                if (!App.IsPro && ViewModelInstance.Instance.LocalBookPage.GetLocalBooksCount() >= 3)
+                {
+                    ToastHelper.ShowMessage("免费版本本地书架只能收藏三本，专业版无限制.");
+                    return;
+                }
+
+                CurrentBook.IsOnline = true;
+                CurrentBook.IsLocal = true;
+                ViewModelInstance.Instance.LocalBookPage.InserOrUpdateBook(CurrentBook);
+
+            }, commandId: 0));
+            dialog.Commands.Add(new UICommand("取消", cmd =>
+            {
+                return;
+            }, commandId: 1));
+
+            //获取返回值
+            var result = await dialog.ShowAsync();
+        }
 
         #endregion
 
@@ -155,6 +212,7 @@ namespace Sodu.ViewModel
                 CatalogUrl = book.NewestChapterUrl,
             };
 
+            CurrentCatalog = catalog;
             SetCurrentContent(catalog);
             SetCatalogData(catalog);
         }
@@ -166,11 +224,39 @@ namespace Sodu.ViewModel
             {
                 return;
             }
-
             CurrentCatalog = catalog;
+
             var value = await GetCatalogContent(catalog);
-            ContentPages = value.Item1;
-            ContentText = value.Item2;
+            if (value != null)
+            {
+
+                ContentPages = value.Item1;
+                ContentText = value.Item2;
+
+                CurrentBook.LastReadChapterName = catalog.CatalogName;
+                CurrentBook.LastReadChapterUrl = catalog.CatalogUrl;
+
+                UpdateHistory();
+            }
+            else
+            {
+                IsRetry = true;
+                ContentText = "";
+                ContentPages.Clear();
+            }
+        }
+
+
+        private void UpdateHistory()
+        {
+            if (CurrentBook.IsLocal || CurrentBook.IsOnline)
+            {
+                DbLocalBook.InsertOrUpdatBook(AppDataPath.GetAppCacheDbPath(), CurrentBook);
+            }
+            else
+            {
+                ViewModelInstance.Instance.History.InserOrUpdateHistory(CurrentBook);
+            }
         }
 
         public async Task<Tuple<List<string>, string>> GetCatalogContent(BookCatalog catalog)
@@ -181,17 +267,31 @@ namespace Sodu.ViewModel
                 IsLoading = true;
                 await Task.Run(async () =>
                 {
-                    string html = null;
-                    List<string> list = null;
+                    try
+                    {
+                        string html = null;
+                        List<string> list = null;
+                        if (DicContentCache.ContainsKey(catalog.CatalogUrl))
+                        {
+                            value = DicContentCache[catalog.CatalogUrl];
+                            return;
+                        }
+                        if (CurrentBook.IsLocal)
+                        {
+                            html = await GetCatalogContentFormDb(catalog);
+                            list = SplitContentToPages(html);
+                            if (html != null && list != null)
+                            {
+                                value = new Tuple<List<string>, string>(list, html);
+                                if (!DicContentCache.ContainsKey(catalog.CatalogUrl))
+                                {
+                                    DicContentCache.Add(catalog.CatalogUrl, value);
+                                }
+                                return;
+                            }
+                        }
 
-                    if (DicContentCache.ContainsKey(catalog.CatalogUrl))
-                    {
-                        value = DicContentCache[catalog.CatalogUrl];
-                        return;
-                    }
-                    if (CurrentBook.IsLocal)
-                    {
-                        html = await GetCatalogContentFormDb(catalog);
+                        html = await GetCatalogContentFromWeb(catalog);
                         list = SplitContentToPages(html);
                         if (html != null && list != null)
                         {
@@ -200,26 +300,18 @@ namespace Sodu.ViewModel
                             {
                                 DicContentCache.Add(catalog.CatalogUrl, value);
                             }
-                            return;
                         }
                     }
-
-                    html = await GetCatalogContentFromWeb(catalog);
-                    list = SplitContentToPages(html);
-                    if (html != null && list != null)
+                    catch (Exception ex)
                     {
-                        value = new Tuple<List<string>, string>(list, html);
-                        if (!DicContentCache.ContainsKey(catalog.CatalogUrl))
-                        {
-                            DicContentCache.Add(catalog.CatalogUrl, value);
-                        }
+                        Debug.WriteLine(ex.Message + "\n" + ex.StackTrace);
                     }
                 });
 
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine(e);
+                Debug.WriteLine(ex.Message + "\n" + ex.StackTrace);
                 return null;
             }
             finally
@@ -232,27 +324,34 @@ namespace Sodu.ViewModel
 
         public void SetCatalogData(BookCatalog catalog)
         {
-            IsLoadingCatalogData = true;
-            var catalogUrl = AnalisysSourceHelper.GetCatalogPageUrl(catalog.CatalogUrl);
-            SetCatalogPageData(catalogUrl);
-            IsLoadingCatalogData = false;
+            //本地书架
+            if (CurrentBook.IsLocal)
+            {
+                //从数据库中获取杂志目录及内容
+            }
+            else
+            {
+                var catalogUrl = AnalisysSourceHelper.GetCatalogPageUrl(catalog.CatalogUrl);
+                SetCatalogPageData(catalogUrl);
+            }
         }
-
 
         private async void SetCatalogPageData(string url, int retryCount = 3)
         {
             try
             {
+                IsLoadingCatalogData = true;
+
                 var i = 0;
                 Tuple<List<BookCatalog>, string, string, string> value = null;
-                while (i < retryCount)
+                while (i <= retryCount)
                 {
                     value = await AnalisysSourceHelper.GetCatalogPageData(url);
                     if (value != null)
                     {
                         break;
                     }
-                    Debug.WriteLine($"加载目录失败，第{i}次尝试");
+                    Debug.WriteLine($"加载目录失败，第{i + 1}次尝试");
                     i++;
                 }
 
@@ -275,30 +374,42 @@ namespace Sodu.ViewModel
                 CurrentBook.AuthorName = value.Item4;
 
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine(e);
+                Debug.WriteLine(ex.Message + "\n" + ex.StackTrace);
+            }
+            finally
+            {
+                IsLoadingCatalogData = false;
             }
         }
 
         private async Task<string> GetCatalogContentFromWeb(BookCatalog catalog, int retryCount = 3)
         {
             var i = 0;
+            IsCancleRequest = false;
             string html = null;
-            while (i < retryCount)
+            while (i <= retryCount)
             {
-                html = await AnalisysSourceHelper.GetCatalogContent(catalog.CatalogUrl);
-                if (html != null)
+                if (IsCancleRequest)
+                {
+                    Debug.WriteLine($"用户取消请求操作");
+                    break;
+                }
+                html = await GetHtmlData(catalog.CatalogUrl, false, false);
+                html = AnalisysSourceHelper.AnalisysCatalogContent(catalog.CatalogUrl, html);
+                if (!string.IsNullOrEmpty(html))
                 {
                     break;
                 }
-                Debug.WriteLine($"加载目录失败，第{i}次尝试");
+
+                Debug.WriteLine($"加载正文内容失败，第{i + 1}次尝试");
                 i++;
             }
 
-            if (html == null)
+            if (string.IsNullOrEmpty(html))
             {
-                Debug.WriteLine("加载目录失败，不再次尝试");
+                Debug.WriteLine("加载正文内容失败，不再次尝试");
             }
             return html;
         }
@@ -330,6 +441,23 @@ namespace Sodu.ViewModel
 
         private readonly Tuple<Brush, Brush> _nightModeColor = new Tuple<Brush, Brush>(new SolidColorBrush(Color.FromArgb(255, 12, 12, 12)), new SolidColorBrush(Color.FromArgb(255, 90, 90, 90)));
 
+
+        private Tuple<Brush, Brush> _contentColor;
+        /// <summary>
+        ///  当前选中的颜色
+        /// </summary>
+        public Tuple<Brush, Brush> ContentColor
+        {
+            get
+            {
+                return _contentColor;
+            }
+            set
+            {
+                Set(ref _contentColor, value);
+            }
+        }
+
         private Tuple<Brush, Brush> _selectedColor;
         /// <summary>
         ///  当前选中的颜色
@@ -343,11 +471,12 @@ namespace Sodu.ViewModel
             set
             {
                 Set(ref _selectedColor, value);
-
                 var index = ContentColors.IndexOf(value);
-                if (index != -1)
+                AppSettingService.SetKeyValue(SettingKey.ContentColorIndex, index);
+
+                if (!IsNightMode)
                 {
-                    AppSettingService.SetKeyValue(SettingKey.ContentColorIndex, index);
+                    ContentColor = value;
                 }
             }
         }
@@ -417,12 +546,12 @@ namespace Sodu.ViewModel
                 AppSettingService.SetKeyValue(SettingKey.IsNightMode, value);
                 if (value)
                 {
-                    SelectedColor = _nightModeColor;
+                    ContentColor = _nightModeColor;
                 }
                 else
                 {
                     var index = AppSettingService.GetKeyValue(SettingKey.ContentColorIndex);
-                    SelectedColor = index == null ? ContentColors[0] : ContentColors[int.Parse(index.ToString())];
+                    ContentColor = index == null ? ContentColors[0] : ContentColors[int.Parse(index.ToString())];
                 }
             }
         }
@@ -479,16 +608,15 @@ namespace Sodu.ViewModel
                  _lineHeightCommand = new RelayCommand<object>(
                        (obj) =>
                        {
-                           if (obj.ToString().Equals("-") && LineHeight < 50)
-                           {
-                               LineHeight = LineHeight + 2;
-                           }
-
-                           if (obj.ToString().Equals("0") && LineHeight > FontSize)
+                           if (obj.ToString().Equals("-"))
                            {
                                LineHeight = LineHeight - 2;
                            }
 
+                           if (obj.ToString().Equals("+"))
+                           {
+                               LineHeight = LineHeight + 2;
+                           }
                        }));
 
 
@@ -536,14 +664,13 @@ namespace Sodu.ViewModel
                                return;
                            }
                            NavigationService.NavigateTo(typeof(CatalogPage));
-                           ShowStatusBar(true);
                        }));
 
         private void InitSettingValue()
         {
             //初始化字体颜色 背景颜色
-            var index = AppSettingService.GetKeyValue(SettingKey.ContentColorIndex);
-            if (index == null)
+            var index = AppSettingService.GetIntValue(SettingKey.ContentColorIndex);
+            if (index < 0)
             {
                 SelectedColor = ContentColors[0];
             }
@@ -553,50 +680,46 @@ namespace Sodu.ViewModel
             }
 
             //字体大小
-            var fontSize = AppSettingService.GetKeyValue(SettingKey.FontSize);
-            if (fontSize == null)
+            var fontSize = AppSettingService.GetIntValue(SettingKey.FontSize);
+            if (fontSize < 0)
             {
                 FontSize = 20;
             }
             else
             {
-                _fontSize = double.Parse(fontSize.ToString());
+                _fontSize = fontSize;
             }
 
             //行高
-            var lineHeight = AppSettingService.GetKeyValue(SettingKey.LineHeight);
-            if (lineHeight == null)
+            var lineHeight = AppSettingService.GetIntValue(SettingKey.LineHeight);
+            if (lineHeight < 0)
             {
                 LineHeight = 32;
             }
             else
             {
-                _lineHeight = double.Parse(lineHeight.ToString());
+                _lineHeight = lineHeight;
 
             }
 
             //亮度
-            var lightValue = AppSettingService.GetKeyValue(SettingKey.LightValue);
-            if (lightValue == null)
+            var lightValue = AppSettingService.GetIntValue(SettingKey.LightValue);
+            if (lightValue < 0)
             {
                 LightValue = 100;
             }
             else
             {
-                _lightValue = double.Parse(lightValue.ToString());
+                _lightValue = lightValue;
 
             }
 
             //夜间模式
-            var isNightMode = AppSettingService.GetKeyValue(SettingKey.IsNightMode);
-            if (isNightMode == null)
-            {
-                IsNightMode = false;
-            }
-            else
-            {
-                _isNightMode = bool.Parse(isNightMode.ToString());
-            }
+            IsNightMode = AppSettingService.GetBoolKeyValue(SettingKey.IsNightMode);
+
+            //横屏模式
+            IsLandscape = AppSettingService.GetBoolKeyValue(SettingKey.IsLandscape);
+
 
         }
 
@@ -664,7 +787,10 @@ namespace Sodu.ViewModel
         }
         private void _battery_RemainingChargePercentChanged(object sender, object e)
         {
-            BatteryValue = string.Format("{0}", _battery.RemainingChargePercent);
+            DispatcherHelper.CheckBeginInvokeOnUI(() =>
+            {
+                BatteryValue = string.Format("{0}", _battery.RemainingChargePercent);
+            });
         }
 
 

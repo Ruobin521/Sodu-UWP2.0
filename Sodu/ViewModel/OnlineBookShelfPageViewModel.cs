@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -140,9 +141,9 @@ namespace Sodu.ViewModel
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine(e);
+                Debug.WriteLine(ex.Message + "\n" + ex.StackTrace);
             }
             finally
             {
@@ -183,9 +184,9 @@ namespace Sodu.ViewModel
                      result = true;
                      DbBookShelf.InsertOrUpdateBooks(AppDataPath.GetAppCacheDbPath(), list, AppSettingService.GetUserId());
                  }
-                 catch (Exception e)
+                 catch (Exception ex)
                  {
-                     Console.WriteLine(e);
+                     Debug.WriteLine(ex.Message + "\n" + ex.StackTrace);
                      result = false;
                  }
              });

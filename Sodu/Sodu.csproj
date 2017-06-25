@@ -115,7 +115,12 @@
     <Compile Include="UserControl\ContentPage.xaml.cs">
       <DependentUpon>ContentPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControl\CoverImage.cs" />
+    <Compile Include="UserControl\CoverImage.xaml.cs">
+      <DependentUpon>CoverImage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControl\HistoryItem.xaml.cs">
+      <DependentUpon>HistoryItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControl\LocalBookItem.xaml.cs">
       <DependentUpon>LocalBookItem.xaml</DependentUpon>
     </Compile>
@@ -132,6 +137,7 @@
       <DependentUpon>TopNavigationBar.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\BasePageViewModel.cs" />
+    <Compile Include="ViewModel\HistoryPageViewModel.cs" />
     <Compile Include="ViewModel\HotAndRecommendPageViewModel.cs" />
     <Compile Include="ViewModel\LocalBookItemViewModel.cs" />
     <Compile Include="ViewModel\LocalBookPageViewModel.cs" />
@@ -206,6 +212,7 @@
     <Content Include="Assets\Icon\bookshelf2.png" />
     <Content Include="Assets\Icon\cover.png" />
     <Content Include="Assets\Icon\down.png" />
+    <Content Include="Assets\Icon\failed%403x.png" />
     <Content Include="Assets\Icon\head.png" />
     <Content Include="Assets\Icon\lineSpace_max%403x.png" />
     <Content Include="Assets\Icon\liuliang.png" />
@@ -213,6 +220,7 @@
     <Content Include="Assets\Icon\maxLight%403x.png" />
     <Content Include="Assets\Icon\mzsm%403x.png" />
     <Content Include="Assets\Icon\new_blue%403x.png" />
+    <Content Include="Assets\Icon\plus%403x.png" />
     <Content Include="Assets\Icon\up.png" />
     <Content Include="Assets\Icon\user%403x.png" />
     <Content Include="Assets\Icon\wwan%403x.png" />
@@ -253,6 +261,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UserControl\ContentPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControl\CoverImage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControl\HistoryItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

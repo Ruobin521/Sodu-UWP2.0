@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Sodu.Contants;
+using Sodu.Control;
 using Sodu.Core.Util;
 using Sodu.ViewModel;
 
@@ -27,10 +28,10 @@ namespace Sodu.View
     /// </summary>
     public sealed partial class OnlineContentPage : Page
     {
+        private bool IsAnimating { get; set; }
+        private bool IsShow { get; set; }
 
-        private bool isAnimating { get; set; }
-        private bool isShow { get; set; }
-        public OnlineContentPage()
+        public  OnlineContentPage()
         {
             this.InitializeComponent();
 
@@ -38,23 +39,38 @@ namespace Sodu.View
 
             BlackControl.Visibility = Visibility.Visible;
 
+            BtnAdd.Visibility = Visibility.Collapsed;
+
             MenuBarShow.Completed += MenuSb_Completed;
             MenuBarHide.Completed += MenuSb_Completed;
-
         }
 
 
         private void MenuSb_Completed(object sender, object e)
         {
-            isAnimating = false;
-            isShow = !isShow;
+            IsAnimating = false;
+            IsShow = !IsShow;
+
+            if (IsShow)
+            {
+                var bookId = ViewModelInstance.Instance.OnlineBookContent.CurrentBook.BookId;
+
+                var ifExist = ViewModelInstance.Instance.LocalBookPage.CheckBookExist(bookId);
+
+                BtnAdd.Visibility = ifExist ? Visibility.Collapsed : Visibility.Visible;
+
+            }
+            else
+            {
+                BtnAdd.Visibility = Visibility.Collapsed;
+            }
         }
 
         private void UIElement_OnTapped(object sender, TappedRoutedEventArgs e)
         {
             var point = e.GetPosition(sender as UIElement);
 
-            //上一章
+            //点击中间区域
             if (point.X > Window.Current.Bounds.Width / 3 && point.X < Window.Current.Bounds.Width / 3 * 2)
             {
                 SetMenuVisibility();
@@ -68,29 +84,28 @@ namespace Sodu.View
 
         private async void SetMenuVisibility()
         {
-            if (isAnimating)
+            if (IsAnimating)
             {
                 return;
             }
-            isAnimating = true;
+            IsAnimating = true;
 
             FontSetingPanel.Visibility = Visibility.Collapsed;
 
-            if (isShow)
+            if (IsShow)
             {
                 MenuBarHide.Begin();
                 if (PlatformHelper.IsMobileDevice)
                 {
-                    await StatusBar.GetForCurrentView().HideAsync();
+                   // await StatusBar.GetForCurrentView().HideAsync();
                 }
             }
             else
             {
                 MenuBarShow.Begin();
-
                 if (PlatformHelper.IsMobileDevice)
                 {
-                    await StatusBar.GetForCurrentView().ShowAsync();
+                  //  await StatusBar.GetForCurrentView().ShowAsync();
                 }
             }
         }
@@ -102,12 +117,22 @@ namespace Sodu.View
 
         private void BtnFontSetingPanel_OnClick(object sender, RoutedEventArgs e)
         {
-            FontSetingPanel.Visibility = (FontSetingPanel.Visibility == Visibility.Collapsed) ? Visibility.Visible : Visibility.Collapsed;
+            FontSetingPanel.Visibility = (FontSetingPanel.Visibility == Visibility.Collapsed)
+                ? Visibility.Visible
+                : Visibility.Collapsed;
         }
 
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+
+        private void BtnNightMode_OnClick(object sender, RoutedEventArgs e)
         {
-            FontSetingPanel.Visibility = Visibility.Collapsed;
+            var btn = (TabbarButton)sender;
+
+            btn.Label = btn.Label == "夜间模式" ? "日间模式" : "夜间模式";
+        }
+
+        private void BtnAdd_OnClick(object sender, RoutedEventArgs e)
+        {
+            SetMenuVisibility();
         }
     }
 }

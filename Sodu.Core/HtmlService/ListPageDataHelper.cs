@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Sodu.Core.Entity;
 
@@ -46,7 +47,7 @@ namespace Sodu.Core.HtmlService
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex);
+                    Debug.WriteLine(ex.Message + "\n" + ex.StackTrace);
                 }
 
                 try
@@ -63,7 +64,7 @@ namespace Sodu.Core.HtmlService
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex);
+                    Debug.WriteLine(ex);
                 }
             }
             catch (Exception)
@@ -292,7 +293,7 @@ namespace Sodu.Core.HtmlService
                 }
                 catch(Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    Debug.WriteLine(ex.Message + "\n" + ex.StackTrace);
                 }
 
             }

@@ -11,7 +11,7 @@ using SQLite.Net.Platform.WinRT;
 
 namespace Sodu.Core.DataBase
 {
-    public class DbLocalBook
+    public class DbHistory
     {
         public static List<Book> GetBooks(string path)
         {
@@ -20,13 +20,13 @@ namespace Sodu.Core.DataBase
             {
                 using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), path))
                 {
-                    db.CreateTable<LocalBook>();
+                    db.CreateTable<BookHistorySchema>();
 
                     db.RunInTransaction(() =>
                     {
                         try
                         {
-                            var enumerable = db.Table<LocalBook>()?.ToList();
+                            var enumerable = db.Table<BookHistorySchema>()?.ToList();
                             if (enumerable == null || enumerable.Count == 0)
                             {
                                 return;
@@ -34,11 +34,11 @@ namespace Sodu.Core.DataBase
 
                             enumerable = enumerable.ToList().OrderByDescending(p => DateTime.Parse(p.UpdateTime)).ToList();
 
-                            foreach (var localBook in enumerable)
+                            foreach (var history in enumerable)
                             {
-                                if (!string.IsNullOrEmpty(localBook.BookJson))
+                                if (!string.IsNullOrEmpty(history.BookJson))
                                 {
-                                    var book = JsonConvert.DeserializeObject<Book>(localBook.BookJson);
+                                    var book = JsonConvert.DeserializeObject<Book>(history.BookJson);
                                     list.Add(book);
                                 }
                             }
@@ -58,61 +58,23 @@ namespace Sodu.Core.DataBase
             }
             return list;
         }
-
-        public static int GetBooksCount(string path)
-        {
-            int count = 0;
-            try
-            {
-                using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), path))
-                {
-                    db.CreateTable<LocalBook>();
-
-                    db.RunInTransaction(() =>
-                    {
-                        try
-                        {
-                            var enumerable = db.Table<LocalBook>()?.ToList();
-                            if (enumerable == null || enumerable.Count == 0)
-                            {
-                                return;
-                            }
-
-                            count = enumerable.Count;
-                        }
-                        catch (Exception ex)
-                        {
-                            Debug.WriteLine(ex.Message + "\n" + ex.StackTrace);
-                            count = 0;
-                        }
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message + "\n" + ex.StackTrace);
-                count = 0;
-            }
-            return count;
-        }
-
-        public static bool InsertOrUpdatBook(string path, Book book)
+        public static bool InsertOrUpdatHistory(string path, Book book)
         {
             bool result = true;
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), path))
             {
-                db.CreateTable<LocalBook>();
+                db.CreateTable<BookHistorySchema>();
                 db.RunInTransaction(() =>
                 {
                     try
                     {
-                        var temp = (from m in db.Table<LocalBook>()
+                        var temp = (from m in db.Table<BookHistorySchema>()
                                     where m.BookId == book.BookId
                                     select m
                                 ).FirstOrDefault();
                         if (temp == null)
                         {
-                            var schema = new LocalBook()
+                            var schema = new BookHistorySchema()
                             {
                                 BookId = book.BookId,
                                 BookJson = JsonConvert.SerializeObject(book),
@@ -136,46 +98,17 @@ namespace Sodu.Core.DataBase
             return result;
         }
 
-
-        public static bool CheckBookExist(string path, string bookId)
-        {
-            bool result = false;
-            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), path))
-            {
-                db.CreateTable<LocalBook>();
-                db.RunInTransaction(() =>
-                {
-                    try
-                    {
-                        var temp = (from m in db.Table<LocalBook>()
-                                    where m.BookId == bookId
-                                    select m
-                                ).FirstOrDefault();
-                        if (temp != null)
-                        {
-                            result = true;
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        result = false;
-                    }
-                });
-            }
-            return result;
-        }
-
         public static bool ClearBooks(string path)
         {
             bool result = true;
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), path))
             {
-                db.CreateTable<LocalBook>();
+                db.CreateTable<BookHistorySchema>();
                 db.RunInTransaction(() =>
                 {
                     try
                     {
-                        db.DeleteAll<LocalBook>();
+                        db.DeleteAll<BookHistorySchema>();
                     }
                     catch (Exception)
                     {
@@ -185,5 +118,6 @@ namespace Sodu.Core.DataBase
             }
             return result;
         }
+
     }
 }

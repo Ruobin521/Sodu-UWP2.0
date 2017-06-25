@@ -120,5 +120,16 @@ namespace Sodu.ViewModel
             }
         }
 
+        private HistoryPageViewModel _history;
+        public HistoryPageViewModel History
+        {
+            get { return _history ?? (_history = new HistoryPageViewModel()); }
+            set
+            {
+                Set(ref _history, value);
+            }
+        }
+
+
     }
 }

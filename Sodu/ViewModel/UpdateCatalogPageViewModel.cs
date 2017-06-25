@@ -110,7 +110,7 @@ namespace Sodu.ViewModel
                 var list = ListPageDataHelper.GetBookUpdateChapterList(html);
                 if (list == null)
                 {
-                    Console.WriteLine("排行榜数据获取失败");
+                    Debug.WriteLine("排行榜数据获取失败");
                 }
                 else
                 {
@@ -150,9 +150,9 @@ namespace Sodu.ViewModel
                     Title = $"{CurrentBook.BookName}({PageIndex}/{PageCount})";
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine(e);
+                Debug.WriteLine(ex.Message + "\n" + ex.StackTrace);
                 throw;
             }
             finally

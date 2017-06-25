@@ -19,7 +19,7 @@
         <x:String  x:Key="DownloadPathData">M633.341091 671.637814c-11.326976-11.328-29.694299-11.328-41.022299 0l-44.363394 45.106314 0-237.407038c0-16.020882-12.986779-29.007661-29.006637-29.007661l-8.867972 0c-16.020882 0-29.007661 12.985756-29.007661 29.007661l0 241.248529-48.14144-48.947805c-11.328-11.328-29.694299-11.328-41.022299 0l-6.27082 6.27082c-11.328 11.326976-11.329023 29.694299 0 41.022299L490.889705 825.944202c5.975085 5.976108 13.909801 8.79634 21.736047 8.466835 7.825222 0.328481 15.759939-2.491751 21.735024-8.466835l105.251136-107.013269c11.328-11.328 11.328-29.695323 0-41.022299L633.341091 671.637814zM916.318 403.171386c-20.911262-24.651446-48.196699-44.821835-79.002308-55.130621-6.601348-74.843592-38.726-142.075833-88.228437-192.724373C693.638385 99.288331 616.835162 64.328098 533.007965 64.328098c-61.839417 0-119.489418 18.824741-167.898965 51.543933-44.008306 29.134551-80.095199 69.474304-104.071264 117.881804-52.156894 8.515954-99.245352 34.063817-133.572158 71.257927-39.607066 42.131563-63.371306 99.05604-63.371306 161.357991 0 64.992223 25.965371 124.155694 68.212568 166.737512l-0.652869 0c41.905412 42.911322 99.357915 69.322855 163.399487 69.466118l0-70.370721c-44.683688-0.14224-85.406159-18.486026-114.549919-48.400337-29.714765-30.029944-47.756677-71.267137-47.756677-117.433596 0-43.924395 17.162892-83.816964 44.447305-113.3987 27.28646-29.582759 65.360614-48.854685 107.380636-51.096748 13.202697-0.448208 25.313525-8.516977 30.80561-21.515013 18.482957-43.917232 49.288566-80.670298 87.803765-106.667392 36.738739-24.650423 81.627089-39.442314 129.823787-39.442314 65.131393 0 124.543527 26.89351 167.44257 70.370721 42.687218 43.924395 69.532633 103.978143 69.532633 170.763199 0 16.5837 11.44261 31.374568 28.164456 34.512025 26.406416 4.929266 49.28959 18.376533 66.013483 38.098713 15.402805 19.721157 25.312502 44.820811 25.312502 72.161506 0 31.374568-12.110829 58.716286-32.354895 79.334883-19.363 20.171412-46.647413 32.720216-76.784804 32.720216l-0.669242 0-11.195993 0 0 70.370721 11.195993 0 0.881067 0c48.847521-0.896416 93.085048-21.512966 125.422548-53.338812 32.125675-33.167401 52.369741-78.43642 52.369741-129.085984C958.339046 475.78417 942.056198 434.994162 916.318 403.171386zM894.954437 928.496879c0 16.019859-12.986779 29.007661-29.007661 29.007661L156.013775 957.50454c-16.020882 0-29.007661-12.986779-29.007661-29.007661l0-6.943133c0-16.019859 12.986779-29.007661 29.007661-29.007661l709.934025 0c16.019859 0 29.007661 12.986779 29.007661 29.007661L894.95546 928.496879z</x:String>
         <x:String  x:Key="SettingPathData">M40.666163 869.888H22.234163c-15.872 0-26.624-15.872-20.48-30.72l271.36-678.912c3.584-8.704 11.776-13.824 20.48-13.824H338.138163c9.216 0 17.408 5.632 20.48 13.824L630.490163 839.68c5.632 14.848-5.12 30.72-20.48 30.72h-22.528c-9.216 0-17.408-5.632-20.48-13.824l-67.072-167.424c-3.584-8.704-11.776-13.824-20.48-13.824H148.698163c-9.216 0-17.408 5.632-20.48 13.824l-67.072 166.912c-3.072 8.192-11.264 13.824-20.48 13.824z m145.92-253.952h251.904c15.872 0 26.624-15.872 20.992-30.208L335.066163 261.632c-7.168-18.944-33.792-18.944-41.472 0l-127.488 323.072c-6.656 15.36 4.096 31.232 20.48 31.232zM938.202163 561.152c12.288 0 22.016-9.728 22.016-22.016v-24.576c-2.56-73.216-41.984-108.032-117.248-105.472-68.096 0-109.056 23.552-121.856 70.144-2.56 9.728-11.264 15.872-20.992 15.872h-16.384c-14.848 0-25.6-14.336-21.504-28.672 23.04-74.752 83.456-112.128 181.248-112.128 117.248 2.56 177.152 57.344 179.712 164.352v238.592c-2.048 30.208-1.536 59.904 1.024 88.576 1.024 13.312-8.704 24.576-22.016 24.576h-16.384c-11.776 0-21.504-9.216-22.016-20.992l-2.56-53.248-4.096 7.68c-28.672 44.032-79.872 68.608-154.624 74.24h-4.096c-105.472-5.632-161.28-55.296-166.4-148.48 2.56-67.584 36.352-116.224 101.888-144.896 33.792-12.8 90.112-20.992 168.448-23.552h35.84z m-239.616 167.936c2.56 65.024 40.448 99.328 113.664 101.888 101.376-2.56 151.04-67.072 149.504-193.536 0-11.776-10.24-21.504-22.016-21.504h-13.824c-154.624-2.56-229.888 34.816-227.328 113.152z</x:String>
 
-  
+
         <converter:LightValueConverter x:Key="LightValueConverter"></converter:LightValueConverter>
         <KeyTime x:Key="SbKeyTime">0:0:0.35</KeyTime>
         <Storyboard x:Name="MenuBarHide">
@@ -312,12 +312,11 @@
         </Style>
 
 
-
-
     </Page.Resources>
 
-    <Grid   Tapped="UIElement_OnTapped" Background="{Binding SelectedColor.Item1}">
-        <Grid x:Name="TopBar" Visibility="Visible" Background="#FF191919" BorderThickness="0" Height="44" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5"
+    <Grid   Tapped="UIElement_OnTapped" Background="{Binding ContentColor.Item1}">
+        <Grid x:Name="BlackControl" Canvas.ZIndex="99" Visibility="Collapsed" Background="Black" IsHitTestVisible="False" Opacity="{Binding LightValue,Converter={StaticResource LightValueConverter}}"></Grid>
+        <Grid x:Name="TopBar" Canvas.ZIndex="98" Visibility="Visible" Background="#FF191919" BorderThickness="0" Height="55" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5"
               Tapped="Prevent_OnTapped">
             <Grid.RenderTransform>
                 <CompositeTransform/>
@@ -335,7 +334,7 @@
                 </AppBarButton.Content>
             </AppBarButton>
         </Grid>
-        <Grid VerticalAlignment="Bottom" Background="Transparent">
+        <Grid x:Name="BottomSettingPanel" Canvas.ZIndex="98" VerticalAlignment="Bottom" Background="Transparent">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="55"/>
@@ -362,10 +361,10 @@
                         <Image Grid.Column="2" Height="35" Width="35" Margin="10,0"   Source="../Assets/Icon/maxLight@3x.png"   ></Image>
 
 
-                        <control:SettingButton Grid.Column="3"   Command="{Binding LandsacpeCommand}" Click="ButtonBase_OnClick"
-                            BorderThickness="1" BorderBrush="White" Padding="2">
+                        <control:SettingButton Grid.Column="3"   Command="{Binding LandsacpeCommand}"  
+                            BorderThickness="1" IsSelected="{Binding IsLandscape}">
                             <control:SettingButton.Content>
-                                <Image Source="../Assets/Icon/screen.png" Stretch="Uniform"></Image>
+                                <Image Source="../Assets/Icon/screen.png" Stretch="Fill" Height="20" Width="25"></Image>
                             </control:SettingButton.Content>
                         </control:SettingButton>
                     </Grid>
@@ -375,25 +374,29 @@
                             <ColumnDefinition Width="50"/>
                             <ColumnDefinition Width="80"/>
                             <ColumnDefinition Width="80"/>
-                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="60"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="间距" Foreground="White" FontSize="14" VerticalAlignment="Center" Margin="10,0"></TextBlock>
-                        <control:SettingButton Grid.Column="1"   Command="{Binding LineHeightCommand}" CommandParameter="-"
-                            BorderThickness="1" BorderBrush="White" Padding="4">
-                            <control:SettingButton.Content>
-                                <Image Source="../Assets/Icon/lineSpace_max@3x.png" Stretch="Uniform"></Image>
-                            </control:SettingButton.Content>
-                        </control:SettingButton>
+                        <Button Grid.Column="1"   Command="{Binding LineHeightCommand}" CommandParameter="-"
+                            BorderThickness="1" BorderBrush="White"  Style="{StaticResource SettingButtonStyle}" >
+                            <Button.Content>
+                                <Image Source="../Assets/Icon/lineSpace_max@3x.png" Stretch="Fill" Height="16" Width="20"></Image>
+                            </Button.Content>
+                        </Button>
 
-                        <control:SettingButton Grid.Column="2"    Command="{Binding LineHeightCommand}" CommandParameter="+"
-                            BorderThickness="1" BorderBrush="White" Padding="0">
-                            <control:SettingButton.Content>
-                                <Image Source="../Assets/Icon/lineSpace_max@3x.png" Stretch="Uniform"></Image>
-                            </control:SettingButton.Content>
-                        </control:SettingButton>
+                        <Button Grid.Column="2"    Command="{Binding LineHeightCommand}" CommandParameter="+"
+                            BorderThickness="1" BorderBrush="White" Padding="0"  Style="{StaticResource SettingButtonStyle}">
+                            <Button.Content>
+                                <Image Source="../Assets/Icon/lineSpace_max@3x.png" Stretch="Fill" Height="23" Width="25"></Image>
+                            </Button.Content>
+                        </Button>
 
-                        <TextBlock Grid.Column="3" Text="{Binding LineHeight}" Foreground="White" FontSize="14" VerticalAlignment="Center" Margin="10,0"></TextBlock>
+                        <TextBlock Grid.Column="3" Text="滚动阅读"
+                                   Foreground="White" FontSize="14" VerticalAlignment="Center" ></TextBlock>
+
+                        <ToggleSwitch Grid.Column="4"   IsOn="{Binding IsScroll,Mode=TwoWay}"
+                                      Style="{StaticResource CustomToggleSwitchStyle}" Foreground="White"  />
 
                     </Grid>
 
@@ -442,6 +445,7 @@
 
                 </Grid>
             </ScrollViewer>
+
             <Grid  Grid.Row="1" x:Name="BottomBar"  Tapped="Prevent_OnTapped" Background="#FF191919"  Height="55"  RenderTransformOrigin="0.5,0.5">
                 <Grid.RenderTransform>
                     <CompositeTransform/>
@@ -452,8 +456,8 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <control:TabbarButton  Grid.Column="0"  Foreground="#FFADADAD"  Label="夜间"
-                                    PathData="{StaticResource DayPathData}"
+                <control:TabbarButton  x:Name="BtnNightMode" Grid.Column="0"  Foreground="#FFADADAD"  Label="夜间模式" Click="BtnNightMode_OnClick"
+                                    PathData="{StaticResource DayPathData}" 
                                     HighLightBackColor="Black"  Command="{Binding NightModeCommand}"/>
 
                 <control:TabbarButton  Grid.Column="1"  Foreground="#FFADADAD"  Label="目录"
@@ -470,10 +474,30 @@
                                    HighLightBackColor="Black"/>
             </Grid>
         </Grid>
+        <Button x:Name="BtnAdd" 
+                
+            Height="40" Width="40" Background="Red" 
+                Click="BtnAdd_OnClick"
+                HorizontalAlignment="Right" 
+                VerticalAlignment="Bottom" 
+                Canvas.ZIndex="97" 
+                Margin="0,0,30,75"
+                Command="{Binding AddToLocalShelfCommand}"
+                Style="{StaticResource CloseButtonStyle}"
+                Foreground="White" 
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Top">
+            <Button.Content>
+                <Image  Source="../Assets/Icon/plus@3x.png" Margin="8"></Image>
+            </Button.Content>
 
-        <control:CustomLoadingControl  IsActive="{Binding IsLoading}" VerticalAlignment="Center" Margin="0,0,0,100" Canvas.ZIndex="-1"/>
+        </Button>
 
-        <Grid Canvas.ZIndex="-5">
+        <control:CustomLoadingControl Tapped="Prevent_OnTapped"  IsActive="{Binding IsLoading}" VerticalAlignment="Center" Margin="0,0,0,100"
+                                  CancleCommand="{Binding CancleHttpRequestCommand}"     Canvas.ZIndex="97"/>
+
+        <!--正文内容-->
+        <Grid Canvas.ZIndex="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="20"/>
                 <RowDefinition Height="*"/>
@@ -499,7 +523,7 @@
                   <Run Text="1000"></Run>
                 </TextBlock>
 
-                <TextBlock  Foreground="{Binding SelectedColor.Item2}"  HorizontalAlignment="Right"  Margin="0,0,10,0">
+                <TextBlock  Style="{StaticResource InfoTextStyle}"  HorizontalAlignment="Right"  Margin="0,0,10,0">
                   <Run Text="55"></Run>
                   <Run Text="/"></Run>
                   <Run Text="1000"></Run>
@@ -507,11 +531,25 @@
             </Grid>
 
             <ScrollViewer Canvas.ZIndex="-1" Padding="10,8" Grid.Row="1" Style="{StaticResource ContentScrollViewerStyle}" >
-                <TextBlock Text="{Binding ContentText}"  TextWrapping="Wrap" LineHeight="30" Foreground="{Binding SelectedColor.Item2}" FontSize="{Binding FontSize}"></TextBlock>
+                <TextBlock Text="{Binding ContentText}"  TextWrapping="Wrap" LineHeight="30" Foreground="{Binding ContentColor.Item2}" FontSize="{Binding FontSize}"></TextBlock>
             </ScrollViewer>
         </Grid>
 
-        <Grid x:Name="BlackControl" Visibility="Collapsed" Background="Black" IsHitTestVisible="False" Canvas.ZIndex="99" Opacity="{Binding LightValue,Converter={StaticResource LightValueConverter}}"></Grid>
+        <Grid  VerticalAlignment="Center"
+               Visibility="{Binding IsRetry,Converter={StaticResource  BooleanToVisibilityConverter}}"
+               Margin="0,0,0,100" Height="180" Width="180" Tapped="Prevent_OnTapped">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="110"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Image  Height="100" Width="100" Source="../Assets/Icon/failed@3x.png"></Image>
+            <TextBlock Grid.Row="1" FontSize="16" Foreground="{StaticResource AppTextColor}" Text="啊哦...加载失败了" TextAlignment="Center"></TextBlock>
+            <Button Height="38" Width="150" Style="{StaticResource CustomButtonStyle}" HorizontalAlignment="Center"
+                Content="重新加载"  FontSize="16"  Grid.Row="2" Command="{Binding RetryCommand}"></Button>
+
+        </Grid>
+
 
     </Grid>
 </Page>

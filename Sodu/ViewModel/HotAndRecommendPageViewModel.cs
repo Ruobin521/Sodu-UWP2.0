@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Sodu.Core.HtmlService;
+using Sodu.Service;
 
 namespace Sodu.ViewModel
 {
@@ -31,7 +33,7 @@ namespace Sodu.ViewModel
             var list = ListPageDataHelper.GetHotAndRecommendList(html);
             if (list == null || list.Count == 0)
             {
-                Console.WriteLine("排行榜数据获取失败");
+                ToastHelper.ShowMessage("热门推荐数据获取失败");
             }
             else
             {

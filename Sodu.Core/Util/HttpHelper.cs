@@ -45,15 +45,15 @@ namespace Sodu.Core.Util
                 Request.Method = "GET";    //设置请求方式为GET : 
                 Request.Headers["Timeout"] = "15000";
                 Request.Headers[HttpRequestHeader.Accept] = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8";
-                Request.Headers[HttpRequestHeader.UserAgent] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393";
-                Request.Headers[HttpRequestHeader.AcceptEncoding] = "gzip, deflate"; //设置接收的编码 可以接受 gzip
+                Request.Headers[HttpRequestHeader.UserAgent] = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.110 Safari/537.36";
+                Request.Headers[HttpRequestHeader.AcceptEncoding] = "gzip, deflate, sdch"; //设置接收的编码 可以接受 gzip
                 Request.Headers[HttpRequestHeader.AcceptLanguage] = "zh-CN,zh;q=0.8";
                 Request.Headers[HttpRequestHeader.CacheControl] = "max-age=0";
                 Request.Headers[HttpRequestHeader.Connection] = "keep-alive";
-                Request.ContentType = "application/x-www-form-urlencoded";
+                Request.ContentType = "text/html; charset=utf-8";
                 Request.Proxy = null;
                 Request.ContinueTimeout = 350;
-
+                await Task.Delay(500);
                 html = await GetReponseHtml(Request, encoding);
 
             }
@@ -89,7 +89,7 @@ namespace Sodu.Core.Util
 
         public async Task<string> GetReponseHtml(WebRequest request, Encoding encoding = null)
         {
-            string html = string.Empty;
+            string html = null;
             try
             {
                 var response = await request.GetResponseAsync();
@@ -120,7 +120,8 @@ namespace Sodu.Core.Util
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex.Message);
+                html = null;
+                Debug.WriteLine(ex.Message + "\n" + ex.StackTrace);
             }
             return html;
         }
@@ -173,8 +174,9 @@ namespace Sodu.Core.Util
                 }
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Debug.WriteLine(ex.Message + "\n" + ex.StackTrace);
                 html = null;
             }
             return html;
@@ -223,8 +225,9 @@ namespace Sodu.Core.Util
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Debug.WriteLine(ex.Message + "\n" + ex.StackTrace);
                 html = null;
             }
             return html;
@@ -242,14 +245,11 @@ namespace Sodu.Core.Util
         {
             try
             {
-                if (Request != null)
-                {
-                    Request.Abort();
-                }
+                Request?.Abort();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                Debug.WriteLine(ex.Message + "\n" + ex.StackTrace);
             }
 
         }

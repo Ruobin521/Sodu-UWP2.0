@@ -31,157 +31,6 @@
 
      
 
-        <Style x:Key="CustomToggleSwitchStyle" TargetType="ToggleSwitch">
-            <Setter Property="Foreground" Value="Black"/>
-            <Setter Property="HorizontalAlignment" Value="Left"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="HorizontalContentAlignment" Value="Left"/>
-            <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
-            <Setter Property="FontSize" Value="18"/>
-            <Setter Property="ManipulationMode" Value="System,TranslateX"/>
-            <Setter Property="UseSystemFocusVisuals" Value="True"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ToggleSwitch">
-                        <Grid BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition MaxWidth="12" Width="12"/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="10"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="10"/>
-                            </Grid.RowDefinitions>
-                            <VisualStateManager.VisualStateGroups>
-                                <VisualStateGroup x:Name="ToggleStates">
-                                    <VisualStateGroup.Transitions>
-                                        <VisualTransition x:Name="DraggingToOnTransition" From="Dragging" GeneratedDuration="0" To="On">
-                                            <Storyboard>
-                                                <RepositionThemeAnimation FromHorizontalOffset="{Binding TemplateSettings.KnobCurrentToOnOffset, RelativeSource={RelativeSource Mode=TemplatedParent}}" TargetName="SwitchKnob"/>
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" Storyboard.TargetName="SwitchKnobBounds">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="1"/>
-                                                </ObjectAnimationUsingKeyFrames>
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" Storyboard.TargetName="OuterBorder">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="0"/>
-                                                </ObjectAnimationUsingKeyFrames>
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" Storyboard.TargetName="SwitchKnobOn">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="1"/>
-                                                </ObjectAnimationUsingKeyFrames>
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" Storyboard.TargetName="SwitchKnobOff">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="0"/>
-                                                </ObjectAnimationUsingKeyFrames>
-                                            </Storyboard>
-                                        </VisualTransition>
-                                        <VisualTransition x:Name="DraggingToOffTransition" From="Dragging" GeneratedDuration="0" To="Off">
-                                            <Storyboard>
-                                                <RepositionThemeAnimation FromHorizontalOffset="{Binding TemplateSettings.KnobCurrentToOffOffset, RelativeSource={RelativeSource Mode=TemplatedParent}}" TargetName="SwitchKnob"/>
-                                            </Storyboard>
-                                        </VisualTransition>
-                                        <VisualTransition x:Name="OnToOffTransition" From="On" GeneratedDuration="0" To="Off">
-                                            <Storyboard>
-                                                <RepositionThemeAnimation FromHorizontalOffset="{Binding TemplateSettings.KnobOnToOffOffset, RelativeSource={RelativeSource Mode=TemplatedParent}}" TargetName="SwitchKnob"/>
-                                            </Storyboard>
-                                        </VisualTransition>
-                                        <VisualTransition x:Name="OffToOnTransition" From="Off" GeneratedDuration="0" To="On">
-                                            <Storyboard>
-                                                <RepositionThemeAnimation FromHorizontalOffset="{Binding TemplateSettings.KnobOffToOnOffset, RelativeSource={RelativeSource Mode=TemplatedParent}}" TargetName="SwitchKnob"/>
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" Storyboard.TargetName="SwitchKnobBounds">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="1"/>
-                                                </ObjectAnimationUsingKeyFrames>
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" Storyboard.TargetName="OuterBorder">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="0"/>
-                                                </ObjectAnimationUsingKeyFrames>
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" Storyboard.TargetName="SwitchKnobOn">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="1"/>
-                                                </ObjectAnimationUsingKeyFrames>
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" Storyboard.TargetName="SwitchKnobOff">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="0"/>
-                                                </ObjectAnimationUsingKeyFrames>
-                                            </Storyboard>
-                                        </VisualTransition>
-                                    </VisualStateGroup.Transitions>
-                                    <VisualState x:Name="Dragging"/>
-                                    <VisualState x:Name="Off"/>
-                                    <VisualState x:Name="On">
-                                        <Storyboard>
-                                            <DoubleAnimation Duration="0" To="24" Storyboard.TargetProperty="X" Storyboard.TargetName="KnobTranslateTransform"/>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" Storyboard.TargetName="SwitchKnobBounds">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="1"/>
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" Storyboard.TargetName="OuterBorder">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="0"/>
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" Storyboard.TargetName="SwitchKnobOn">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="1"/>
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity" Storyboard.TargetName="SwitchKnobOff">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="0"/>
-                                            </ObjectAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualState>
-                                </VisualStateGroup>
-                                <VisualStateGroup x:Name="ContentStates">
-                                    <VisualState x:Name="OffContent">
-                                        <Storyboard>
-                                            <DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="OffContentPresenter"/>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="IsHitTestVisible" Storyboard.TargetName="OffContentPresenter">
-                                                <DiscreteObjectKeyFrame KeyTime="0">
-                                                    <DiscreteObjectKeyFrame.Value>
-                                                        <x:Boolean>True</x:Boolean>
-                                                    </DiscreteObjectKeyFrame.Value>
-                                                </DiscreteObjectKeyFrame>
-                                            </ObjectAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualState>
-                                    <VisualState x:Name="OnContent">
-                                        <Storyboard>
-                                            <DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="OnContentPresenter"/>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="IsHitTestVisible" Storyboard.TargetName="OnContentPresenter">
-                                                <DiscreteObjectKeyFrame KeyTime="0">
-                                                    <DiscreteObjectKeyFrame.Value>
-                                                        <x:Boolean>True</x:Boolean>
-                                                    </DiscreteObjectKeyFrame.Value>
-                                                </DiscreteObjectKeyFrame>
-                                            </ObjectAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualState>
-                                </VisualStateGroup>
-                            </VisualStateManager.VisualStateGroups>
-                            <ContentPresenter x:Name="HeaderContentPresenter" AutomationProperties.AccessibilityView="Raw" Grid.ColumnSpan="4" ContentTemplate="{TemplateBinding HeaderTemplate}" Content="{TemplateBinding Header}" Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}" IsHitTestVisible="False" Visibility="Collapsed" x:DeferLoadStrategy="Lazy"/>
-                            <ContentPresenter x:Name="OffContentPresenter" AutomationProperties.AccessibilityView="Raw" ContentTemplate="{TemplateBinding OffContentTemplate}" Content="{TemplateBinding OffContent}" Grid.Column="2" Foreground="{TemplateBinding Foreground}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" IsHitTestVisible="False" Opacity="0" Grid.Row="1" Grid.RowSpan="3" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                            <ContentPresenter x:Name="OnContentPresenter" AutomationProperties.AccessibilityView="Raw" ContentTemplate="{TemplateBinding OnContentTemplate}" Content="{TemplateBinding OnContent}" Grid.Column="2" Foreground="{TemplateBinding Foreground}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" IsHitTestVisible="False" Opacity="0" Grid.Row="1" Grid.RowSpan="3" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                            <Grid Grid.ColumnSpan="3" Grid.Column="0" Control.IsTemplateFocusTarget="True" Margin="0,5" Grid.Row="1" Grid.RowSpan="3"/>
-                            <Rectangle x:Name="OuterBorder" Height="26"  Grid.Row="2" Grid.Column="0"
-                                    RadiusY="13"   RadiusX="13" Stroke="{TemplateBinding Foreground}" StrokeThickness="2" Width="48"/>
-                            <Rectangle x:Name="SwitchKnobBounds" Fill="{StaticResource AppThemeColor}" Height="26" Width="48"
-                                       Opacity="0" Grid.Row="2"
-                                       Grid.Column="0"  RadiusY="13" RadiusX="13" Stroke="{ThemeResource SystemControlHighlightAltBaseHighBrush}" 
-                                       StrokeThickness="{ThemeResource ToggleSwitchOnStrokeThickness}" />
-                            <Grid x:Name="SwitchKnob" HorizontalAlignment="Left" Height="20" Grid.Row="2" Grid.Column="0"
-                                  Width="20">
-                                <Grid.RenderTransform>
-                                    <TranslateTransform x:Name="KnobTranslateTransform"/>
-                                </Grid.RenderTransform>
-                                <Ellipse x:Name="SwitchKnobOn" Fill="{ThemeResource SystemControlHighlightAltChromeWhiteBrush}" Height="13" Opacity="0" Width="13" Margin="5,0,0,0"/>
-                                <Ellipse x:Name="SwitchKnobOff" Fill="{TemplateBinding Foreground}" Height="13" Width="13" Margin="5,0,0,0"/>
-                            </Grid>
-                            <Thumb x:Name="SwitchThumb" AutomationProperties.AccessibilityView="Raw" Grid.ColumnSpan="3"
-                                   Grid.Column="0" Grid.Row="1" Grid.RowSpan="3">
-                                <Thumb.Template>
-                                    <ControlTemplate TargetType="Thumb">
-                                        <Rectangle Fill="Transparent"/>
-                                    </ControlTemplate>
-                                </Thumb.Template>
-                            </Thumb>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
 
         <Style x:Key="TitleImageStyle" TargetType="Image">
             <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -305,7 +154,7 @@
                         </Grid>
                     </Button>
 
-                    <Button Style="{StaticResource ItemButtonStyle}" Command="{Binding  }">
+                    <Button Style="{StaticResource ItemButtonStyle}" Command="{Binding   HistoryCommand}">
                         <Grid Style="{StaticResource GridItemStyle}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="35"/>
@@ -328,38 +177,9 @@
                             </Grid.ColumnDefinitions>
                             <Image Source="../Assets/Icon/bookshelf2.png"  Style="{StaticResource TitleImageStyle}"></Image>
                             <TextBlock Text="自动添加到书架"  Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource TitleTextStyle}"></TextBlock>
-                            <ToggleSwitch Grid.Column="2"    IsOn="{Binding}" Style="{StaticResource CustomToggleSwitchStyle}" />
+                            <ToggleSwitch Grid.Column="2"    IsOn="{Binding IsAutoAddtoOnlineShelf,Mode=TwoWay}" Style="{StaticResource CustomToggleSwitchStyle}" />
                         </Grid>
                     </Button>
-
-                    <Button Style="{StaticResource ItemButtonStyle}" >
-                        <Grid Style="{StaticResource GridItemStyle}" >
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="35"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="110"/>
-                            </Grid.ColumnDefinitions>
-                            <Image Source="../Assets/Icon/bookshelf1.png"  Style="{StaticResource TitleImageStyle}"></Image>
-
-                            <TextBlock Text="自动更新本地书架"  Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource TitleTextStyle}"></TextBlock>
-                            <ToggleSwitch Grid.Column="2"    IsOn="{Binding}" Style="{StaticResource CustomToggleSwitchStyle}" />
-                        </Grid>
-                    </Button>
-
-                    <Button Style="{StaticResource ItemButtonStyle}">
-                        <Grid Style="{StaticResource GridItemStyle}" >
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="35"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="110"/>
-                            </Grid.ColumnDefinitions>
-                            <Image Source="../Assets/Icon/wwan@3x.png"  Style="{StaticResource TitleImageStyle}" ></Image>
-
-                            <TextBlock Text="在2/3/4G下缓存"  Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource TitleTextStyle}"></TextBlock>
-                            <ToggleSwitch Grid.Column="2"    IsOn="{Binding}" Style="{StaticResource CustomToggleSwitchStyle}" />
-                        </Grid>
-                    </Button>
-
 
                     <Button Style="{StaticResource ItemButtonStyle}" Command="{Binding  CommentCommand}" Margin="0,20,0,8">
                         <Grid Style="{StaticResource GridItemStyle}" >

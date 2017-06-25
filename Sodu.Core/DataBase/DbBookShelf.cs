@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -49,7 +50,7 @@ namespace Sodu.Core.DataBase
                         }
                         catch (Exception ex)
                         {
-                            Console.WriteLine(ex.Message);
+                            Debug.WriteLine(ex.Message + "\n" + ex.StackTrace);
                             list = null;
                         }
                     });
@@ -57,7 +58,7 @@ namespace Sodu.Core.DataBase
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message + "\n" + ex.StackTrace);
                 list = null;
             }
             return list;
@@ -149,7 +150,7 @@ namespace Sodu.Core.DataBase
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine(ex.Message);
+                        Debug.WriteLine(ex.Message + "\n" + ex.StackTrace);
                         result = false;
                     }
 

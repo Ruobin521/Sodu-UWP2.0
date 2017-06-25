@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +23,7 @@ namespace Sodu.View
     public class CommonPageViewModel : ViewModelBase
     {
         #region 属性
+        public bool IsCancleRequest { get; set; }
 
         public HttpHelper Http { get; set; }
 
@@ -58,7 +60,7 @@ namespace Sodu.View
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message + "\n" + ex.StackTrace);
                 html = null;
             }
             finally
@@ -91,7 +93,7 @@ namespace Sodu.View
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message + "\n" + ex.StackTrace);
                 html = null;
             }
             finally
@@ -187,6 +189,18 @@ namespace Sodu.View
             NavigationService.GoBack();
         }
 
+        private ICommand _cancleHttpRequestCommand;
+        public ICommand CancleHttpRequestCommand => _cancleHttpRequestCommand ?? (_cancleHttpRequestCommand = new RelayCommand<object>(OnCancleHttpRequestCommand));
+
+        public virtual void OnCancleHttpRequestCommand(object obj)
+        {
+            if (Http != null)
+            {
+                IsCancleRequest = true;
+                Http.HttpClientCancleRequest();
+                Http.HttpClientCancleRequest2();
+            }
+        }
 
 
         /// <summary>
@@ -200,6 +214,11 @@ namespace Sodu.View
             NavigationService.NavigateTo(typeof(UpdateCatalogPage));
             await Task.Delay(100);
             ViewModelInstance.Instance.UpdateCatalog.LoadData(obj);
+
+            if (ViewModelInstance.Instance.Main.IsLogin && AppSettingService.GetBoolKeyValue(SettingKey.IsAutoAddToOnlineShelf))
+            {
+                OnAddToOnlineShelfCommand(obj);
+            }
         }
 
         #endregion

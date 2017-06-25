@@ -49,9 +49,7 @@ namespace Sodu.ViewModel
 
         }
 
-        /// <summary>
-        /// 删除
-        /// </summary>
+
         private ICommand _setHadReadCommand;
         public ICommand SetHadReadCommand => _setHadReadCommand ?? (_setHadReadCommand = new RelayCommand<object>(OnSetHadReadCommand));
 
@@ -64,6 +62,7 @@ namespace Sodu.ViewModel
                 localBookl.CurrentBook.IsNew = false;
             }
         }
+
 
 
         #endregion
@@ -115,6 +114,7 @@ namespace Sodu.ViewModel
 
                 DispatcherHelper.CheckBeginInvokeOnUI(() =>
                 {
+                    LocalBooks.Clear();
                     foreach (var book in list)
                     {
                         var localVm = new LocalBookItemViewModel()
@@ -130,7 +130,38 @@ namespace Sodu.ViewModel
 
         public override void OnRefreshCommand(object obj)
         {
+            GetLocalBookFromDb();
+        }
 
+        public void InserOrUpdateBook(Book book)
+        {
+            if (book == null)
+            {
+                return;
+            }
+
+            var temp = LocalBooks.FirstOrDefault(p => p.CurrentBook.BookId == book.BookId);
+            DbLocalBook.InsertOrUpdatBook(AppDataPath.GetLocalBookDbPath(), book);
+
+            if (temp != null)
+            {
+                LocalBooks.Remove(temp);
+            }
+
+            LocalBooks.Add(new LocalBookItemViewModel(book));
+        }
+
+        public int GetLocalBooksCount()
+        {
+            var count = DbLocalBook.GetBooksCount(AppDataPath.GetLocalBookDbPath());
+
+            return count;
+        }
+
+
+        public bool CheckBookExist(string bookId)
+        {
+            return DbLocalBook.CheckBookExist(AppDataPath.GetLocalBookDbPath(), bookId);
         }
 
         #endregion

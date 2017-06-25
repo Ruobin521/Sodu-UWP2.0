@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -64,9 +65,9 @@ namespace Sodu.UserControl
             {
                 FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
             }
-            catch (Exception exception)
+            catch (Exception ex)
             {
-                Console.WriteLine(exception);
+                Debug.WriteLine(ex.Message + "\n" + ex.StackTrace);
             }
         }
     }

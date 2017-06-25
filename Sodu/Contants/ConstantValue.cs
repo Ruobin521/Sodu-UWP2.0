@@ -10,7 +10,7 @@ namespace Sodu.Contants
 {
     public class ConstantValue
     {
-        public static Color AppMainColor = Color.FromArgb(1, 0, 122, 255);
+        public static Color AppMainColor = Color.FromArgb(255, 0, 122, 255);
 
         public static Brush AppMainColorBrush = new SolidColorBrush(AppMainColor);
     }

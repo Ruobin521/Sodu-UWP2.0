@@ -187,7 +187,7 @@
                                         </ObjectAnimationUsingKeyFrames>
                                         <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter" />
                                     </Storyboard>
-                                </VisualState> 
+                                </VisualState>
                                 <VisualState x:Name="Pressed">
                                     <Storyboard>
                                         <DoubleAnimation Storyboard.TargetName="BorderBackground"
@@ -203,7 +203,7 @@
                                         <PointerDownThemeAnimation TargetName="ContentPresenter" />
                                     </Storyboard>
                                 </VisualState>
-                                
+
                                 <!-- <VisualState x:Name="Selected">
                                     <Storyboard>
                                         <DoubleAnimation Storyboard.TargetName="MultiSelectCheck"
@@ -266,7 +266,7 @@
                                     </Storyboard>
                                 </VisualState>
                                 -->
-                                
+
                             </VisualStateGroup>
                             <!--<VisualStateGroup x:Name="DisabledStates">
                                 <VisualState x:Name="Enabled"/>
@@ -389,8 +389,10 @@
                                 </VisualState>
                                 <VisualState x:Name="MultipleDraggingPrimary">
                                     <Storyboard>
-                                        --><!-- These two Opacity animations are required - the FadeInThemeAnimations
-                                        on the same elements animate an internal Opacity. --><!--
+                                        -->
+                            <!-- These two Opacity animations are required - the FadeInThemeAnimations
+                                        on the same elements animate an internal Opacity. -->
+                            <!--
                                         <DoubleAnimation Storyboard.TargetName="MultiArrangeOverlayBackground"
                                                     Storyboard.TargetProperty="Opacity"
                                                     Duration="0"
@@ -663,13 +665,15 @@
     <Style TargetType="local:SettingButton" >
         <Setter Property="Background" Value="{ThemeResource SystemControlBackgroundBaseLowBrush}"/>
         <Setter Property="Foreground" Value="White"/>
-        <Setter Property="BorderBrush" Value="{ThemeResource SystemControlForegroundTransparentBrush}"/>
-        <Setter Property="BorderThickness" Value="{ThemeResource ButtonBorderThemeThickness}"/>
-        <Setter Property="Padding" Value="0"/>
+        <Setter Property="BorderBrush" Value="White"/>
+        <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Height" Value="27"/>
         <Setter Property="Width" Value="50"/>
+        <Setter Property="Margin" Value="2"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
         <Setter Property="FontWeight" Value="Normal"/>
         <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}"/>
@@ -688,12 +692,8 @@
                                 <VisualState x:Name="Pressed">
                                     <Storyboard>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="ContentPresenter">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource  AppThemeColor}"/>
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="#FF007AFF"/>
                                         </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource AppThemeColor}"/>
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <PointerDownThemeAnimation Storyboard.TargetName="RootGrid"/>
                                     </Storyboard>
                                 </VisualState>
                             </VisualStateGroup>

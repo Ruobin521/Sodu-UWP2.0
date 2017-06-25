@@ -14,9 +14,9 @@
     <UserControl.Resources>
         <converter:RankChangValueConverter x:Key="ChangValueConverter"></converter:RankChangValueConverter>
     </UserControl.Resources>
-    <UserControl.DataContext>
+    <!--<UserControl.DataContext>
         <entity:Book></entity:Book>
-    </UserControl.DataContext>
+    </UserControl.DataContext>-->
     <Grid  Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition Height="35"/>

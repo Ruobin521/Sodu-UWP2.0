@@ -5,9 +5,55 @@
     xmlns:local="using:Sodu.View"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:userControl="using:Sodu.UserControl"
+     DataContext="{Binding  Instance.History,Source={StaticResource Locator}}"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="{StaticResource AppBackColor}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="44"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid x:Name="TopBar" Visibility="Visible" Background="{StaticResource  AppThemeColor}" BorderThickness="0" Height="44" 
+              VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5"
+               >
+            <Grid.RenderTransform>
+                <CompositeTransform/>
+            </Grid.RenderTransform>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="历史纪录" Foreground="White" FontSize="18" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,2"></TextBlock>
 
+            <AppBarButton x:Name="BackButton" Grid.Column="0"  Foreground="White" Command="{Binding BackCommand}" RenderTransformOrigin="0.5,0.5" >
+                <AppBarButton.Content>
+                    <Path Fill="White" Stretch="Fill" Height="20" Width="15"  
+                    Data="M407.168 520l258.368-257.36c8.928-8.896 8.928-23.312 0-32.208s-23.392-8.896-32.336 0L359.856 502.752c-0.432 0.368-0.992 0.512-1.392 0.928-4.528 4.512-6.704 10.416-6.656 16.336-0.064 5.904 2.128 11.824 6.656 16.32 0.4 0.4 0.944 0.528 1.36 0.912l273.392 272.336c8.944 8.88 23.408 8.88 32.336 0s8.928-23.312 0-32.192L407.168 520z"></Path>
+                </AppBarButton.Content>
+            </AppBarButton>
+
+            <AppBarButton   Grid.Column="2"  Foreground="White" Command="{Binding ClearAllCommand}" RenderTransformOrigin="0.5,0.5" >
+                <AppBarButton.Content>
+                    <TextBlock Text="清空记录" Foreground="White" VerticalAlignment="Center" Margin="0,0"></TextBlock>
+                </AppBarButton.Content>
+            </AppBarButton>
+        </Grid>
+
+        <ListView Grid.Row="1" x:Name="CatalogList"
+                  ItemsSource="{Binding Books}"
+                  SelectionMode="None"
+                  ItemContainerStyle="{StaticResource CustomListViewItemStyle2}" Style="{StaticResource CatalogListViewStyle}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Button Style="{StaticResource CatalogItemButtonStyle}" 
+                            Command="{Binding  Instance.History.ItemClickCommand,Source={StaticResource Locator}}"
+                            CommandParameter="{Binding}">
+                        <userControl:HistoryItem DataContext="{Binding }"/>
+                    </Button>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </Grid>
 </Page>

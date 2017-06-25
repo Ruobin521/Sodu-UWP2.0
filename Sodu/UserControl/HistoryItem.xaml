@@ -1,17 +1,16 @@
 ﻿<UserControl
-    x:Class="Sodu.UserControl.LocalBookItem"
+    x:Class="Sodu.UserControl.HistoryItem"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Sodu.UserControl"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:converter="using:Sodu.Converter"
-    xmlns:viewModel="using:Sodu.ViewModel"
+    xmlns:entity="using:Sodu.Core.Entity"
     mc:Ignorable="d"
-     Height="90"
+    Height="90"
     d:DesignWidth="500">
     <!--<UserControl.DataContext>
-        <viewModel:LocalBookItemViewModel></viewModel:LocalBookItemViewModel>
+        <entity:Book></entity:Book>
     </UserControl.DataContext>-->
     <Grid>
         <Grid.ColumnDefinitions>
@@ -19,8 +18,9 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid  Height="75" Width="55">
-            <local:CoverImage DataContext="{Binding CurrentBook}"></local:CoverImage>
-            <Border Background="#FF007AFF" Height="14" Width="25" HorizontalAlignment="Right" VerticalAlignment="Bottom" CornerRadius="1" Visibility="{Binding CurrentBook.IsOnline,Converter={StaticResource BooleanToVisibilityConverter}}">
+            <local:CoverImage DataContext="{Binding}"></local:CoverImage>
+            <Border Background="#FF007AFF" Height="14" Width="25" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                    CornerRadius="1" Visibility="{Binding IsLocal,Converter={StaticResource BooleanToVisibilityConverter}}">
                 <TextBlock FontSize="8" Text="在线" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
             </Border>
         </Grid>
@@ -33,19 +33,18 @@
             </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="0"  Margin="0,0,160,0" Orientation="Horizontal">
-                <TextBlock Text="{Binding CurrentBook.BookName}" Foreground="#FF282828" FontWeight="Normal" VerticalAlignment="Center"  FontSize="17"></TextBlock>
-                <Image Source="../Assets/Icon/new_blue@3x.png" Margin="5,5,0,0" Stretch="Fill" Height="25" Width="28" Visibility="{Binding CurrentBook.IsNew,Converter={StaticResource BooleanToVisibilityConverter} }" ></Image>
+                <TextBlock Text="{Binding BookName}" Foreground="#FF282828" FontWeight="Normal" VerticalAlignment="Center"  FontSize="17"></TextBlock>
             </StackPanel>
 
             <TextBlock   Grid.Row="1" Foreground="{StaticResource AppTextColor}"    VerticalAlignment="Center"  FontSize="14">
-            <Run Text="最新："></Run>
-            <Run Text="{Binding CurrentBook.NewestChapterName}"></Run>
+            <Run Text="最后阅读："></Run>
+            <Run Text="{Binding LastReadChapterName}"></Run>
             </TextBlock>
 
 
             <TextBlock   Grid.Row="2" Foreground="{StaticResource AppTextColor}"  VerticalAlignment="Center"  FontSize="14">
-            <Run Text="读至："></Run>
-            <Run Text="{Binding CurrentBook.LastReadChapterName}"></Run>
+            <Run Text="阅读时间："></Run>
+            <Run Text="{Binding UpdateTime}"></Run>
             </TextBlock>
         </Grid>
     </Grid>

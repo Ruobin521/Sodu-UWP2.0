@@ -22,10 +22,11 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="本地书架" Foreground="White" FontSize="18" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,2"></TextBlock>
-            <AppBarButton Grid.Column="2" Icon="Refresh" Foreground="White" Command="{Binding RefreshCommand ,ElementName=root}" ></AppBarButton>
-            <AppBarButton  Grid.Column="0"  Foreground="White" Command="{Binding SearchCommand,ElementName=root}"  Margin="5,0" >
+            <AppBarButton Grid.Column="2" Icon="Refresh" Foreground="White" Command="{Binding RefreshCommand}" ></AppBarButton>
+            <AppBarButton  Grid.Column="0"  Foreground="White" Command="{Binding SearchCommand,ElementName=root}"
+                           Margin="0,0" >
                 <AppBarButton.Content>
-                    <TextBlock Text="全部更新" Foreground="White" FontSize="15"></TextBlock>
+                    <TextBlock Text="全部更新" Foreground="White" FontSize="15" Margin="5,0"></TextBlock>
                 </AppBarButton.Content>
             </AppBarButton>
         </Grid>
@@ -50,12 +51,15 @@
             </swipeListControl:SwipeListView.ItemRightContentTemplate>
             <swipeListControl:SwipeListView.ItemTemplate>
                 <DataTemplate>
-                    <userControl:LocalBookItem DataContext="{Binding}"  Command="{Binding  Instance.LocalBookPageViewModel.ItemClickCommand,Source={ StaticResource  Locator}}" CommandParameter="{Binding}"></userControl:LocalBookItem>
+                    <userControl:LocalBookItem DataContext="{Binding }" 
+             Command="{Binding  Instance.LocalBookPageViewModel.ItemClickCommand,Source={ StaticResource  Locator}}"
+                                               CommandParameter="{Binding}"></userControl:LocalBookItem>
                 </DataTemplate>
             </swipeListControl:SwipeListView.ItemTemplate>
         </swipeListControl:SwipeListView>
 
-        <Grid Grid.Row="1" Height="Auto"  VerticalAlignment="Center" Margin="0,0,0,60"  Visibility="{Binding Books.Count,Converter={StaticResource CountToVisibilityConverter}}">
+        <Grid Grid.Row="1" Height="Auto"  VerticalAlignment="Center" Margin="0,0,0,60"  
+              Visibility="{Binding   LocalBooks.Count,Converter={StaticResource CountToVisibilityConverter}}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="8*"/>

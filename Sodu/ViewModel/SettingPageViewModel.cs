@@ -8,6 +8,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using Sodu.Service;
 using Sodu.View;
 
 namespace Sodu.ViewModel
@@ -37,6 +38,20 @@ namespace Sodu.ViewModel
             }
         }
 
+        private bool _isAutoAddtoOnlineShelf;
+        public bool IsAutoAddtoOnlineShelf
+        {
+            get
+            {
+                _isAutoAddtoOnlineShelf = AppSettingService.GetBoolKeyValue(SettingKey.IsAutoAddToOnlineShelf);
+                return _isAutoAddtoOnlineShelf;
+            }
+            set
+            {
+                Set(ref _isAutoAddtoOnlineShelf, value);
+                AppSettingService.SetKeyValue(SettingKey.IsAutoAddToOnlineShelf,value);
+            }
+        }
 
 
         #endregion
@@ -84,6 +99,8 @@ namespace Sodu.ViewModel
                       (obj) =>
                       {
                           NavigationService.NavigateTo(typeof(HistoryPage));
+
+                          ViewModelInstance.Instance.History.LoadData();
                       }));
             }
         }

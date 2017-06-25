@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices.ComTypes;
@@ -187,7 +188,7 @@ namespace Sodu.ViewModel
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message + "\n" + ex.StackTrace);
             }
             finally
             {
@@ -250,7 +251,7 @@ namespace Sodu.ViewModel
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message + "\n" + ex.StackTrace);
             }
             finally
             {

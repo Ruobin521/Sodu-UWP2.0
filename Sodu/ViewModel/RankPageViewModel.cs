@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -44,7 +45,7 @@ namespace Sodu.ViewModel
             var list = ListPageDataHelper.GetRankListFromHtml(html);
             if (list == null)
             {
-                Console.WriteLine("排行榜数据获取失败");
+                ToastHelper.ShowMessage("排行榜数据获取失败");
             }
             else
             {

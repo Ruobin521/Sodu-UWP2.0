@@ -28,7 +28,6 @@ namespace Sodu.View
     /// </summary>
     public sealed partial class CatalogPage : Page
     {
-
         public CatalogPage()
         {
             this.InitializeComponent(); ;
@@ -36,9 +35,43 @@ namespace Sodu.View
 
        
 
-        private void ListViewBase_OnItemClick(object sender, ItemClickEventArgs e)
+        private void ScroolButton_OnClick(object sender, RoutedEventArgs e)
         {
-            var item = e.ClickedItem as BookCatalog;
+            if (this.ScroolButton.Tag == null || ScroolButton.Tag.ToString() == "0")
+            {
+                List<ScrollViewer> list = new List<ScrollViewer>();
+                GetVisualChildCollection(CatalogList, list);
+                var scroolViewer = list.FirstOrDefault();
+                scroolViewer.ChangeView(0, scroolViewer.ExtentHeight, null, false);
+                this.ScroolButton.Tag = "1";
+                this.ScroolButton.Content = "到顶部";
+            }
+
+            else if (this.ScroolButton.Tag?.ToString() == "1")
+            {
+
+                List<ScrollViewer> list = new List<ScrollViewer>();
+                GetVisualChildCollection(CatalogList, list);
+                var scroolViewer = list.FirstOrDefault();
+                scroolViewer.ChangeView(0, 0, null, false);
+                this.ScroolButton.Tag = "0";
+                this.ScroolButton.Content = "到底部";
+
+            }
+        }
+
+
+        public static void GetVisualChildCollection<T>(DependencyObject parent, List<T> visualCollection) where T : UIElement
+        {
+            int count = VisualTreeHelper.GetChildrenCount(parent);
+            for (int i = 0; i < count; i++)
+            {
+                DependencyObject child = VisualTreeHelper.GetChild(parent, i);
+                if (child is T)
+                    visualCollection.Add(child as T);
+                else if (child != null)
+                    GetVisualChildCollection(child, visualCollection);
+            }
         }
     }
 }

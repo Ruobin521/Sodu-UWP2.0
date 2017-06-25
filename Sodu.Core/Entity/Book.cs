@@ -248,6 +248,22 @@ namespace Sodu.Core.Entity
             }
         }
 
+        /// <summary>
+        /// 是否书架在线
+        /// </summary>
+        private bool _isOnline;
+        public bool IsOnline
+        {
+            get
+            {
+                return _isOnline;
+            }
+            set
+            {
+                Set(ref _isOnline, value);
+            }
+        }
+
         [Ignore]
         public ObservableCollection<BookCatalog> CatalogList { get; set; }
 

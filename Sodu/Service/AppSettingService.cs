@@ -12,7 +12,6 @@ namespace Sodu.Service
     {
         UserName,
         IsAutoAddToOnlineShelf,
-        IsAutoUpdateLocalShelf,
         IsDownloadOnWaan,
 
         //字体大小 
@@ -47,6 +46,62 @@ namespace Sodu.Service
             var value = SettingHelper.GetValueByContainer(ContainerName, key.ToString());
             return value;
         }
+
+
+
+        public static bool GetBoolKeyValue(SettingKey key)
+        {
+            try
+            {
+                var value = SettingHelper.GetValueByContainer(ContainerName, key.ToString());
+
+                return value != null && bool.Parse(value.ToString());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return false;
+            }
+        }
+
+        public static double GetDoubleValue(SettingKey key)
+        {
+            try
+            {
+                var value = SettingHelper.GetValueByContainer(ContainerName, key.ToString());
+
+                if (value == null)
+                {
+                    return -1;
+                }
+                return double.Parse(value.ToString());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return  -1;
+            }
+        }
+
+        public static int GetIntValue(SettingKey key)
+        {
+            try
+            {
+                var value = SettingHelper.GetValueByContainer(ContainerName, key.ToString());
+
+                if (value == null)
+                {
+                    return -1;
+                }
+                return int.Parse(value.ToString());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return -1;
+            }
+        }
+
 
 
         public static string GetUserId()

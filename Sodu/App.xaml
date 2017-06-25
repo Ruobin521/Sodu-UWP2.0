@@ -10,7 +10,9 @@
         <ResourceDictionary>
             <viewModel:ViewModelInstance  x:Key="Locator"/>
             <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"></converter:BooleanToVisibilityConverter>
+            <converter:BooleanToCollapsedConverter x:Key="BooleanToCollapsedConverter"></converter:BooleanToCollapsedConverter>
             <converter:CountToVisibilityConverter x:Key="CountToVisibilityConverter"></converter:CountToVisibilityConverter>
+            <converter:BookCoverConverter x:Key="BookCoverConverter"></converter:BookCoverConverter>
             <SolidColorBrush x:Key="AppThemeColor" Color="#FF007AFF"></SolidColorBrush>
             <SolidColorBrush x:Key="AppBackColor" Color="#FFEFEFF4"></SolidColorBrush>
             <SolidColorBrush x:Key="AppTextColor" Color="#FF8C8C8C"></SolidColorBrush>

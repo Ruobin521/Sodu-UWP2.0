@@ -17,11 +17,9 @@ namespace Sodu.Core.HtmlService
 
     public class AnalisysSourceHelper
     {
-        private static readonly HttpHelper Http = new HttpHelper();
-
         public static async Task<string> GetHtmlByUrl(string url)
         {
-            var html = await Http.WebRequestGet(url);
+            var html = await new HttpHelper().WebRequestGet(url);
             return html;
         }
 
@@ -49,6 +47,11 @@ namespace Sodu.Core.HtmlService
             return html;
         }
 
+        public static string AnalisysCatalogContent(string url, string html)
+        {
+            html = AnalisysSourceHtmlHelper.AnalisysHtml(url, html, AnalisysType.Content)?.ToString();
+            return html;
+        }
         //catalogs:[BookCatalog]?, introduction:String?,author:String?, cover:String?)
         /// <summary>
         /// 解析目录页数据
