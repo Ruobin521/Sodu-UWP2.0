@@ -14,14 +14,51 @@ namespace Sodu.Core.HtmlService
         /// <summary>
         /// 少年文学
         /// </summary>
-        public const string Snwx = "www.snwx.com";
+        public const string Snwx = "www.snwx8.com";
+
+        /// <summary>
+        /// 大海中文
+        /// </summary>
+        public const string Dhzw = "www.dhzw.org";
 
         /// <summary>
         /// 爱上中文
         /// </summary>
         public const string Aszw = "www.aszw.org";
 
+        /// <summary>
+        /// 7度书屋
+        /// </summary>
+        public const string Qdsw = "www.7dsw.com";
 
+
+        /// <summary>
+        ///云来阁 
+        /// </summary>
+        public const string Ylg = "www.yunlaige.com";
+
+
+        /// <summary>
+        /// 古古 
+        /// </summary>
+        public const string Ggxs = "www.55xs.com";
+
+        /// <summary>
+        /// 风云
+        /// </summary>
+        public const string Fyxs = "www.baoliny.com";
+
+
+
+        /// <summary>
+        /// 第九中文网 
+        /// </summary>
+        public const string Dijiuzww = "dijiuzww.com";
+
+        /// <summary>
+        /// 手牵手小说
+        /// </summary>
+        public const string Sqsxs = "www.sqsxs.com";
 
         /// <summary>
         /// 风华居
@@ -38,7 +75,7 @@ namespace Sodu.Core.HtmlService
         /// </summary>
         public const string Myg = "www.muyuge.com";
 
-      
+
         /// <summary>
         /// 乐文
         /// </summary>
@@ -70,25 +107,15 @@ namespace Sodu.Core.HtmlService
         /// </summary>
         public const string Qlwx = "www.76wx.com";
 
-        ///// <summary>
-        ///// 手牵手小说(挂了)
-        ///// </summary>
-        //public const string Sqsxs = "www.sqsxs.com";
 
-        ///// <summary>
-        ///// 大海中文（挂了）
-        ///// </summary>
-        //public const string Dhzw = "www.dhzw.com";
+
+
 
         ///// <summary>
         /////第七中文（挂了）
         ///// </summary>
         //public const string Dqzw = "www.d7zy.com";
 
-        ///// <summary>
-        ///// 7度书屋（挂了）
-        ///// </summary>
-        //public const string Qdsw = "www.7dsw.com";
 
         ///// <summary>
         ///// 第九中文网（挂了）
@@ -115,10 +142,7 @@ namespace Sodu.Core.HtmlService
         ///// </summary>
         //public const string Xbiquge = "www.xbiquge.net";
 
-        ///// <summary>
-        ///// 古古（挂了）
-        ///// </summary>
-        //public const string Ggxs = "www.55xs.com";
+
 
         /// <summary>
         /// 倚天中文（挂了）
@@ -130,10 +154,6 @@ namespace Sodu.Core.HtmlService
         ///// </summary>
         //public const string Shu6 = "www.shu6.cc";
 
-        ///// <summary>
-        /////云来阁(打不开)
-        ///// </summary>
-        //public const string Ylg = "www.yunlaige.com";
 
         ///// <summary>
         /////4k中文(挂了）

@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.Graphics.Display;
@@ -204,12 +205,12 @@ namespace Sodu.ViewModel
 
         public void LoadData(Book book)
         {
-            CurrentBook = book;
+            CurrentBook = book.Clone();
 
             var catalog = new BookCatalog()
             {
-                CatalogName = book.NewestChapterName,
-                CatalogUrl = book.NewestChapterUrl,
+                CatalogName = book.LastReadChapterName,
+                CatalogUrl = book.LastReadChapterUrl,
             };
 
             CurrentCatalog = catalog;
@@ -224,12 +225,12 @@ namespace Sodu.ViewModel
             {
                 return;
             }
+
             CurrentCatalog = catalog;
 
             var value = await GetCatalogContent(catalog);
             if (value != null)
             {
-
                 ContentPages = value.Item1;
                 ContentText = value.Item2;
 
@@ -368,6 +369,13 @@ namespace Sodu.ViewModel
                     {
                         CurrentBook.CatalogList.Add(bookCatalog);
                     }
+
+                    var temp = CurrentBook.CatalogList.FirstOrDefault(p => p.CatalogUrl == CurrentCatalog.CatalogUrl);
+                    if (temp != null)
+                    {
+                        CurrentCatalog = temp;
+                    }
+
                 }
                 CurrentBook.Description = value.Item2;
                 CurrentBook.Cover = value.Item3;
@@ -610,12 +618,12 @@ namespace Sodu.ViewModel
                        {
                            if (obj.ToString().Equals("-"))
                            {
-                               LineHeight = LineHeight - 2;
+                               LineHeight = LineHeight - 1;
                            }
 
                            if (obj.ToString().Equals("+"))
                            {
-                               LineHeight = LineHeight + 2;
+                               LineHeight = LineHeight + 1;
                            }
                        }));
 

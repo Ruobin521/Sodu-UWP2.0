@@ -1,7 +1,11 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using Sodu.Core.Entity;
+using Sodu.Core.Extend;
 using Sodu.View;
 
 namespace Sodu.ViewModel
@@ -11,17 +15,20 @@ namespace Sodu.ViewModel
     {
         #region 属性
 
-        private ObservableCollection<Book> _books;
+        private AutoLoadCollection<Book> _books;
         /// <summary>
         ///列表项
         /// </summary>
-        public ObservableCollection<Book> Books
+        public AutoLoadCollection<Book> Books
         {
             get
             {
-                return _books ?? (_books = new ObservableCollection<Book>());
+                return _books ?? (_books = new AutoLoadCollection<Book>(LoadMore));
             }
-            set { Set(ref _books, value); }
+            set
+            {
+                Set(ref _books, value);
+            }
         }
 
 
@@ -121,9 +128,16 @@ namespace Sodu.ViewModel
 
         public virtual void OnRefreshCommand(object obj)
         {
+
+
         }
 
-       
+        public virtual void LoadMore()
+        {
+
+        }
+
+
         #endregion
     }
 }

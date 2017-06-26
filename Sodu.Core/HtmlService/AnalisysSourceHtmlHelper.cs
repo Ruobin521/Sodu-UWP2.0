@@ -68,6 +68,191 @@ namespace Sodu.Core.HtmlService
                     }
                     break;
 
+                // 七度
+                case SourceWebValue.Qdsw:
+                    if (type == AnalisysType.Content)
+                    {
+                        var value = GetContentFromHtmlCommon(html, "<div id=\"BookText\">.*?</div>");
+                        return value;
+                    }
+                    if (type == AnalisysType.CatalogPageUrl)
+                    {
+                        var value = GetCatalogPageUrlCommon(url);
+                        return value;
+                    }
+                    if (type == AnalisysType.CatalogPageData)
+                    {
+                        var baseUrl = "http://" + host;
+                        var value = GetCatalogPageDataCommon(url, baseUrl, html,
+                            catalogsRegex: "<div id=\"list\">.*?</div>",
+                            catalogRegex: "<dd><a href=\"(.*?)\".*?>(.*?)</a></dd>",
+                            introRegex: "<div class=\"intro\">(.*?)</div>",
+                            coverRegex: "<div id=\"fmimg\">.*?<img.*?src=\"(.*?)\".*?>",
+                            authorRegex: "<i>作者：(.*?)</i>");
+                        return value;
+                    }
+                    break;
+
+
+                // 云来阁
+                case SourceWebValue.Ylg:
+                    if (type == AnalisysType.Content)
+                    {
+                        var value = GetContentFromHtmlCommon(html, "<div id=\"content\">.*?<div class=\"bottomlink tc\">");
+                        return value;
+                    }
+                    if (type == AnalisysType.CatalogPageUrl)
+                    {
+                        var value = GetCatalogPageUrlCommon(url);
+                        return value;
+                    }
+                    if (type == AnalisysType.CatalogPageData)
+                    {
+                        var baseUrl = "http://" + host;
+                        var value = GetCatalogPageDataCommon(url, baseUrl, html,
+                            catalogsRegex: "<table.*?</table>",
+                            catalogRegex: "<a href=\"(.*?)\">(.*?)</a>",
+                            introRegex: "<meta property=\"og:description\" content=\"(.*?)\"/>",
+                            coverRegex: "<meta property=\"og:image\" content=\"(.*?)\"/>",
+                            authorRegex: "<meta property=\"og:novel:author\" content=\"(.*?)\"/>");
+                        return value;
+                    }
+                    break;
+
+                // 古古 55xs
+                case SourceWebValue.Ggxs:
+                    if (type == AnalisysType.Content)
+                    {
+                        var value = GetContentFromHtmlCommon(html, "<dd id=\"contents\".*?</dd>");
+                        return value;
+                    }
+                    if (type == AnalisysType.CatalogPageUrl)
+                    {
+                        var value = GetCatalogPageUrlCommon(url);
+                        return value;
+                    }
+                    if (type == AnalisysType.CatalogPageData)
+                    {
+                        var baseUrl = "http://" + host;
+                        var value = GetCatalogPageDataCommon(baseUrl, baseUrl, html,
+                            catalogsRegex: "<table.*?class=\"list\">.*?</table>",
+                            catalogRegex: "<td><a href=\"(.*?)\".*?>(.*?)</a></td>",
+                            introRegex: "<div class=\"msgarea\">(.*?)</p>",
+                            coverRegex: "<div class=\"img1\"><img src=\"(.*?)\".*?</div>",
+                            authorRegex: "<a href=\"/modules/article/authorarticle.php\\?author=.*?>(.*?)</a>");
+                        return value;
+                    }
+                    break;
+
+
+                // 风云
+                case SourceWebValue.Fyxs:
+                    if (type == AnalisysType.Content)
+                    {
+                        var value = GetContentFromHtmlCommon(html, "<p id=\"?content\"?.*?</p>");
+                        value = value.Replace("", "");
+                        value = Regex.Replace(value, "【无弹窗小说网.*?www.baoliny.com】", "");
+                        value = Regex.Replace(value, "【风云小说阅读网.*?www.baoliny.com】", "");
+                        value = Regex.Replace(value, "【最新章节阅读.*?www.baoliny.com】", "");
+                        return value;
+                    }
+                    if (type == AnalisysType.CatalogPageUrl)
+                    {
+                        var value = GetCatalogPageUrlCommon(url) + "index.html";
+                        return value;
+                    }
+                    if (type == AnalisysType.CatalogPageData)
+                    {
+                        var baseUrl = "http://" + host;
+                        var value = GetCatalogPageDataCommon("", "", html,
+                            catalogsRegex: "<div class=\"readerListShow\".*?</div>",
+                            catalogRegex: "<td.*?href=\"(.*?)\".*?>(.*?)</a></td>",
+                            introRegex: "<p align=\"center\">.*?<p>(.*?)</p>",
+                            coverRegex: "",
+                            authorRegex: "②作者(.*?)所写");
+                        return value;
+                    }
+                    break;
+
+
+
+                // 第九中文
+                case SourceWebValue.Dijiuzww:
+                    if (type == AnalisysType.Content)
+                    {
+                        var value = GetContentFromHtmlCommon(html, "<div id=\"?content\"?.*?</div>");
+                        return value;
+                    }
+                    if (type == AnalisysType.CatalogPageUrl)
+                    {
+                        var value = GetCatalogPageUrlCommon(url);
+                        return value;
+                    }
+                    if (type == AnalisysType.CatalogPageData)
+                    {
+                        var baseUrl = "http://" + host;
+                        var value = GetCatalogPageDataCommon(url, baseUrl, html,
+                            catalogsRegex: "正文</dt>.*?</div>",
+                            catalogRegex: "<dd><a href=\"/(.*?)\">(.*?)</a></dd>",
+                            introRegex: "<div id=\"intro\">.*?</p>",
+                            coverRegex: "<div id=\"fmimg\"><script.*?src=\"/(.*?)\">",
+                            authorRegex: "<p>作&nbsp;&nbsp;&nbsp;&nbsp;者：(.*?)</p>");
+                        return value;
+                    }
+                    break;
+
+
+
+                // 大海中文
+                case SourceWebValue.Dhzw:
+                    if (type == AnalisysType.Content)
+                    {
+                        var value = GetContentFromHtmlCommon(html, "<div id=\"BookText\">.*?</div>");
+                        return value;
+                    }
+                    if (type == AnalisysType.CatalogPageUrl)
+                    {
+                        var value = GetCatalogPageUrlCommon(url);
+                        return value;
+                    }
+                    if (type == AnalisysType.CatalogPageData)
+                    {
+                        var baseUrl = "http://" + host;
+                        var value = GetCatalogPageDataCommon(url, baseUrl, html,
+                            catalogsRegex: "<div id=\"list\">.*?</div>",
+                            catalogRegex: "<dd><a href=\"(.*?)\".*?>(.*?)</a></dd>",
+                            introRegex: "<div class=\"intro\">(.*?)</div>",
+                            coverRegex: "<div id=\"fmimg\">.*?<img.*?src=\"(.*?)\".*?>",
+                            authorRegex: "<i>作者：(.*?)</i>");
+                        return value;
+                    }
+                    break;
+
+
+                // 手牵手
+                case SourceWebValue.Sqsxs:
+                    if (type == AnalisysType.Content)
+                    {
+                        var value = GetContentFromHtmlCommon(html, "<div id=\"content\">.*?</div>");
+                        return value;
+                    }
+                    if (type == AnalisysType.CatalogPageUrl)
+                    {
+                        var value = GetCatalogPageUrlCommon(url);
+                        return value;
+                    }
+                    if (type == AnalisysType.CatalogPageData)
+                    {
+                        var baseUrl = "http://" + host;
+                        var value = GetCatalogPageDataCommon(url, baseUrl, html,
+                            catalogsRegex: "<div id=\"list\">.*?</div>",
+                            catalogRegex: "<dd><a href=\"(.*?)\".*?>(.*?)</a></a></dd>",
+                            introRegex: "<div id=\"intro\">(.*?)</div>",
+                            coverRegex: "<div id=\"fmimg\">.*?<img.*?src=\"(.*?)\".*?>",
+                            authorRegex: "<meta property=\"og:novel:author\" content=\"(.*?)\"/>");
+                        return value;
+                    }
+                    break;
 
                 // 风华居
                 case SourceWebValue.Fenghuaju:
@@ -142,7 +327,7 @@ namespace Sodu.Core.HtmlService
                     if (type == AnalisysType.CatalogPageData)
                     {
                         var baseUrl = "http://" + host;
-                        var value = GetCatalogPageDataCommon(url, baseUrl, html,
+                        var value = GetCatalogPageDataCommon(baseUrl, baseUrl, html,
                             catalogsRegex: "<h2 class=\"bookTitle\">.*?<div id=\"uyan_frame\">",
                             catalogRegex: "<a href=\"(.*?)\">(.*?)</a>",
                             introRegex: "<div class=\"reBook borderF\">(.*?)</div>",
@@ -247,8 +432,8 @@ namespace Sodu.Core.HtmlService
                     }
                     if (type == AnalisysType.CatalogPageData)
                     {
-                        var baseUrl = "http://" + host;
-                        var value = GetCatalogPageDataCommon(url, baseUrl, html,
+                        var baseUrl = "https://" + host;
+                        var value = GetCatalogPageDataCommon(baseUrl, baseUrl, html,
                             catalogsRegex: "<dl class=\"chapterlist\">.*?</dl>",
                             catalogRegex: "<dd><a href=\"(.*?)\">(.*?)</a></dd>",
                             introRegex: "<p class=\"book-intro\">(.*?)</p>",
@@ -303,7 +488,8 @@ namespace Sodu.Core.HtmlService
             html = Regex.Replace(html, "<.*?>", "");
             html = html.Replace("&lt;/script&gt;", "");
             html = html.Replace("&lt;/div&gt;", "");
-            html = html.Replace(" ", "");
+            html = html.Replace("  ", "　");
+            html = html.Replace("\n\n", "\n");
             return html;
         }
 

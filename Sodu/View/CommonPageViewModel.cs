@@ -211,8 +211,10 @@ namespace Sodu.View
 
         public virtual async void OnItemClickCommand(object obj)
         {
+            ViewModelInstance.Instance.UpdateCatalog.ResetData();
+
             NavigationService.NavigateTo(typeof(UpdateCatalogPage));
-            await Task.Delay(100);
+           
             ViewModelInstance.Instance.UpdateCatalog.LoadData(obj);
 
             if (ViewModelInstance.Instance.Main.IsLogin && AppSettingService.GetBoolKeyValue(SettingKey.IsAutoAddToOnlineShelf))

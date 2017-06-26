@@ -79,7 +79,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="ListViewItem">
                         <Grid x:Name="LayoutRoot"
-                              BorderThickness="{TemplateBinding BorderThickness}" 
+                              BorderThickness="{TemplateBinding BorderThickness}"
                               Background="{TemplateBinding Background}">
                             <Grid.Resources>
                                 <Style x:Key="BaseContentPresenterStyle" TargetType="ContentPresenter">
@@ -105,39 +105,41 @@
                                             </ObjectAnimationUsingKeyFrames>
                                         </Storyboard>
                                     </VisualState>
-                                    <VisualState x:Name="Pressed">
+
+                                    <VisualState x:Name="Selected">
                                         <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Fill" Storyboard.TargetName="PressedBackground">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="LightGray"/>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Visibility" Storyboard.TargetName="Image">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
                                             </ObjectAnimationUsingKeyFrames>
                                         </Storyboard>
                                     </VisualState>
 
-                                    <!--   <VisualState x:Name="SelectedPressed">
-                                    <Storyboard>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Fill" Storyboard.TargetName="PressedBackground">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ContentButtonPressedBackground}"/>
-                                        </ObjectAnimationUsingKeyFrames>
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState x:Name="PointerOver">
-                                    <Storyboard>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Fill" Storyboard.TargetName="PressedBackground">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ContentButtonPointerOverBackground}"/>
-                                        </ObjectAnimationUsingKeyFrames>
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState x:Name="Selected"/>-->
                                 </VisualStateGroup>
                             </VisualStateManager.VisualStateGroups>
-                            <Rectangle x:Name="PressedBackground"  Fill="{TemplateBinding Background}" Control.IsTemplateFocusTarget="True"/>
-                            <ContentPresenter x:Name="ContentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" ContentTransitions="{TemplateBinding ContentTransitions}" Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" Style="{StaticResource BodyContentPresenterStyle}" TextWrapping="NoWrap" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Padding="{TemplateBinding Padding}"/>
+                            <Grid x:Name="ContentGrid" Background="Transparent">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="30"></ColumnDefinition>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Image x:Name="Image" Source="../Assets/Icon/location@3x.png" Height="23" Width="18" Margin="0,5,0,0" VerticalAlignment="Center" Visibility="Collapsed"></Image>
+                                <ContentPresenter x:Name="ContentPresenter" Grid.ColumnSpan="2" Grid.Column="0"
+                                                  ContentTemplate="{TemplateBinding ContentTemplate}" 
+                                                  ContentTransitions="{TemplateBinding ContentTransitions}"
+                                                  Content="{TemplateBinding Content}" 
+                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                  Margin="{TemplateBinding Padding}" 
+                                                  Style="{StaticResource BodyContentPresenterStyle}"
+                                                  TextWrapping="NoWrap" 
+                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                  Padding="{TemplateBinding Padding}"/>
+
+                            </Grid>
                         </Grid>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
-        
+
     </Page.Resources>
     <Grid Background="{StaticResource AppBackColor}">
         <Grid.RowDefinitions>
@@ -173,7 +175,8 @@
 
         <ListView Grid.Row="1" x:Name="CatalogList"
                   ItemsSource="{Binding CurrentBook.CatalogList}"
-                  SelectionMode="None"
+                  SelectionMode="Single"
+                  SelectedItem="{Binding CurrentCatalog,Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                   ItemContainerStyle="{StaticResource CustomListViewItemStyle2}" 
                   Style="{StaticResource CatalogListViewStyle}">
             <ListView.Header>
@@ -228,9 +231,9 @@
                     <Button Style="{StaticResource CatalogItemButtonStyle}" 
                             Command="{Binding  Instance.OnlineBookContent.CatalogSelectedCommand,Source={StaticResource Locator}}"
                             CommandParameter="{Binding}">
-                        <Grid Background="Transparent" Height="45"  VerticalAlignment="Center">
+                        <Grid Height="45"  VerticalAlignment="Center">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="30"/>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="55"/>

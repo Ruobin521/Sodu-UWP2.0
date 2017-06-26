@@ -30,10 +30,29 @@ namespace Sodu.View
     {
         public CatalogPage()
         {
-            this.InitializeComponent(); ;
+            this.InitializeComponent();
+
+            Loaded += CatalogPage_Loaded;
         }
 
-       
+        private void CatalogPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (CatalogList.Items != null && CatalogList.SelectedIndex > 4)
+            {
+                if (CatalogList.Items.Count > CatalogList.SelectedIndex + 1 + 4)
+                {
+                    CatalogList.ScrollIntoView(CatalogList.Items[CatalogList.SelectedIndex + 4]);
+                }
+                else
+                {
+                    CatalogList.ScrollIntoView(CatalogList.SelectedItem);
+                }
+
+                this.ScroolButton.Tag = "1";
+                this.ScroolButton.Content = "到顶部";
+
+            }
+        }
 
         private void ScroolButton_OnClick(object sender, RoutedEventArgs e)
         {

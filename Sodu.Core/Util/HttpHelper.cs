@@ -53,7 +53,7 @@ namespace Sodu.Core.Util
                 Request.ContentType = "text/html; charset=utf-8";
                 Request.Proxy = null;
                 Request.ContinueTimeout = 350;
-                await Task.Delay(500);
+                //await Task.Delay(500);
                 html = await GetReponseHtml(Request, encoding);
 
             }

@@ -16,6 +16,10 @@
             <SolidColorBrush x:Key="AppThemeColor" Color="#FF007AFF"></SolidColorBrush>
             <SolidColorBrush x:Key="AppBackColor" Color="#FFEFEFF4"></SolidColorBrush>
             <SolidColorBrush x:Key="AppTextColor" Color="#FF8C8C8C"></SolidColorBrush>
+
+            <FontFamily x:Key="STHeiti" >/Font/STHeiti.ttf#华文黑体</FontFamily>
+            <FontFamily x:Key="DQ" >/Font/Hiragino Sans GB W3.otf#冬青黑体简体中文 W3</FontFamily>
+          
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Sodu.Control/Style/CustomControlStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>

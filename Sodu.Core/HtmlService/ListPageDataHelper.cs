@@ -321,12 +321,14 @@ namespace Sodu.Core.HtmlService
                     continue;
                 }
                 t_entity.NewestChapterName = Regex.Match(matches2[0].ToString(), "(?<=alt=\").*?(?=\")").ToString();
-
-                //  t_entity.ChapterName = Regex.Replace(matches2[0].ToString(), "<.*?>", "").ToString();
+            
                 t_entity.LyWeb = Regex.Replace(matches2[1].ToString(), "<.*?>", "");
 
                 Match match2 = Regex.Match(item.ToString(), "(?<=<.*?class=\"xt1\">).*?(?=</div>)");
                 t_entity.UpdateTime = match2.ToString();
+
+                t_entity.LastReadChapterName = t_entity.NewestChapterName;
+                t_entity.LastReadChapterUrl = t_entity.NewestChapterUrl;
 
                 t_entity.NewestChapterName = DealWithChapterName(t_entity.NewestChapterName);
                 t_entity.LastReadChapterName = DealWithChapterName(t_entity.LastReadChapterName);

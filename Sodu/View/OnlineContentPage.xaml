@@ -531,7 +531,12 @@
             </Grid>
 
             <ScrollViewer Canvas.ZIndex="-1" Padding="10,8" Grid.Row="1" Style="{StaticResource ContentScrollViewerStyle}" >
-                <TextBlock Text="{Binding ContentText}"  TextWrapping="Wrap" LineHeight="30" Foreground="{Binding ContentColor.Item2}" FontSize="{Binding FontSize}"></TextBlock>
+                <TextBlock Text="{Binding ContentText}"  TextWrapping="Wrap" LineHeight="{Binding LineHeight}" 
+                           Foreground="{Binding ContentColor.Item2}"
+                           FontSize="{Binding FontSize}"
+                           FontWeight="Light"
+                           FontFamily="{StaticResource DQ}"
+                           ></TextBlock>
             </ScrollViewer>
         </Grid>
 

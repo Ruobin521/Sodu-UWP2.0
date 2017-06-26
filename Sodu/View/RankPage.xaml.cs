@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Sodu.Control;
+using Sodu.Control.SwipeListControl;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -27,7 +28,7 @@ namespace Sodu.View
         public RankPage()
         {
             this.InitializeComponent();
-            base.CurrentListView = BookListView;
+            base.CurrentListView = BookListView as SwipeListView;
         }
 
 

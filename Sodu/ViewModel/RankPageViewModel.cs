@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using Sodu.Core.Entity;
 using Sodu.Core.HtmlService;
 using Sodu.Service;
 
@@ -51,14 +52,13 @@ namespace Sodu.ViewModel
             {
                 if (pageIndex == 1)
                 {
-                    Books = list;
+                    Books.Clear();
+
                 }
-                else
+
+                foreach (var book in list)
                 {
-                    foreach (var item in list)
-                    {
-                        Books.Add(item);
-                    }
+                    Books.Add(book);
                 }
                 Title = $"排行榜({PageIndex}/{PageCount})";
             }
@@ -70,6 +70,15 @@ namespace Sodu.ViewModel
             GetData(1);
         }
 
+
+        public override void LoadMore()
+        {
+            if (PageIndex == PageCount || IsLoading)
+            {
+                return;
+            }
+            GetData(PageIndex + 1);
+        }
 
         public override void OnPullToLoadCommand(object obj)
         {
