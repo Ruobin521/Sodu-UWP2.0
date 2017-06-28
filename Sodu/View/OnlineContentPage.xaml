@@ -8,6 +8,7 @@
     xmlns:viewModel="using:Sodu.ViewModel"
     xmlns:control="using:Sodu.Control"
     xmlns:converter="using:Sodu.Converter"
+    xmlns:contentPageControl="using:Sodu.ContentPageControl"
     mc:Ignorable="d"
     x:Name="Root"
     DataContext="{Binding  Instance.OnlineBookContent,Source={StaticResource Locator}}">
@@ -312,12 +313,13 @@
         </Style>
 
 
+
     </Page.Resources>
 
-    <Grid   Tapped="UIElement_OnTapped" Background="{Binding ContentColor.Item1}">
+    <Grid x:Name="RootGrid"  Tapped="UIElement_OnTapped"  Background="{Binding ContentColor.Item1}">
         <Grid x:Name="BlackControl" Canvas.ZIndex="99" Visibility="Collapsed" Background="Black" IsHitTestVisible="False" Opacity="{Binding LightValue,Converter={StaticResource LightValueConverter}}"></Grid>
-        <Grid x:Name="TopBar" Canvas.ZIndex="98" Visibility="Visible" Background="#FF191919" BorderThickness="0" Height="55" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5"
-              Tapped="Prevent_OnTapped">
+        <Grid x:Name="TopBar" Canvas.ZIndex="98" Visibility="Collapsed" Background="#FF191919" BorderThickness="0" Height="55" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5"
+               IsTapEnabled="False">
             <Grid.RenderTransform>
                 <CompositeTransform/>
             </Grid.RenderTransform>
@@ -334,13 +336,14 @@
                 </AppBarButton.Content>
             </AppBarButton>
         </Grid>
-        <Grid x:Name="BottomSettingPanel" Canvas.ZIndex="98" VerticalAlignment="Bottom" Background="Transparent">
+        <Grid x:Name="BottomSettingPanel"  IsTapEnabled="False" Visibility="Visible" 
+              Canvas.ZIndex="98" VerticalAlignment="Bottom" Background="Transparent">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="55"/>
             </Grid.RowDefinitions>
             <ScrollViewer Style="{StaticResource ContentScrollViewerStyle}">
-                <Grid x:Name="FontSetingPanel" Background="#F2131313" Height="Auto"   Tapped="Prevent_OnTapped" Visibility="Visible">
+                <Grid x:Name="FontSetingPanel" Background="#F2131313" Height="Auto" IsTapEnabled="False" Visibility="Collapsed">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="60"/>
                         <RowDefinition Height="60"/>
@@ -423,7 +426,7 @@
                     </Grid>
 
                     <Grid Grid.Row="3">
-                        <ListView   ItemContainerStyle="{StaticResource   CustomColorListViewItemStyle}"  
+                        <ListView  x:Name="ColorList"  ItemContainerStyle="{StaticResource   CustomColorListViewItemStyle}"  
                                 SelectionMode="Single"
                                 ItemsSource="{Binding  ContentColors}"  
                                 SelectedItem="{Binding  SelectedColor,Mode=TwoWay}"
@@ -446,7 +449,7 @@
                 </Grid>
             </ScrollViewer>
 
-            <Grid  Grid.Row="1" x:Name="BottomBar"  Tapped="Prevent_OnTapped" Background="#FF191919"  Height="55"  RenderTransformOrigin="0.5,0.5">
+            <Grid  Grid.Row="1" x:Name="BottomBar" Visibility="Collapsed"  IsTapEnabled="False" Background="#FF191919"  Height="55"  RenderTransformOrigin="0.5,0.5">
                 <Grid.RenderTransform>
                     <CompositeTransform/>
                 </Grid.RenderTransform>
@@ -475,8 +478,7 @@
             </Grid>
         </Grid>
         <Button x:Name="BtnAdd" 
-                
-            Height="40" Width="40" Background="Red" 
+            Height="35" Width="35" Background="Red" 
                 Click="BtnAdd_OnClick"
                 HorizontalAlignment="Right" 
                 VerticalAlignment="Bottom" 
@@ -493,52 +495,12 @@
 
         </Button>
 
-        <control:CustomLoadingControl Tapped="Prevent_OnTapped"  IsActive="{Binding IsLoading}" VerticalAlignment="Center" Margin="0,0,0,100"
+        <control:CustomLoadingControl x:Name="Loading" Tapped="Prevent_OnTapped"  IsActive="{Binding IsLoading}" VerticalAlignment="Center" Margin="0,0,0,100"
                                   CancleCommand="{Binding CancleHttpRequestCommand}"     Canvas.ZIndex="97"/>
 
         <!--正文内容-->
-        <Grid Canvas.ZIndex="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="20"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="20"/>
-            </Grid.RowDefinitions>
-            <Grid VerticalAlignment="Center">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="50"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Style="{StaticResource InfoTextStyle}" Text="{Binding CurrentCatalog.CatalogName}"    />
-                <TextBlock  Style="{StaticResource InfoTextStyle}" Grid.Column="1" Text="{Binding CurrentTime}" Margin="0"  />
-            </Grid>
-            <Grid Grid.Row="2" VerticalAlignment="Center">
-                <TextBlock Style="{StaticResource InfoTextStyle}">
-                <Run Text="电量：" ></Run>
-                <Run Text="{Binding BatteryValue}" ></Run>
-                </TextBlock>
-
-                <TextBlock Style="{StaticResource InfoTextStyle}" HorizontalAlignment="Center"  >
-                  <Run Text="55"></Run>
-                  <Run Text="/"></Run>
-                  <Run Text="1000"></Run>
-                </TextBlock>
-
-                <TextBlock  Style="{StaticResource InfoTextStyle}"  HorizontalAlignment="Right"  Margin="0,0,10,0">
-                  <Run Text="55"></Run>
-                  <Run Text="/"></Run>
-                  <Run Text="1000"></Run>
-                </TextBlock>
-            </Grid>
-
-            <ScrollViewer Canvas.ZIndex="-1" Padding="10,8" Grid.Row="1" Style="{StaticResource ContentScrollViewerStyle}" >
-                <TextBlock Text="{Binding ContentText}"  TextWrapping="Wrap" LineHeight="{Binding LineHeight}" 
-                           Foreground="{Binding ContentColor.Item2}"
-                           FontSize="{Binding FontSize}"
-                           FontWeight="Light"
-                           FontFamily="{StaticResource DQ}"
-                           ></TextBlock>
-            </ScrollViewer>
-        </Grid>
+        <contentPageControl:ScrollPageControl x:Name="ScrollControlControl" Visibility="Collapsed"/>
+        <contentPageControl:SwitchPageControl x:Name="SwitchControl" Visibility="Visible"/>
 
         <Grid  VerticalAlignment="Center"
                Visibility="{Binding IsRetry,Converter={StaticResource  BooleanToVisibilityConverter}}"

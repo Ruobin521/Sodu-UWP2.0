@@ -58,6 +58,7 @@ namespace Sodu.Core.DataBase
             }
             return list;
         }
+
         public static bool InsertOrUpdatHistory(string path, Book book)
         {
             bool result = true;

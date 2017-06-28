@@ -109,6 +109,7 @@
   <ItemGroup>
     <Compile Include="Config\AppDataPath.cs" />
     <Compile Include="DataBase\DbBookShelf.cs" />
+    <Compile Include="DataBase\DbHelper.cs" />
     <Compile Include="DataBase\DbHistory.cs" />
     <Compile Include="DataBase\DbLocalBook.cs" />
     <Compile Include="Entity\BaseViewModel.cs" />
@@ -131,6 +132,7 @@
     <Compile Include="Util\HttpHelper.cs" />
     <Compile Include="Util\PlatformHelper.cs" />
     <Compile Include="Util\SettingHelper.cs" />
+    <Compile Include="Util\SoduVisualTreeHelper.cs" />
     <EmbeddedResource Include="Properties\Sodu.Core.rd.xml" />
   </ItemGroup>
   <ItemGroup>

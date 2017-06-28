@@ -53,7 +53,6 @@ namespace Sodu.Core.Util
                 Request.ContentType = "text/html; charset=utf-8";
                 Request.Proxy = null;
                 Request.ContinueTimeout = 350;
-                //await Task.Delay(500);
                 html = await GetReponseHtml(Request, encoding);
 
             }
@@ -93,16 +92,9 @@ namespace Sodu.Core.Util
             try
             {
                 var response = await request.GetResponseAsync();
-                Stream stream = null;
-                if (response.Headers[HttpRequestHeader.ContentEncoding] != null)
-                {
-                    stream = response.Headers[HttpRequestHeader.ContentEncoding].Equals("gzip",
-                                   StringComparison.CurrentCultureIgnoreCase) ? new GZipStream(response.GetResponseStream(), CompressionMode.Decompress) : response.GetResponseStream();
-                }
-                else
-                {
-                    stream = response.GetResponseStream();
-                }
+
+                var stream = response.Headers[HttpRequestHeader.ContentEncoding].Equals("gzip", StringComparison.CurrentCultureIgnoreCase) ? new GZipStream(response.GetResponseStream(), CompressionMode.Decompress) : response.GetResponseStream();
+
                 var ms = new MemoryStream();
                 var buffer = new byte[1024];
                 while (true)
@@ -114,7 +106,7 @@ namespace Sodu.Core.Util
                 }
                 var bytes = ms.ToArray();
 
-                encoding = encoding == null ? GetEncoding(bytes, response.Headers[HttpRequestHeader.ContentType]) : encoding;
+                encoding = encoding ?? GetEncoding(bytes, response.Headers[HttpRequestHeader.ContentType]);
                 html = encoding.GetString(bytes);
                 await stream.FlushAsync();
             }

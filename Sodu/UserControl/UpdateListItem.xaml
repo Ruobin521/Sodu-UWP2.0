@@ -23,12 +23,12 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="{Binding NewestChapterName}" Grid.Row="0" Foreground="Black" FontWeight="Normal" VerticalAlignment="Center"  FontSize="17"></TextBlock>
-        <TextBlock   Grid.Row="1" Foreground="{StaticResource AppTextColor}" FontWeight="Normal"  FontFamily="微软雅黑"  VerticalAlignment="Center"  FontSize="15">
+        <TextBlock Text="{Binding NewestChapterName}" Grid.Row="0" Foreground="Black" FontWeight="Normal" FontFamily="Arial" VerticalAlignment="Center"  FontSize="17"></TextBlock>
+        <TextBlock   Grid.Row="1" Foreground="{StaticResource AppTextColor}" FontWeight="Normal"  FontFamily="Arial"  VerticalAlignment="Center"  FontSize="15">
             <Run Text="来源网站："></Run>
             <Run Text="{Binding LyWeb}"></Run>
         </TextBlock>
-        <TextBlock   Grid.Row="2"  Foreground="{StaticResource AppTextColor}" FontWeight="Normal"  FontFamily="微软雅黑" VerticalAlignment="Center"  FontSize="15">
+        <TextBlock   Grid.Row="2"  Foreground="{StaticResource AppTextColor}" FontWeight="Normal"  FontFamily="Arial" VerticalAlignment="Center"  FontSize="15">
             <Run Text="更新时间："></Run>
             <Run Text="{Binding UpdateTime}"></Run>
         </TextBlock>

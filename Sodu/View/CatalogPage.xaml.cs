@@ -59,7 +59,7 @@ namespace Sodu.View
             if (this.ScroolButton.Tag == null || ScroolButton.Tag.ToString() == "0")
             {
                 List<ScrollViewer> list = new List<ScrollViewer>();
-                GetVisualChildCollection(CatalogList, list);
+                SoduVisualTreeHelper.GetVisualChildCollection(CatalogList, list);
                 var scroolViewer = list.FirstOrDefault();
                 scroolViewer.ChangeView(0, scroolViewer.ExtentHeight, null, false);
                 this.ScroolButton.Tag = "1";
@@ -70,7 +70,7 @@ namespace Sodu.View
             {
 
                 List<ScrollViewer> list = new List<ScrollViewer>();
-                GetVisualChildCollection(CatalogList, list);
+                SoduVisualTreeHelper.GetVisualChildCollection(CatalogList, list);
                 var scroolViewer = list.FirstOrDefault();
                 scroolViewer.ChangeView(0, 0, null, false);
                 this.ScroolButton.Tag = "0";
@@ -80,17 +80,6 @@ namespace Sodu.View
         }
 
 
-        public static void GetVisualChildCollection<T>(DependencyObject parent, List<T> visualCollection) where T : UIElement
-        {
-            int count = VisualTreeHelper.GetChildrenCount(parent);
-            for (int i = 0; i < count; i++)
-            {
-                DependencyObject child = VisualTreeHelper.GetChild(parent, i);
-                if (child is T)
-                    visualCollection.Add(child as T);
-                else if (child != null)
-                    GetVisualChildCollection(child, visualCollection);
-            }
-        }
+
     }
 }

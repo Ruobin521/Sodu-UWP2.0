@@ -18,16 +18,24 @@ using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 using GalaSoft.MvvmLight.Threading;
+using Sodu.ContentPageControl;
 using Sodu.Core.Config;
 using Sodu.Core.DataBase;
 
 namespace Sodu.ViewModel
 {
-    public class OnlineContentPageViewModel : CommonPageViewModel
+    public enum CatalogDirection
+    {
+        Pre,
+        Next,
+        Current
+    }
+
+    public class OnlineContentPageViewModel : BasePageViewModel
     {
         #region 属性
 
-
+        private SwitchPageControl SwitchControl { get; set; }
 
         /// <summary>
         /// 缓存数据（url,pages ,content）
@@ -38,6 +46,9 @@ namespace Sodu.ViewModel
         /// 是否正在加载目录页数据（目录，简介，封面，作者）
         /// </summary>
         private bool IsLoadingCatalogData { get; set; }
+
+        private bool IsPreLoadingCatalog { get; set; }
+
 
 
         private BookCatalog _currentCatalog;
@@ -55,6 +66,8 @@ namespace Sodu.ViewModel
             set
             {
                 Set(ref _currentCatalog, value);
+
+                PreLoadPreAndNextCatalog();
             }
         }
 
@@ -85,6 +98,21 @@ namespace Sodu.ViewModel
 
 
 
+        private List<string> _catalogContents;
+        /// <summary>
+        /// 
+        /// </summary>
+        public List<string> CatalogContents
+        {
+            get
+            {
+                return _catalogContents ?? (_catalogContents = new List<string>());
+            }
+            set { Set(ref _catalogContents, value); }
+        }
+
+
+
         private List<string> _contentPages;
         /// <summary>
         ///当前章节分页内容
@@ -97,6 +125,8 @@ namespace Sodu.ViewModel
             }
             set { Set(ref _contentPages, value); }
         }
+
+
 
 
         private string _contentText;
@@ -177,11 +207,10 @@ namespace Sodu.ViewModel
             }, commandId: 0));
             dialog.Commands.Add(new UICommand("取消", cmd =>
             {
-                return;
             }, commandId: 1));
 
             //获取返回值
-            var result = await dialog.ShowAsync();
+            await dialog.ShowAsync();
         }
 
         #endregion
@@ -214,10 +243,9 @@ namespace Sodu.ViewModel
             };
 
             CurrentCatalog = catalog;
-            SetCurrentContent(catalog);
             SetCatalogData(catalog);
+            SetCurrentContent(catalog);
         }
-
 
         public async void SetCurrentContent(BookCatalog catalog)
         {
@@ -227,17 +255,17 @@ namespace Sodu.ViewModel
             }
 
             CurrentCatalog = catalog;
+            var value = await GetCatalogContent(catalog, true);
 
-            var value = await GetCatalogContent(catalog);
             if (value != null)
             {
                 ContentPages = value.Item1;
                 ContentText = value.Item2;
-
+                SwitchControl.SetCurrentText();
                 CurrentBook.LastReadChapterName = catalog.CatalogName;
                 CurrentBook.LastReadChapterUrl = catalog.CatalogUrl;
-
                 UpdateHistory();
+                PreLoadPreAndNextCatalog();
             }
             else
             {
@@ -247,6 +275,111 @@ namespace Sodu.ViewModel
             }
         }
 
+        private void PreLoadPreAndNextCatalog()
+        {
+            if (IsPreLoadingCatalog || CurrentBook.CatalogList == null || CurrentBook.CatalogList.Count == 0)
+            {
+                return;
+            }
+
+            IsPreLoadingCatalog = true;
+
+            var temp = CurrentBook.CatalogList.FirstOrDefault(p => p.CatalogUrl == CurrentCatalog.CatalogUrl);
+            if (temp == null)
+            {
+                return;
+            }
+
+            var index = CurrentBook.CatalogList.IndexOf(temp);
+            var tasks = new Task[2];
+            tasks[0] = Task.Run(async () =>
+            {
+                var value = GetCatalogByDirction(CatalogDirection.Next);
+                if (value != null)
+                {
+                    await GetCatalogContent(value.Item2);
+                }
+
+            });
+
+            tasks[1] = Task.Run(async () =>
+            {
+                var value = GetCatalogByDirction(CatalogDirection.Pre);
+                if (value != null)
+                {
+                    await GetCatalogContent(value.Item2);
+                }
+            });
+
+            Task.Factory.ContinueWhenAll(tasks, (c) =>
+            {
+                IsPreLoadingCatalog = false;
+            });
+
+        }
+
+        public void SwitchCatalog(CatalogDirection dir)
+        {
+            if (IsLoading)
+            {
+                return;
+            }
+            var value = GetCatalogByDirction(dir);
+
+            if (value != null)
+            {
+                SetCurrentContent(value.Item2);
+            }
+        }
+
+        public async Task<Tuple<List<string>, string>> GetCatalogDataByDirection(CatalogDirection dir, bool isShowLoading = false)
+        {
+            var catalog = GetCatalogByDirction(dir);
+            if (catalog == null)
+            {
+                return null;
+            }
+
+            var value = await GetCatalogContent(catalog.Item2, isShowLoading);
+            return value;
+        }
+
+        public Tuple<int, BookCatalog> GetCatalogByDirction(CatalogDirection dir)
+        {
+            if (CurrentBook.CatalogList == null || CurrentBook.CatalogList.Count == 0)
+            {
+                return null;
+            }
+
+            var temp = CurrentBook.CatalogList.FirstOrDefault(p => p.CatalogUrl == CurrentCatalog.CatalogUrl);
+
+            if (temp == null)
+            {
+                return new Tuple<int, BookCatalog>(CurrentBook.CatalogList.Count - 1, CurrentBook.CatalogList.LastOrDefault());
+            }
+
+            var index = CurrentBook.CatalogList.IndexOf(temp);
+
+            switch (dir)
+            {
+                case CatalogDirection.Current:
+                    return new Tuple<int, BookCatalog>(index, temp);
+                case CatalogDirection.Next:
+                    if (index < CurrentBook.CatalogList.Count - 1)
+                    {
+                        return new Tuple<int, BookCatalog>(index, CurrentBook.CatalogList[index + 1]);
+                    }
+                    break;
+                case CatalogDirection.Pre:
+                    if (index > 0)
+                    {
+                        return new Tuple<int, BookCatalog>(index, CurrentBook.CatalogList[index - 1]);
+                    }
+                    break;
+            }
+
+            return null;
+        }
 
         private void UpdateHistory()
         {
@@ -260,18 +393,25 @@ namespace Sodu.ViewModel
             }
         }
 
-        public async Task<Tuple<List<string>, string>> GetCatalogContent(BookCatalog catalog)
+        public async Task<Tuple<List<string>, string>> GetCatalogContent(BookCatalog catalog, bool showLoading = false)
         {
             Tuple<List<string>, string> value = null;
             try
             {
-                IsLoading = true;
+                if (showLoading)
+                {
+                    DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                    {
+                        IsLoading = true;
+                    });
+                }
+
                 await Task.Run(async () =>
                 {
                     try
                     {
-                        string html = null;
-                        List<string> list = null;
+                        string html;
+                        List<string> list;
                         if (DicContentCache.ContainsKey(catalog.CatalogUrl))
                         {
                             value = DicContentCache[catalog.CatalogUrl];
@@ -317,7 +457,10 @@ namespace Sodu.ViewModel
             }
             finally
             {
-                IsLoading = false;
+                DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                {
+                    IsLoading = false;
+                });
             }
             return value;
         }
@@ -374,8 +517,8 @@ namespace Sodu.ViewModel
                     if (temp != null)
                     {
                         CurrentCatalog = temp;
+                        PreLoadPreAndNextCatalog();
                     }
-
                 }
                 CurrentBook.Description = value.Item2;
                 CurrentBook.Cover = value.Item3;
@@ -430,9 +573,21 @@ namespace Sodu.ViewModel
         }
 
 
+        public void SetSwihchControl(SwitchPageControl control)
+        {
+            SwitchControl = control;
+        }
+
+
         private List<string> SplitContentToPages(string html)
         {
-            return new List<string>();
+            var list = new List<string>();
+
+            for (int i = 0; i < 10; i++)
+            {
+                list.Add(html);
+            }
+            return list;
         }
 
 

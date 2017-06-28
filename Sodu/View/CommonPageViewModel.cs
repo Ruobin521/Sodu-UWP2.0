@@ -209,12 +209,12 @@ namespace Sodu.View
         private ICommand _itemClickCommand;
         public ICommand ItemClickCommand => _itemClickCommand ?? (_itemClickCommand = new RelayCommand<object>(OnItemClickCommand));
 
-        public virtual async void OnItemClickCommand(object obj)
+        public virtual void OnItemClickCommand(object obj)
         {
             ViewModelInstance.Instance.UpdateCatalog.ResetData();
 
             NavigationService.NavigateTo(typeof(UpdateCatalogPage));
-           
+
             ViewModelInstance.Instance.UpdateCatalog.LoadData(obj);
 
             if (ViewModelInstance.Instance.Main.IsLogin && AppSettingService.GetBoolKeyValue(SettingKey.IsAutoAddToOnlineShelf))

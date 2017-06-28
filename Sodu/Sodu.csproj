@@ -91,8 +91,6 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
-    <Content Include="Font\STHeiti.ttf" />
-    <Content Include="Font\Hiragino Sans GB W3.otf" />
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
@@ -100,6 +98,15 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Contants\ConstantValue.cs" />
+    <Compile Include="ContentPageControl\ScrollPageControl.xaml.cs">
+      <DependentUpon>ScrollPageControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ContentPageControl\SwitchPageControl.xaml.cs">
+      <DependentUpon>SwitchPageControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ContentPageControl\SwitchPageItem.xaml.cs">
+      <DependentUpon>SwitchPageItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Converter\CountToVisibilityConverter.cs" />
     <Compile Include="Converter\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converter\ImageUrlConverter.cs" />
@@ -259,6 +266,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="ContentPageControl\ScrollPageControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ContentPageControl\SwitchPageControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ContentPageControl\SwitchPageItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -374,7 +393,9 @@
       <Name>Windows Mobile Extensions for the UWP</Name>
     </SDKReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Font\" />
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

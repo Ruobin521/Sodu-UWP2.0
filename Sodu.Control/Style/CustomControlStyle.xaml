@@ -242,6 +242,7 @@
 
     <Style x:Key="InfoTextStyle" TargetType="TextBlock">
         <Setter  Property="FontSize" Value="14"></Setter>
+        <Setter  Property="FontFamily" Value="Arial"></Setter>
         <Setter  Property="Foreground" Value="#FF555555"></Setter>
         <Setter  Property="TextTrimming" Value="WordEllipsis"></Setter>
         <Setter  Property="VerticalAlignment" Value="Stretch"></Setter>

@@ -109,7 +109,7 @@ namespace Sodu.Core.HtmlService
                     if (type == AnalisysType.CatalogPageData)
                     {
                         var baseUrl = "http://" + host;
-                        var value = GetCatalogPageDataCommon(url, baseUrl, html,
+                        var value = GetCatalogPageDataCommon(url, "", html,
                             catalogsRegex: "<table.*?</table>",
                             catalogRegex: "<a href=\"(.*?)\">(.*?)</a>",
                             introRegex: "<meta property=\"og:description\" content=\"(.*?)\"/>",
@@ -407,7 +407,7 @@ namespace Sodu.Core.HtmlService
                     if (type == AnalisysType.CatalogPageData)
                     {
                         var baseUrl = "http://" + host;
-                        var value = GetCatalogPageDataCommon(url, "", html,
+                        var value = GetCatalogPageDataCommon(baseUrl, "", html,
                             catalogsRegex: "<h2 class=\"bookTitle\">.*?<div id=\"uyan_frame\">",
                             catalogRegex: "<a href=\"(.*?)\">(.*?)</a>",
                             introRegex: "<div class=\"reBook borderF\">(.*?)</div>",

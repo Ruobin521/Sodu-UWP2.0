@@ -23,7 +23,7 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0"  Margin="0,0,160,0" Orientation="Horizontal"  HorizontalAlignment="Left">
-            <TextBlock Text="{Binding BookName}" Foreground="Black" FontWeight="Normal"  FontFamily="微软雅黑" VerticalAlignment="Center"  FontSize="17" Width="Auto"></TextBlock>
+            <TextBlock Text="{Binding BookName}" Foreground="Black" FontWeight="Normal"  FontFamily="Arial" VerticalAlignment="Center"  FontSize="17" Width="Auto"></TextBlock>
             <Image Source="../Assets/Icon/new_blue@3x.png" Margin="5,5,0,0" Stretch="Fill" Height="25" Width="28" Visibility="{Binding IsNew,Converter={StaticResource BooleanToVisibilityConverter} }" ></Image>
         </StackPanel>
 
@@ -36,7 +36,7 @@
         </TextBlock>
 
 
-        <TextBlock   Grid.Row="2" Foreground="{StaticResource AppTextColor}" FontWeight="Light"    FontFamily="Arial" VerticalAlignment="Center"  FontSize="15"  HorizontalAlignment="Left">
+        <TextBlock   Grid.Row="2" Foreground="{StaticResource AppTextColor}" FontWeight="Light"    FontFamily="{StaticResource Fz}" VerticalAlignment="Center"  FontSize="15"  HorizontalAlignment="Left">
             <Run Text="读至："></Run>
             <Run Text="{Binding LastReadChapterName}"></Run>
         </TextBlock>

@@ -1,20 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI;
-using Windows.UI.ViewManagement;
+using System.Diagnostics;
+using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using Sodu.Contants;
+using GalaSoft.MvvmLight.Threading;
 using Sodu.Control;
 using Sodu.Core.Util;
 using Sodu.ViewModel;
@@ -26,14 +17,15 @@ namespace Sodu.View
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class OnlineContentPage : Page
+    public sealed partial class OnlineContentPage
     {
         private bool IsAnimating { get; set; }
         private bool IsShow { get; set; }
 
-        public  OnlineContentPage()
+
+        public OnlineContentPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
             TopBar.Visibility = BottomBar.Visibility = FontSetingPanel.Visibility = Visibility.Collapsed;
 
@@ -43,13 +35,27 @@ namespace Sodu.View
 
             MenuBarShow.Completed += MenuSb_Completed;
             MenuBarHide.Completed += MenuSb_Completed;
+
+
+            SizeChanged += OnlineContentPage_SizeChanged;
         }
+
+        private void OnlineContentPage_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            var vm = (OnlineContentPageViewModel)DataContext;
+            vm.SetSwihchControl(SwitchControl);
+        }
+ 
+
+      
 
 
         private void MenuSb_Completed(object sender, object e)
         {
             IsAnimating = false;
             IsShow = !IsShow;
+
+            // Viewer.IsEnabled = !IsShow;
 
             if (IsShow)
             {
@@ -75,14 +81,10 @@ namespace Sodu.View
             {
                 SetMenuVisibility();
             }
-            else
-            {
-                // OnTapped(point);
-            }
         }
 
 
-        private async void SetMenuVisibility()
+        private void SetMenuVisibility()
         {
             if (IsAnimating)
             {
@@ -97,7 +99,7 @@ namespace Sodu.View
                 MenuBarHide.Begin();
                 if (PlatformHelper.IsMobileDevice)
                 {
-                   // await StatusBar.GetForCurrentView().HideAsync();
+                    // await StatusBar.GetForCurrentView().HideAsync();
                 }
             }
             else
@@ -105,7 +107,7 @@ namespace Sodu.View
                 MenuBarShow.Begin();
                 if (PlatformHelper.IsMobileDevice)
                 {
-                  //  await StatusBar.GetForCurrentView().ShowAsync();
+                    //  await StatusBar.GetForCurrentView().ShowAsync();
                 }
             }
         }
@@ -134,5 +136,7 @@ namespace Sodu.View
         {
             SetMenuVisibility();
         }
+
+
     }
 }
