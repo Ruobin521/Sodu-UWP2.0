@@ -28,14 +28,23 @@ namespace Sodu.ContentPageControl
         }
 
         public static readonly DependencyProperty TextProperty = DependencyProperty.Register(
-            "Text", typeof(string), typeof(SwitchPageItem), new PropertyMetadata(default(string)));
+            "Text", typeof(string), typeof(SwitchPageItem), new PropertyMetadata(default(string), OnTextValueChanged));
+
+        private static void OnTextValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var item = (SwitchPageItem)d;
+
+            item.TextContent.Text = e.NewValue != null ? e.NewValue?.ToString() : "";
+        }
 
         public string Text
         {
-            get { return (string) GetValue(TextProperty); }
+            get { return (string)GetValue(TextProperty); }
             set { SetValue(TextProperty, value); }
         }
 
+
+ 
 
         public void AnimationToLeft()
         {

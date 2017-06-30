@@ -6,6 +6,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
 using GalaSoft.MvvmLight.Threading;
+using Sodu.ContentPageControl.ScrollSwitchPage;
 using Sodu.Control;
 using Sodu.Core.Util;
 using Sodu.ViewModel;
@@ -33,43 +34,50 @@ namespace Sodu.View
 
             BtnAdd.Visibility = Visibility.Collapsed;
 
-            MenuBarShow.Completed += MenuSb_Completed;
-            MenuBarHide.Completed += MenuSb_Completed;
+            MenuBarShow.Completed += MenuBarShow_Completed;
+            MenuBarHide.Completed += MenuBarHide_Completed;
 
+            NavigationCacheMode = NavigationCacheMode.Enabled;
 
-            SizeChanged += OnlineContentPage_SizeChanged;
+            this.Loaded += OnlineContentPage_Loaded;
         }
 
-        private void OnlineContentPage_SizeChanged(object sender, SizeChangedEventArgs e)
+        private void MenuBarHide_Completed(object sender, object e)
         {
-            var vm = (OnlineContentPageViewModel)DataContext;
-            vm.SetSwihchControl(SwitchControl);
-        }
- 
-
-      
-
-
-        private void MenuSb_Completed(object sender, object e)
-        {
+            IsShow = false;
             IsAnimating = false;
-            IsShow = !IsShow;
 
-            // Viewer.IsEnabled = !IsShow;
+            ScrollControl.IsEnabled = true;
+            SwitchControl.IsEnabled = true;
 
-            if (IsShow)
+            BtnAdd.Visibility = Visibility.Collapsed;
+        }
+
+        private void MenuBarShow_Completed(object sender, object e)
+        {
+            IsShow = true;
+            IsAnimating = false;
+
+            ScrollControl.IsEnabled = false;
+            SwitchControl.IsEnabled = false;
+
+            Task.Run(() =>
             {
                 var bookId = ViewModelInstance.Instance.OnlineBookContent.CurrentBook.BookId;
 
                 var ifExist = ViewModelInstance.Instance.LocalBookPage.CheckBookExist(bookId);
 
-                BtnAdd.Visibility = ifExist ? Visibility.Collapsed : Visibility.Visible;
+                DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                {
+                    BtnAdd.Visibility = ifExist ? Visibility.Collapsed : Visibility.Visible;
+                });
+            });
 
-            }
-            else
-            {
-                BtnAdd.Visibility = Visibility.Collapsed;
-            }
+        }
+
+        private void OnlineContentPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            SetMenuVisibility(false);
         }
 
         private void UIElement_OnTapped(object sender, TappedRoutedEventArgs e)
@@ -79,12 +87,12 @@ namespace Sodu.View
             //点击中间区域
             if (point.X > Window.Current.Bounds.Width / 3 && point.X < Window.Current.Bounds.Width / 3 * 2)
             {
-                SetMenuVisibility();
+                SetMenuVisibility(!IsShow);
             }
         }
 
 
-        private void SetMenuVisibility()
+        private void SetMenuVisibility(bool isShow)
         {
             if (IsAnimating)
             {
@@ -94,21 +102,14 @@ namespace Sodu.View
 
             FontSetingPanel.Visibility = Visibility.Collapsed;
 
-            if (IsShow)
+            if (!isShow)
             {
                 MenuBarHide.Begin();
-                if (PlatformHelper.IsMobileDevice)
-                {
-                    // await StatusBar.GetForCurrentView().HideAsync();
-                }
+
             }
             else
             {
                 MenuBarShow.Begin();
-                if (PlatformHelper.IsMobileDevice)
-                {
-                    //  await StatusBar.GetForCurrentView().ShowAsync();
-                }
             }
         }
 
@@ -134,9 +135,12 @@ namespace Sodu.View
 
         private void BtnAdd_OnClick(object sender, RoutedEventArgs e)
         {
-            SetMenuVisibility();
+            SetMenuVisibility(false);
         }
 
-
+        public Tuple<double,double> GetControlSize()
+        {
+            return SwitchControl.GetControlSize();
+        }
     }
 }

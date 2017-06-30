@@ -17,7 +17,14 @@ namespace Sodu
 
         public static void NavigateTo(Type type, object para = null)
         {
-            ContentFrame.Navigate(type,para);
+            try
+            {
+                ContentFrame.Navigate(type, para);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
 
         public static void GoBack()

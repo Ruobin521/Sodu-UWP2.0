@@ -11,8 +11,10 @@
             <viewModel:ViewModelInstance  x:Key="Locator"/>
             <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"></converter:BooleanToVisibilityConverter>
             <converter:BooleanToCollapsedConverter x:Key="BooleanToCollapsedConverter"></converter:BooleanToCollapsedConverter>
+            <converter:BooleanToOpicityConverter x:Key="BooleanToOpicityConverter"></converter:BooleanToOpicityConverter>
             <converter:CountToVisibilityConverter x:Key="CountToVisibilityConverter"></converter:CountToVisibilityConverter>
             <converter:BookCoverConverter x:Key="BookCoverConverter"></converter:BookCoverConverter>
+            <converter:IndexConverter x:Key="IndexConverter"></converter:IndexConverter>
             <SolidColorBrush x:Key="AppThemeColor" Color="#FF007AFF"></SolidColorBrush>
             <SolidColorBrush x:Key="AppBackColor" Color="#FFEFEFF4"></SolidColorBrush>
             <SolidColorBrush x:Key="AppTextColor" Color="#FF8C8C8C"></SolidColorBrush>

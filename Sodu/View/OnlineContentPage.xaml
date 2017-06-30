@@ -9,6 +9,7 @@
     xmlns:control="using:Sodu.Control"
     xmlns:converter="using:Sodu.Converter"
     xmlns:contentPageControl="using:Sodu.ContentPageControl"
+    xmlns:scrollSwitchPage="using:Sodu.ContentPageControl.ScrollSwitchPage"
     mc:Ignorable="d"
     x:Name="Root"
     DataContext="{Binding  Instance.OnlineBookContent,Source={StaticResource Locator}}">
@@ -318,8 +319,10 @@
 
     <Grid x:Name="RootGrid"  Tapped="UIElement_OnTapped"  Background="{Binding ContentColor.Item1}">
         <Grid x:Name="BlackControl" Canvas.ZIndex="99" Visibility="Collapsed" Background="Black" IsHitTestVisible="False" Opacity="{Binding LightValue,Converter={StaticResource LightValueConverter}}"></Grid>
-        <Grid x:Name="TopBar" Canvas.ZIndex="98" Visibility="Collapsed" Background="#FF191919" BorderThickness="0" Height="55" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5"
-               IsTapEnabled="False">
+        <Grid x:Name="TopBar" Canvas.ZIndex="98" Visibility="Collapsed" Background="#FF191919" BorderThickness="0" Height="55" 
+              VerticalAlignment="Top" 
+              RenderTransformOrigin="0.5,0.5"
+               Tapped="Prevent_OnTapped">
             <Grid.RenderTransform>
                 <CompositeTransform/>
             </Grid.RenderTransform>
@@ -336,14 +339,14 @@
                 </AppBarButton.Content>
             </AppBarButton>
         </Grid>
-        <Grid x:Name="BottomSettingPanel"  IsTapEnabled="False" Visibility="Visible" 
+        <Grid x:Name="BottomSettingPanel"   Tapped="Prevent_OnTapped" Visibility="Visible" 
               Canvas.ZIndex="98" VerticalAlignment="Bottom" Background="Transparent">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="55"/>
             </Grid.RowDefinitions>
             <ScrollViewer Style="{StaticResource ContentScrollViewerStyle}">
-                <Grid x:Name="FontSetingPanel" Background="#F2131313" Height="Auto" IsTapEnabled="False" Visibility="Collapsed">
+                <Grid x:Name="FontSetingPanel" Background="#F2131313" Height="Auto"  IsTapEnabled="False" Visibility="Collapsed">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="60"/>
                         <RowDefinition Height="60"/>
@@ -351,7 +354,7 @@
                         <RowDefinition Height="Auto" MinHeight="60"/>
                     </Grid.RowDefinitions>
 
-                    <Grid Grid.Row="0">
+                    <Grid Grid.Row="0" Tapped="Prevent_OnTapped">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="50"/>
                             <ColumnDefinition Width="Auto"/>
@@ -372,7 +375,7 @@
                         </control:SettingButton>
                     </Grid>
 
-                    <Grid Grid.Row="1">
+                    <Grid Grid.Row="1"  Tapped="Prevent_OnTapped">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="50"/>
                             <ColumnDefinition Width="80"/>
@@ -403,7 +406,7 @@
 
                     </Grid>
 
-                    <Grid Grid.Row="2">
+                    <Grid Grid.Row="2"  Tapped="Prevent_OnTapped">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="50"/>
                             <ColumnDefinition Width="80"/>
@@ -425,7 +428,7 @@
 
                     </Grid>
 
-                    <Grid Grid.Row="3">
+                    <Grid Grid.Row="3"   Tapped="Prevent_OnTapped">
                         <ListView  x:Name="ColorList"  ItemContainerStyle="{StaticResource   CustomColorListViewItemStyle}"  
                                 SelectionMode="Single"
                                 ItemsSource="{Binding  ContentColors}"  
@@ -449,7 +452,7 @@
                 </Grid>
             </ScrollViewer>
 
-            <Grid  Grid.Row="1" x:Name="BottomBar" Visibility="Collapsed"  IsTapEnabled="False" Background="#FF191919"  Height="55"  RenderTransformOrigin="0.5,0.5">
+            <Grid  Grid.Row="1" x:Name="BottomBar" Visibility="Collapsed"  Tapped="Prevent_OnTapped" Background="#FF191919"  Height="55"  RenderTransformOrigin="0.5,0.5">
                 <Grid.RenderTransform>
                     <CompositeTransform/>
                 </Grid.RenderTransform>
@@ -495,12 +498,13 @@
 
         </Button>
 
-        <control:CustomLoadingControl x:Name="Loading" Tapped="Prevent_OnTapped"  IsActive="{Binding IsLoading}" VerticalAlignment="Center" Margin="0,0,0,100"
+        <control:CustomLoadingControl x:Name="LoadingControl" Tapped="Prevent_OnTapped"  IsActive="{Binding IsLoading}" VerticalAlignment="Center" Margin="0,0,0,100"
                                   CancleCommand="{Binding CancleHttpRequestCommand}"     Canvas.ZIndex="97"/>
 
         <!--正文内容-->
-        <contentPageControl:ScrollPageControl x:Name="ScrollControlControl" Visibility="Collapsed"/>
-        <contentPageControl:SwitchPageControl x:Name="SwitchControl" Visibility="Visible"/>
+        <contentPageControl:ScrollPageControl x:Name="ScrollControl" Opacity="{Binding IsScroll,Converter={StaticResource  BooleanToOpicityConverter }}" IsHitTestVisible="{Binding IsScroll}"/>
+        <!--<contentPageControl:SwitchPageControl x:Name="SwitchControl" Visibility="{Binding IsScroll,Converter={StaticResource BooleanToCollapsedConverter}}"/>-->
+        <scrollSwitchPage:ScrollSwitchControl x:Name="SwitchControl" Visibility="{Binding IsScroll,Converter={StaticResource BooleanToCollapsedConverter}}"/>
 
         <Grid  VerticalAlignment="Center"
                Visibility="{Binding IsRetry,Converter={StaticResource  BooleanToVisibilityConverter}}"

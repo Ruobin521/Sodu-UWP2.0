@@ -1,0 +1,139 @@
+﻿<UserControl
+    x:Class="Sodu.ContentPageControl.ScrollSwitchPage.ScrollSwitchItem"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Sodu.ContentPageControl.ScrollSwitchPage"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400"
+    x:Name="Root">
+
+    <UserControl.RenderTransform>
+        <CompositeTransform  />
+    </UserControl.RenderTransform>
+
+    <UserControl.Resources>
+
+        <KeyTime x:Key="SbKeyTime">0:0:0.28</KeyTime>
+        <KeyTime x:Key="SbKeyTime2">0:0:0.15</KeyTime>
+
+        <!--向左划，获取之后的内容-->
+
+        <Storyboard x:Name="LeftToRight">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="Root">
+                <EasingDoubleKeyFrame KeyTime="0"  x:Name="LeftToRightStart" />
+                <EasingDoubleKeyFrame KeyTime="0"  x:Name="LeftToRightEnd" />
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <Storyboard x:Name="CenterToLeft">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="Root">
+                <EasingDoubleKeyFrame KeyTime="0"  x:Name="CenterToLeftStart"/>
+                <EasingDoubleKeyFrame KeyTime="{StaticResource SbKeyTime}" x:Name="CenterToLeftEnd"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <Storyboard x:Name="RightToCenter">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="Root">
+                <EasingDoubleKeyFrame KeyTime="0"  x:Name="RightToCenterStart"/>
+                <EasingDoubleKeyFrame KeyTime="{StaticResource SbKeyTime}"  Value="0" />
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <!--向右划，获取之前的内容-->
+
+        <Storyboard x:Name="LeftToCenter">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="Root">
+                <EasingDoubleKeyFrame KeyTime="0" x:Name="LeftToCenterStart" />
+                <EasingDoubleKeyFrame KeyTime="{StaticResource SbKeyTime}"    Value="0" />
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <Storyboard x:Name="CenterToRight">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="Root">
+                <EasingDoubleKeyFrame KeyTime="0"  x:Name="CenterToRightStart"/>
+                <EasingDoubleKeyFrame KeyTime="{StaticResource SbKeyTime}"  x:Name="CenterToRightEnd" />
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <Storyboard x:Name="RightToLeft">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="Root">
+                <EasingDoubleKeyFrame KeyTime="0:0:0"   x:Name="RightToLeftStart" />
+                <EasingDoubleKeyFrame KeyTime="0:0:0"   x:Name="RightToLeftEnd" />
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <!--回归原位，不执行切-->
+        <Storyboard x:Name="RightToRight">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="Root">
+                <EasingDoubleKeyFrame KeyTime="0:0:0"   x:Name="RightToRighttStart" />
+                <EasingDoubleKeyFrame KeyTime="{StaticResource SbKeyTime2}"   x:Name="RightToRightEnd" />
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+
+
+        <Storyboard x:Name="CenterToCenter">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="Root">
+                <EasingDoubleKeyFrame KeyTime="0" x:Name="CenterToCenterStart" />
+                <EasingDoubleKeyFrame KeyTime="{StaticResource SbKeyTime2}"   Value="0" />
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <Storyboard x:Name="LeftToLeft">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="Root">
+                <EasingDoubleKeyFrame KeyTime="0" x:Name="LeftToLeftStart"/>
+                <EasingDoubleKeyFrame KeyTime="{StaticResource SbKeyTime2}"  x:Name="LeftToLeftEnd" />
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+
+    </UserControl.Resources>
+
+    <Grid Canvas.ZIndex="0"   Background="{Binding Instance.OnlineBookContent.ContentColor.Item1,Source={StaticResource Locator}}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="18"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="18"/>
+        </Grid.RowDefinitions>
+        <Grid VerticalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="50"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Style="{StaticResource InfoTextStyle}" Text="{Binding  ElementName=Root,Path=Title}"    />
+            <TextBlock  Style="{StaticResource InfoTextStyle}" Grid.Column="1" Text="{Binding Instance.OnlineBookContent.CurrentTime,Source={StaticResource Locator}}" Margin="0"  />
+        </Grid>
+        <Grid Grid.Row="2" VerticalAlignment="Center">
+            <TextBlock Style="{StaticResource InfoTextStyle}">
+                <Run Text="电量：" ></Run>
+                <Run Text="{Binding  Instance.OnlineBookContent.BatteryValue,Source={StaticResource Locator}}" ></Run>
+            </TextBlock>
+
+            <TextBlock Style="{StaticResource InfoTextStyle}" HorizontalAlignment="Center"  >
+                  <Run Text="{Binding ElementName=Root,Path=CatalogIndex}"></Run>
+                  <Run Text="/"></Run>
+                  <Run Text="{Binding ElementName=Root,Path=CatalogCount}"></Run>
+            </TextBlock>
+
+            <TextBlock  Style="{StaticResource InfoTextStyle}"  HorizontalAlignment="Right"  Margin="0,0,10,0">
+                  <Run Text="{Binding PageIndex,Mode=OneWay,Converter={StaticResource IndexConverter},ElementName=Root}"></Run>
+                  <Run Text="/"></Run>
+                  <Run Text="{Binding PageCount,Mode=OneWay,ElementName=Root}"></Run>
+            </TextBlock>
+        </Grid>
+
+        <Grid x:Name="Grid" Background="{Binding ElementName=Root,Path=Background}" Grid.Row="1">
+            <TextBlock Text="{Binding ElementName=Root,Path=Text}" 
+                   TextWrapping="Wrap" LineHeight="{Binding Instance.OnlineBookContent.LineHeight,Source={StaticResource Locator}}" 
+                           Foreground="{Binding Instance.OnlineBookContent.ContentColor.Item2,Source={StaticResource Locator}}"
+                           FontSize="{Binding Instance.OnlineBookContent.FontSize,Source={StaticResource Locator}}"
+                           FontWeight="Light"
+                           FontFamily="Arial"
+                           HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"></TextBlock>
+        </Grid>
+    </Grid>
+
+
+</UserControl>

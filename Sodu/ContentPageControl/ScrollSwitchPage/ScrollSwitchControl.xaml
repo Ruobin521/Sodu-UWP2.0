@@ -1,0 +1,20 @@
+﻿<UserControl
+    x:Class="Sodu.ContentPageControl.ScrollSwitchPage.ScrollSwitchControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Sodu.ContentPageControl.ScrollSwitchPage"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400"
+     DataContext="{Binding  Instance.OnlineBookContent,Source={StaticResource Locator}}">
+
+    <Grid>
+        <Grid Background="Transparent" ManipulationMode="System,TranslateX" Padding="8,3,6,0">
+            <local:ScrollSwitchItem Background="{Binding ContentColor.Item1}" x:Name="Control1" />
+            <local:ScrollSwitchItem Background="{Binding ContentColor.Item1}" x:Name="Control2" />
+            <local:ScrollSwitchItem Background="{Binding ContentColor.Item1}" x:Name="Control3"  />
+        </Grid>
+    </Grid>
+</UserControl>

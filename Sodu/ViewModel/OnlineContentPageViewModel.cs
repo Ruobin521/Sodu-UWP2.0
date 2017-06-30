@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.Graphics.Display;
@@ -17,6 +18,7 @@ using Windows.UI;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
+using GalaSoft.MvvmLight.Messaging;
 using GalaSoft.MvvmLight.Threading;
 using Sodu.ContentPageControl;
 using Sodu.Core.Config;
@@ -35,7 +37,6 @@ namespace Sodu.ViewModel
     {
         #region 属性
 
-        private SwitchPageControl SwitchControl { get; set; }
 
         /// <summary>
         /// 缓存数据（url,pages ,content）
@@ -47,7 +48,7 @@ namespace Sodu.ViewModel
         /// </summary>
         private bool IsLoadingCatalogData { get; set; }
 
-        private bool IsPreLoadingCatalog { get; set; }
+        public bool IsPreLoadingCatalog { get; set; }
 
 
 
@@ -66,8 +67,6 @@ namespace Sodu.ViewModel
             set
             {
                 Set(ref _currentCatalog, value);
-
-                PreLoadPreAndNextCatalog();
             }
         }
 
@@ -83,52 +82,6 @@ namespace Sodu.ViewModel
 
 
 
-        private ObservableCollection<BookCatalog> _bookCatalogs;
-        /// <summary>
-        ///目录列表
-        /// </summary>
-        public ObservableCollection<BookCatalog> BookCatalogs
-        {
-            get
-            {
-                return _bookCatalogs ?? (_bookCatalogs = new ObservableCollection<BookCatalog>());
-            }
-            set { Set(ref _bookCatalogs, value); }
-        }
-
-
-
-        private List<string> _catalogContents;
-        /// <summary>
-        /// 
-        /// </summary>
-        public List<string> CatalogContents
-        {
-            get
-            {
-                return _catalogContents ?? (_catalogContents = new List<string>());
-            }
-            set { Set(ref _catalogContents, value); }
-        }
-
-
-
-        private List<string> _contentPages;
-        /// <summary>
-        ///当前章节分页内容
-        /// </summary>
-        public List<string> ContentPages
-        {
-            get
-            {
-                return _contentPages ?? (_contentPages = new List<string>());
-            }
-            set { Set(ref _contentPages, value); }
-        }
-
-
-
-
         private string _contentText;
         /// <summary>
         ///当前章节内容（未分页）
@@ -139,8 +92,22 @@ namespace Sodu.ViewModel
             set
             {
                 Set(ref _contentText, value);
+
             }
         }
+
+        private int _catalogCount;
+
+        public int CatalogCount
+        {
+            get { return _catalogCount; }
+            set
+            {
+                Set(ref _catalogCount, value);
+            }
+        }
+
+
 
         private bool _isRetry;
         /// <summary>
@@ -232,6 +199,7 @@ namespace Sodu.ViewModel
             HideStatusBar(true);
         }
 
+
         public void LoadData(Book book)
         {
             CurrentBook = book.Clone();
@@ -243,7 +211,7 @@ namespace Sodu.ViewModel
             };
 
             CurrentCatalog = catalog;
-            SetCatalogData(catalog);
+            SetCatalogsData(catalog);
             SetCurrentContent(catalog);
         }
 
@@ -255,28 +223,32 @@ namespace Sodu.ViewModel
             }
 
             CurrentCatalog = catalog;
-            var value = await GetCatalogContent(catalog, true);
+            PreLoadPreAndNextCatalog();
 
+            var value = await GetCatalogContent(catalog, true);
             if (value != null)
             {
-                ContentPages = value.Item1;
                 ContentText = value.Item2;
-                SwitchControl.SetCurrentText();
                 CurrentBook.LastReadChapterName = catalog.CatalogName;
                 CurrentBook.LastReadChapterUrl = catalog.CatalogUrl;
                 UpdateHistory();
-                PreLoadPreAndNextCatalog();
             }
             else
             {
                 IsRetry = true;
                 ContentText = "";
-                ContentPages.Clear();
             }
+
+            Messenger.Default.Send(ContentText, "ContentTextChanged");
         }
 
         private void PreLoadPreAndNextCatalog()
         {
+            if (CurrentBook == null)
+            {
+                return;
+            }
+
             if (IsPreLoadingCatalog || CurrentBook.CatalogList == null || CurrentBook.CatalogList.Count == 0)
             {
                 return;
@@ -332,7 +304,19 @@ namespace Sodu.ViewModel
             }
         }
 
-        public async Task<Tuple<List<string>, string>> GetCatalogDataByDirection(CatalogDirection dir, bool isShowLoading = false)
+
+        public async Task<Tuple<List<string>,BookCatalog>> GetCatalogPagesByDirection(CatalogDirection dir, bool isShowLoading = false)
+        {
+            var catalog = GetCatalogByDirction(dir);
+            if (catalog == null)
+            {
+                return null;
+            }
+            var value = await GetCatalogContent(catalog.Item2, isShowLoading);
+            return  new Tuple<List<string>, BookCatalog>(value.Item1, catalog.Item2);
+        }
+
+        public async Task<Tuple<List<string>, string, BookCatalog>> GetCatalogDataByDirection(CatalogDirection dir, bool isShowLoading = false)
         {
             var catalog = GetCatalogByDirction(dir);
             if (catalog == null)
@@ -341,7 +325,7 @@ namespace Sodu.ViewModel
             }
 
             var value = await GetCatalogContent(catalog.Item2, isShowLoading);
-            return value;
+            return new Tuple<List<string>, string, BookCatalog>(value.Item1, value.Item2, catalog.Item2);
         }
 
         public Tuple<int, BookCatalog> GetCatalogByDirction(CatalogDirection dir)
@@ -353,9 +337,14 @@ namespace Sodu.ViewModel
 
             var temp = CurrentBook.CatalogList.FirstOrDefault(p => p.CatalogUrl == CurrentCatalog.CatalogUrl);
 
-            if (temp == null)
+            if (temp == null && dir == CatalogDirection.Next)
             {
                 return new Tuple<int, BookCatalog>(CurrentBook.CatalogList.Count - 1, CurrentBook.CatalogList.LastOrDefault());
+            }
+
+            if (temp == null && dir == CatalogDirection.Current)
+            {
+                return new Tuple<int, BookCatalog>(0, CurrentCatalog);
             }
 
             var index = CurrentBook.CatalogList.IndexOf(temp);
@@ -398,6 +387,7 @@ namespace Sodu.ViewModel
             Tuple<List<string>, string> value = null;
             try
             {
+
                 if (showLoading)
                 {
                     DispatcherHelper.CheckBeginInvokeOnUI(() =>
@@ -410,17 +400,27 @@ namespace Sodu.ViewModel
                 {
                     try
                     {
-                        string html;
-                        List<string> list;
                         if (DicContentCache.ContainsKey(catalog.CatalogUrl))
                         {
                             value = DicContentCache[catalog.CatalogUrl];
+
+                            if ((value.Item1 == null || value.Item1.Count == 0) && !string.IsNullOrEmpty(value.Item2))
+                            {
+                                var pages = await SplitContentToPages(value.Item2);
+                                var temp = new Tuple<List<string>, string>(pages, value.Item2);
+                                DicContentCache[catalog.CatalogUrl] = temp;
+                                value = temp;
+                                return;
+                            }
                             return;
                         }
+
+                        string html;
+                        List<string> list;
                         if (CurrentBook.IsLocal)
                         {
                             html = await GetCatalogContentFormDb(catalog);
-                            list = SplitContentToPages(html);
+                            list = await SplitContentToPages(html);
                             if (html != null && list != null)
                             {
                                 value = new Tuple<List<string>, string>(list, html);
@@ -433,7 +433,7 @@ namespace Sodu.ViewModel
                         }
 
                         html = await GetCatalogContentFromWeb(catalog);
-                        list = SplitContentToPages(html);
+                        list = await SplitContentToPages(html);
                         if (html != null && list != null)
                         {
                             value = new Tuple<List<string>, string>(list, html);
@@ -466,7 +466,7 @@ namespace Sodu.ViewModel
         }
 
 
-        public void SetCatalogData(BookCatalog catalog)
+        public void SetCatalogsData(BookCatalog catalog)
         {
             //本地书架
             if (CurrentBook.IsLocal)
@@ -517,8 +517,10 @@ namespace Sodu.ViewModel
                     if (temp != null)
                     {
                         CurrentCatalog = temp;
-                        PreLoadPreAndNextCatalog();
+                        // PreLoadPreAndNextCatalog();
                     }
+
+                    CatalogCount = CurrentBook.CatalogList.Count;
                 }
                 CurrentBook.Description = value.Item2;
                 CurrentBook.Cover = value.Item3;
@@ -573,21 +575,9 @@ namespace Sodu.ViewModel
         }
 
 
-        public void SetSwihchControl(SwitchPageControl control)
+        public List<string> GetCatalogPagesFormDicrionary(string url)
         {
-            SwitchControl = control;
-        }
-
-
-        private List<string> SplitContentToPages(string html)
-        {
-            var list = new List<string>();
-
-            for (int i = 0; i < 10; i++)
-            {
-                list.Add(html);
-            }
-            return list;
+            return DicContentCache.ContainsKey(url) ? DicContentCache[url].Item1 : null;
         }
 
 
@@ -595,7 +585,173 @@ namespace Sodu.ViewModel
         {
             base.OnBackCommand(obj);
             ShowStatusBar();
+            ResDeta();
         }
+
+
+        private void ResDeta()
+        {
+            PageIndex = 0;
+            PageCount = 0;
+            CatalogCount = 0;
+
+
+            CurrentBook = null;
+            CurrentCatalog = null;
+            ContentText = null;
+
+            DicContentCache.Clear();
+        }
+        #endregion
+
+
+        #region 分页相关
+
+
+
+        public async void ResizePageContent()
+        {
+            for (int i = 0; i < DicContentCache.Count; i++)
+            {
+                var tuple = DicContentCache[DicContentCache.Keys.ToList()[i]];
+
+                DicContentCache[DicContentCache.Keys.ToList()[i]] = new Tuple<List<string>, string>(new List<string>(), tuple.Item2);
+            }
+
+            var pages = await SplitContentToPages(ContentText);
+
+            if (pages == null)
+            {
+                return;
+            }
+            DicContentCache[CurrentCatalog.CatalogUrl] = new Tuple<List<string>, string>(pages, ContentText);
+
+            if (PageIndex > pages.Count - 1)
+            {
+                PageIndex = pages.Count - 1;
+            }
+            PageCount = pages.Count;
+
+            Messenger.Default.Send(ContentText, "ContentTextChanged");
+        }
+
+
+        /// <summary>
+        /// 将html分页
+        /// </summary>
+        /// <param name="html"></param>
+        /// <returns></returns>
+        private async Task<List<string>> SplitContentToPages(string html)
+        {
+            List<string> list = null;
+            await Task.Run(async () =>
+          {
+              Tuple<double, double> size = null;
+
+              await App.RootFrame.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+             {
+                 var content = NavigationService.ContentFrame.Content as OnlineContentPage;
+                 if (content == null)
+                 {
+                     return;
+                 }
+                 size = content.GetControlSize();
+             });
+
+              if (size != null)
+              {
+                  list = GetSplitContentPages(html, size.Item1, size.Item2, FontSize, LineHeight);
+              }
+          });
+            return list;
+        }
+
+        private List<string> SplitString(string str)
+        {
+            if (string.IsNullOrEmpty(str))
+            {
+                return null;
+            }
+
+            List<string> strList = new List<string>();
+            string[] lists = str.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
+            for (int i = 0; i < lists.Count(); i++)
+            {
+                if (!string.IsNullOrEmpty(lists[i]) && !string.IsNullOrEmpty(lists[i].Trim()))
+                {
+                    strList.Add("　　" + lists[i].Trim());
+                }
+            }
+            return strList;
+        }
+
+        private List<string> GetSplitContentPages(string html, double containerWidth, double containerHeight, double fontSize, double lineHeight)
+        {
+            var list = SplitString(html);
+
+            if (list == null || list.Count == 0)
+            {
+                return null;
+            }
+            var paragraphs = list;
+
+            int linesCount = (int)(containerHeight / lineHeight);
+            int perLineCount = (int)(containerWidth / fontSize);
+
+
+            if ((containerHeight % lineHeight) / lineHeight > 0.8)
+            {
+                linesCount = linesCount + 1;
+            }
+            List<string> pages = new List<string>();
+
+            try
+            {
+                int i = 0;
+                string tempPageContent = string.Empty;
+                for (int j = 0; j < paragraphs.Count; j++)
+                {
+                    string str = paragraphs[j];
+                    string lineStr = string.Empty;
+                    var chars = str.ToArray();
+                    var tempList = chars.ToList();
+
+                    //将一段内容逐字符添加到内容中
+                    for (int m = 0; m < tempList.Count; m++)
+                    {
+                        var word = tempList[m];
+                        lineStr += word;
+                        //换行
+                        if (lineStr.Length == perLineCount || m == tempList.Count - 1)
+                        {
+                            //将一行内容添加到当前分页中
+                            tempPageContent += lineStr + "\r";
+                            lineStr = string.Empty;
+                            i++;
+                            //如果一页内容填满就添加下一页
+                            if (i == linesCount)
+                            {
+                                pages.Add(tempPageContent);
+                                tempPageContent = string.Empty;
+                                i = 0;
+                            }
+                        }
+                    }
+
+                    if (j == paragraphs.Count - 1 && !string.IsNullOrEmpty(tempPageContent))
+                    {
+                        pages.Add(tempPageContent);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+            return pages;
+        }
+
+
 
         #endregion
 
@@ -761,7 +917,7 @@ namespace Sodu.ViewModel
                     return;
                 }
                 Set(ref _isScroll, value);
-                AppSettingService.SetKeyValue(SettingKey.LightValue, value);
+                AppSettingService.SetKeyValue(SettingKey.IsScroll, value);
 
             }
         }
@@ -780,6 +936,8 @@ namespace Sodu.ViewModel
                            {
                                LineHeight = LineHeight + 1;
                            }
+
+                           ResizePageContent();
                        }));
 
 
@@ -797,6 +955,8 @@ namespace Sodu.ViewModel
                          {
                              FontSize = FontSize - 1;
                          }
+
+                         ResizePageContent();
                      }));
 
 
@@ -883,6 +1043,8 @@ namespace Sodu.ViewModel
             //横屏模式
             IsLandscape = AppSettingService.GetBoolKeyValue(SettingKey.IsLandscape);
 
+            //滚动阅读
+            IsScroll = AppSettingService.GetBoolKeyValue(SettingKey.IsScroll);
 
         }
 

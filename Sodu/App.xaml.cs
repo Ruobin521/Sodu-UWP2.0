@@ -51,7 +51,6 @@ namespace Sodu
             var package = Windows.ApplicationModel.Package.Current;
 
             IsPro = package.DisplayName.Equals("小说搜索阅读 UWP");
-
             if (!IsPro)
             {
                 CookieHelper.SetCookie(SoduPageValue.HomePage, false);

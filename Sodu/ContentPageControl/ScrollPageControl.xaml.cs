@@ -14,6 +14,9 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using GalaSoft.MvvmLight.Messaging;
+using GalaSoft.MvvmLight.Threading;
+using Sodu.View;
 using Sodu.ViewModel;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
@@ -22,6 +25,7 @@ namespace Sodu.ContentPageControl
 {
     public sealed partial class ScrollPageControl : Windows.UI.Xaml.Controls.UserControl
     {
+
         private bool IsLoading { get; set; }
 
         public ScrollPageControl()
@@ -29,47 +33,56 @@ namespace Sodu.ContentPageControl
             this.InitializeComponent();
             Viewer.ViewChanged += Viewer_ViewChanged;
 
-
-            ContentText.DataContextChanged += ContentText_DataContextChanged;
+            Messenger.Default.Register<string>(this, "ContentTextChanged", UpdateScrollContent);
         }
 
-        private async void ContentText_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
+        private async void UpdateScrollContent(string str)
         {
+            IsLoading = true;
+
             var windowHeight = Window.Current.Bounds.Height;
 
-            if (ContentText.DataContext == null)
+            ContentText.Text = "";
+            ContentText.Height = double.NaN;
+            await Task.Delay(1);
+
+            Viewer.ChangeView(0, 0, null, true);
+
+            if (string.IsNullOrEmpty(str))
             {
-                ContentText.Text = "";
                 ContentText.Height = windowHeight + 200;
-                await Task.Delay(2);
-                Viewer.ChangeView(0, 40, null, false);
+                await Task.Delay(1);
             }
             else
             {
-                ContentText.Height = double.NaN;
-                ContentText.Text = ContentText.DataContext.ToString();
-                await Task.Delay(2);
+                ContentText.Text = str;
+                await Task.Delay(1);
                 var textHeight = ContentText.ActualHeight;
                 if (textHeight < windowHeight + 100)
                 {
                     ContentText.Height = windowHeight + 200;
-
-                    await Task.Delay(2);
-
-                    //  ContentText.Height = windowHeight + 500;
                 }
                 else
                 {
                     ContentText.Height = textHeight;
                 }
-
-                Viewer.ChangeView(0, 40, null, true);
+                await Task.Delay(1);
             }
+
+            Viewer.ChangeView(0, 50, null, Viewer.VerticalOffset > 50);
+            IsLoading = false;
         }
 
 
-        private async void Viewer_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
+
+        private void Viewer_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
         {
+            var vm = (OnlineContentPageViewModel)DataContext;
+
+            if (IsLoading || vm.IsLoading)
+            {
+                return;
+            }
 
             //所有内容垂直高度 - 当前滚动的高度
             var v1 = Viewer.ExtentHeight - Viewer.VerticalOffset;
@@ -82,16 +95,7 @@ namespace Sodu.ContentPageControl
             {
                 if (!e.IsIntermediate)
                 {
-                    if (IsLoading)
-                    {
-                        return;
-                    }
-
-                    Debug.WriteLine("------------------------------上一章");
-                    IsLoading = true;
-                    (DataContext as OnlineContentPageViewModel)?.SwitchCatalog(CatalogDirection.Pre);
-                    await Task.Delay(5);
-                    IsLoading = false;
+                    SwitchToPre();
                 }
             }
 
@@ -99,19 +103,52 @@ namespace Sodu.ContentPageControl
             {
                 if (!e.IsIntermediate)
                 {
-                    if (IsLoading)
-                    {
-                        return;
-                    }
-
-                    IsLoading = true;
-                    Debug.WriteLine("----------------------------------------下一章");
-                    (DataContext as OnlineContentPageViewModel)?.SwitchCatalog(CatalogDirection.Next);
-                    await Task.Delay(5);
-                    IsLoading = false;
-
-                    Debug.WriteLine("-------------------------------------" + Viewer.VerticalOffset);
+                    SwitchToNext();
                 }
+            }
+        }
+
+
+        private async void SwitchToPre()
+        {
+            var vm = (OnlineContentPageViewModel)DataContext;
+
+            if (IsLoading)
+            {
+                return;
+            }
+
+            vm.SwitchCatalog(CatalogDirection.Pre);
+            await Task.Delay(5);
+
+        }
+
+        private async void SwitchToNext()
+        {
+            var vm = (OnlineContentPageViewModel)DataContext;
+            try
+            {
+                if (IsLoading)
+                {
+                    return;
+                }
+                var value = vm.GetCatalogByDirction(CatalogDirection.Next);
+
+                if (value == null)
+                {
+                    await Task.Delay(10);
+                    NavigationService.NavigateTo(typeof(CatalogPage));
+                }
+                else
+                {
+                    vm.SwitchCatalog(CatalogDirection.Next);
+                    await Task.Delay(5);
+                }
+
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
             }
         }
     }
