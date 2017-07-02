@@ -1,5 +1,6 @@
 ﻿using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -7,6 +8,8 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
+using Sodu.Core.Extend;
+
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -29,7 +32,7 @@ namespace Sodu.Control
             this.Loaded += PopupWindow_Loaded;
             //this.Unloaded += PopupWindow_Unloaded;
         }
-        public PopupWindow(string message, VerticalAlignment vertical = VerticalAlignment.Top, HorizontalAlignment horizontal = HorizontalAlignment.Right) : this()
+        public PopupWindow(string message, bool isSuccess, VerticalAlignment vertical = VerticalAlignment.Top, HorizontalAlignment horizontal = HorizontalAlignment.Right) : this()
         {
             this.txtMessage = message;
 
@@ -55,6 +58,14 @@ namespace Sodu.Control
                 top = Window.Current.Bounds.Height - 10;
             }
 
+            if (!isSuccess)
+            {
+                mainGrid.Background = new SolidColorBrush(Color.FromArgb(200, 0, 0, 0));
+            }
+            else
+            {
+                mainGrid.Background = new SolidColorBrush().ConverterFromString("#FF3388FF");
+            }
             m_Popup.Margin = new Thickness(left, top, 0, 0);
         }
 
@@ -69,6 +80,7 @@ namespace Sodu.Control
             this.tb_Notify.Text = this.txtMessage;
             this.storyBoard = this.tb_Notify_in;
             this.easeKeyframe.Value = -(this.tb_Notify.Text.Length * 16 > 150 ? this.tb_Notify.Text.Length * this.tb_Notify.FontSize : 150);
+            this.easeKeyframe2.Value = -(this.tb_Notify.Text.Length * 16 > 150 ? this.tb_Notify.Text.Length * this.tb_Notify.FontSize : 150);
             this.storyBoard.Completed += StoryBoard_Completed;
             this.storyBoard.Begin();
         }

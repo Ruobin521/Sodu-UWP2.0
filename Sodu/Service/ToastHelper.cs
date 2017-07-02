@@ -10,11 +10,11 @@ namespace Sodu.Service
 {
     public class ToastHelper
     {
-        public static void ShowMessage(string message)
+        public static void ShowMessage(string message,bool isSuccess = true)
         {
             DispatcherHelper.CheckBeginInvokeOnUI(() =>
             {
-                var popup = new PopupWindow(message);
+                var popup = new PopupWindow(message,isSuccess);
                 popup.ShowWindow();
             });
         }

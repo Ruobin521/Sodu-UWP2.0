@@ -47,6 +47,13 @@ namespace Sodu.UserControl
             {
                 this.RightTapped += LocalBookItem_RightTapped;
             }
+
+            RootGrid.Tapped += RootGrid_Tapped;
+        }
+
+        private void RootGrid_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            Command?.Execute(CommandParameter);
         }
 
         private void LocalBookItem_RightTapped(object sender, RightTappedRoutedEventArgs e)

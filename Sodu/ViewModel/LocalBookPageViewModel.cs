@@ -6,12 +6,16 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Windows.Storage;
+using Windows.Storage.Pickers;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Threading;
 using Newtonsoft.Json;
 using Sodu.Core.Config;
 using Sodu.Core.DataBase;
 using Sodu.Core.Entity;
+using Sodu.Service;
+using Sodu.View;
 
 namespace Sodu.ViewModel
 {
@@ -46,7 +50,28 @@ namespace Sodu.ViewModel
 
         private void OnDeleteCommand(object obj)
         {
+            var localItem = obj as LocalBookItemViewModel;
+            if (localItem == null)
+            {
+                return;
+            }
 
+            Task.Run(() =>
+            {
+                var reslut = DbLocalBook.DeleteBook(AppDataPath.GetLocalBookDbPath(),
+               localItem.CurrentBook.BookId);
+
+                DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                {
+                    if (!reslut)
+                    {
+                        ToastHelper.ShowMessage($"{localItem.CurrentBook.BookName}删除失败，请重试", false);
+                        return;
+                    }
+                    localItem.IsDeleted = true;
+                    LocalBooks.Remove(localItem);
+                });
+            });
         }
 
 
@@ -57,12 +82,54 @@ namespace Sodu.ViewModel
         {
             var localBookl = obj as LocalBookItemViewModel;
 
-            if (localBookl?.CurrentBook != null)
+            if (localBookl?.CurrentBook == null || (bool)!localBookl?.CurrentBook?.IsNew)
             {
-                localBookl.CurrentBook.IsNew = false;
+                return;
+            }
+            localBookl.CurrentBook.IsNew = false;
+            DbLocalBook.InsertOrUpdatBook(AppDataPath.GetLocalBookDbPath(), localBookl.CurrentBook);
+        }
+
+        private ICommand _addTxtCommand;
+        public ICommand AddTxtCommand => _addTxtCommand ?? (_addTxtCommand = new RelayCommand<object>(OnAddTxtCommand));
+
+        private async void OnAddTxtCommand(object obj)
+        {
+            ToastHelper.ShowMessage("点击添加Txt文件");
+
+            FileOpenPicker openFile = new FileOpenPicker();
+            openFile.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+            openFile.ViewMode = PickerViewMode.List;
+            openFile.FileTypeFilter.Add(".txt");
+
+            // 选取单个文件
+            StorageFile file = await openFile.PickSingleFileAsync();
+            if (file != null)
+            {
+                var str = "你所选择的文件是： " + file.Name;
+
+                ToastHelper.ShowMessage(str);
+            }
+            else
+            {
+                var str = "打开文件操作被取消。";
+                ToastHelper.ShowMessage(str);
             }
         }
 
+        public override void OnItemClickCommand(object obj)
+        {
+            var localbook = obj as LocalBookItemViewModel;
+            if (localbook?.CurrentBook == null)
+            {
+                return;
+            }
+            localbook.CurrentBook.IsLocal = true;
+            localbook.CurrentBook.IsNew = false;
+            NavigationService.NavigateTo(typeof(OnlineContentPage));
+            ViewModelInstance.Instance.OnlineBookContent.ResDeta();
+            ViewModelInstance.Instance.OnlineBookContent.LoadData(localbook.CurrentBook);
+        }
 
 
         #endregion
@@ -102,7 +169,7 @@ namespace Sodu.ViewModel
 
         private void GetLocalBookFromDb()
         {
-
+            LocalBooks.Clear();
             Task.Run(async () =>
             {
                 await Task.Delay(100);
@@ -112,24 +179,32 @@ namespace Sodu.ViewModel
                     return;
                 }
 
-                DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                foreach (var book in list)
                 {
-                    LocalBooks.Clear();
-                    foreach (var book in list)
+                    var localVm = new LocalBookItemViewModel()
                     {
-                        var localVm = new LocalBookItemViewModel()
-                        {
-                            CurrentBook = book
-                        };
+                        CurrentBook = book
+                    };
+                    DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                    {
                         LocalBooks.Add(localVm);
-                    }
-                });
+                    });
+
+                    localVm.CheckUpdate();
+                }
             });
+
 
         }
 
         public override void OnRefreshCommand(object obj)
         {
+            if (LocalBooks.Any(p => p.IsUpdating == true))
+            {
+                ToastHelper.ShowMessage("正在更新数据，请稍后刷新");
+                return;
+            }
+
             GetLocalBookFromDb();
         }
 
@@ -148,7 +223,11 @@ namespace Sodu.ViewModel
                 LocalBooks.Remove(temp);
             }
 
-            LocalBooks.Add(new LocalBookItemViewModel(book));
+            DispatcherHelper.CheckBeginInvokeOnUI(() =>
+            {
+                LocalBooks.Insert(0, new LocalBookItemViewModel(book));
+
+            });
         }
 
         public int GetLocalBooksCount()

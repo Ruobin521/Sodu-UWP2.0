@@ -2443,7 +2443,8 @@
         "type": "project",
         "framework": "UAP,Version=v10.0",
         "dependencies": {
-          "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2"
+          "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2",
+          "Sodu.Core": "1.0.0"
         }
       },
       "Sodu.Core/1.0.0": {
@@ -4953,7 +4954,8 @@
         "type": "project",
         "framework": "UAP,Version=v10.0",
         "dependencies": {
-          "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2"
+          "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2",
+          "Sodu.Core": "1.0.0"
         }
       },
       "Sodu.Core/1.0.0": {
@@ -7502,7 +7504,8 @@
         "type": "project",
         "framework": "UAP,Version=v10.0",
         "dependencies": {
-          "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2"
+          "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2",
+          "Sodu.Core": "1.0.0"
         }
       },
       "Sodu.Core/1.0.0": {
@@ -10021,7 +10024,8 @@
         "type": "project",
         "framework": "UAP,Version=v10.0",
         "dependencies": {
-          "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2"
+          "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2",
+          "Sodu.Core": "1.0.0"
         }
       },
       "Sodu.Core/1.0.0": {
@@ -12579,7 +12583,8 @@
         "type": "project",
         "framework": "UAP,Version=v10.0",
         "dependencies": {
-          "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2"
+          "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2",
+          "Sodu.Core": "1.0.0"
         }
       },
       "Sodu.Core/1.0.0": {
@@ -15098,7 +15103,8 @@
         "type": "project",
         "framework": "UAP,Version=v10.0",
         "dependencies": {
-          "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2"
+          "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2",
+          "Sodu.Core": "1.0.0"
         }
       },
       "Sodu.Core/1.0.0": {
@@ -17656,7 +17662,8 @@
         "type": "project",
         "framework": "UAP,Version=v10.0",
         "dependencies": {
-          "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2"
+          "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2",
+          "Sodu.Core": "1.0.0"
         }
       },
       "Sodu.Core/1.0.0": {

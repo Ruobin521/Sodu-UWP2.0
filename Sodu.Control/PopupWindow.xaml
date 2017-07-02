@@ -16,20 +16,6 @@
                           Visibility="Visible">
             <Border.Resources>
                 <Storyboard x:Name="tb_Notify_in">
-                    <!--<ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="mainGrid" Storyboard.TargetProperty="(UIElement.Visibility)">
-                        <DiscreteObjectKeyFrame KeyTime="00:00:00">
-                            <DiscreteObjectKeyFrame.Value>
-                                <Visibility>Visible</Visibility>
-                            </DiscreteObjectKeyFrame.Value>
-                        </DiscreteObjectKeyFrame>
-
-                        <DiscreteObjectKeyFrame KeyTime="00:00:2">
-                            <DiscreteObjectKeyFrame.Value>
-                                <Visibility>Collapsed</Visibility>
-                            </DiscreteObjectKeyFrame.Value>
-                        </DiscreteObjectKeyFrame>
-                    </ObjectAnimationUsingKeyFrames>-->
-
                     <DoubleAnimationUsingKeyFrames Storyboard.TargetName="GridTrans"
                                 Storyboard.TargetProperty="X">
                         <EasingDoubleKeyFrame KeyTime="0" Value="0">
@@ -37,19 +23,14 @@
                                 <BackEase EasingMode="EaseOut" />
                             </EasingDoubleKeyFrame.EasingFunction>
                         </EasingDoubleKeyFrame>
-                        <!--<EasingDoubleKeyFrame KeyTime="0:0:1" Value="-100">
-                            <EasingDoubleKeyFrame.EasingFunction>
-                                <BackEase EasingMode="EaseOut" Amplitude="0.3"/>
-                            </EasingDoubleKeyFrame.EasingFunction>
-                        </EasingDoubleKeyFrame>-->
-                        <EasingDoubleKeyFrame KeyTime="0:0:1" x:Name="easeKeyframe" Value="-150">
+                        <EasingDoubleKeyFrame KeyTime="0:0:1.5" x:Name="easeKeyframe" Value="-150">
                             <EasingDoubleKeyFrame.EasingFunction>
                                 <BackEase EasingMode="EaseOut" Amplitude="0.5" />
                             </EasingDoubleKeyFrame.EasingFunction>
                         </EasingDoubleKeyFrame>
-                        <EasingDoubleKeyFrame KeyTime="0:0:1.3"   Value="-170">
+                        <EasingDoubleKeyFrame KeyTime="0:0:2.5"  x:Name="easeKeyframe2" Value="-170">
                         </EasingDoubleKeyFrame>
-                        <EasingDoubleKeyFrame KeyTime="0:0:2" Value="0">
+                        <EasingDoubleKeyFrame KeyTime="0:0:2.8" Value="0">
                             <EasingDoubleKeyFrame.EasingFunction>
                                 <BackEase EasingMode="EaseOut" Amplitude="0.5"  />
                             </EasingDoubleKeyFrame.EasingFunction>

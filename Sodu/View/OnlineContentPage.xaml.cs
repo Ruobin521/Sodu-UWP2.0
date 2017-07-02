@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Windows.UI;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
@@ -40,6 +42,21 @@ namespace Sodu.View
             NavigationCacheMode = NavigationCacheMode.Enabled;
 
             this.Loaded += OnlineContentPage_Loaded;
+            this.Unloaded += OnlineContentPage_Unloaded;
+        }
+
+        private void OnlineContentPage_Unloaded(object sender, RoutedEventArgs e)
+        {
+            var content = NavigationService.ContentFrame.Content;
+
+            if (content is CatalogPage)
+            {
+                App.ShowStatusBar(true);
+            }
+            else
+            {
+                App.ShowStatusBar(false);
+            }
         }
 
         private void MenuBarHide_Completed(object sender, object e)
@@ -63,6 +80,10 @@ namespace Sodu.View
 
             Task.Run(() =>
             {
+                if (ViewModelInstance.Instance.OnlineBookContent.CurrentBook == null)
+                {
+                    return;
+                }
                 var bookId = ViewModelInstance.Instance.OnlineBookContent.CurrentBook.BookId;
 
                 var ifExist = ViewModelInstance.Instance.LocalBookPage.CheckBookExist(bookId);
@@ -78,7 +99,9 @@ namespace Sodu.View
         private void OnlineContentPage_Loaded(object sender, RoutedEventArgs e)
         {
             SetMenuVisibility(false);
+            App.HideStatusBar(true);
         }
+
 
         private void UIElement_OnTapped(object sender, TappedRoutedEventArgs e)
         {
@@ -138,7 +161,7 @@ namespace Sodu.View
             SetMenuVisibility(false);
         }
 
-        public Tuple<double,double> GetControlSize()
+        public Tuple<double, double> GetControlSize()
         {
             return SwitchControl.GetControlSize();
         }

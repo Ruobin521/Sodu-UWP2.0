@@ -135,6 +135,9 @@
     <Compile Include="UserControl\CoverImage.xaml.cs">
       <DependentUpon>CoverImage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControl\DownloadItem.xaml.cs">
+      <DependentUpon>DownloadItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControl\HistoryItem.xaml.cs">
       <DependentUpon>HistoryItem.xaml</DependentUpon>
     </Compile>
@@ -154,6 +157,7 @@
       <DependentUpon>TopNavigationBar.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\BasePageViewModel.cs" />
+    <Compile Include="ViewModel\DownloadCenterPageViewModel.cs" />
     <Compile Include="ViewModel\HistoryPageViewModel.cs" />
     <Compile Include="ViewModel\HotAndRecommendPageViewModel.cs" />
     <Compile Include="ViewModel\LocalBookItemViewModel.cs" />
@@ -305,6 +309,10 @@
     <Page Include="UserControl\CoverImage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControl\DownloadItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControl\HistoryItem.xaml">
       <SubType>Designer</SubType>

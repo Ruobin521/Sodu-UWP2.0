@@ -29,10 +29,5 @@ namespace Sodu.View
             base.CurrentListView = BookListView;
         }
 
-        private void BookListView_OnItemClick(object sender, ItemClickEventArgs e)
-        {
-            var item = e.ClickedItem as OnlineBookShelfItem;
-            throw new NotImplementedException();
-        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,6 +43,7 @@ namespace Sodu.Core.HtmlService
         /// <returns></returns>
         public static async Task<string> GetCatalogContent(string url)
         {
+            Debug.WriteLine(url);
             var html = await GetHtmlByUrl(url);
             html = AnalisysSourceHtmlHelper.AnalisysHtml(url, html, AnalisysType.Content)?.ToString();
             return html;
@@ -57,14 +59,26 @@ namespace Sodu.Core.HtmlService
         /// 解析目录页数据
         /// </summary>
         /// <param name="url"></param>
+        /// <param name="bookId"></param>
         /// <returns>目录列表，简介，封面地址,作者</returns>
-        public static async Task<Tuple<List<BookCatalog>, string, string, string>> GetCatalogPageData(string url)
+        public static async Task<Tuple<List<BookCatalog>, string, string, string>> GetCatalogPageData(string url, string bookId)
         {
             var html = await GetHtmlByUrl(url);
 
             var value = AnalisysSourceHtmlHelper.AnalisysHtml(url, html, AnalisysType.CatalogPageData);
 
-            return value as Tuple<List<BookCatalog>, string, string, string>;
+            var reslut = value as Tuple<List<BookCatalog>, string, string, string>;
+
+            if (reslut?.Item1 == null || reslut.Item1.Count == 0)
+            {
+                return null;
+            }
+
+            foreach (var bookCatalog in reslut.Item1)
+            {
+                bookCatalog.BookId = bookId;
+            }
+            return reslut;
         }
     }
 }

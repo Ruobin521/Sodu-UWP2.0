@@ -50,7 +50,7 @@ namespace Sodu.Core.Util
         }
 
 
-        public static async void SaveHttpImage(string folder, string fileName, string url)
+        public static async void SaveHttpImage(string folder, string fileName, string url,Action action = null)
         {
             try
             {
@@ -78,6 +78,8 @@ namespace Sodu.Core.Util
                     read.ReadBytes(temp);
 
                     await FileIO.WriteBytesAsync(file, temp);
+
+                    action?.Invoke();
                 }
             }
 

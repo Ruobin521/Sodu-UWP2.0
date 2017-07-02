@@ -152,7 +152,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\Icon\close_in%403x.png" />
+    <ProjectReference Include="..\Sodu.Core\Sodu.Core.csproj">
+      <Project>{194fa0a1-1ced-41b8-a03d-33e50e9219ac}</Project>
+      <Name>Sodu.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

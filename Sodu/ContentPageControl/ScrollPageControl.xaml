@@ -31,22 +31,17 @@
                 <Run Text="{Binding BatteryValue}" ></Run>
             </TextBlock>
 
-            <TextBlock Style="{StaticResource InfoTextStyle}" HorizontalAlignment="Center"  >
-                  <Run Text="55"></Run>
-                  <Run Text="/"></Run>
-                  <Run Text="1000"></Run>
-            </TextBlock>
-
             <TextBlock  Style="{StaticResource InfoTextStyle}"  HorizontalAlignment="Right"  Margin="0,0,10,0">
-                  <Run Text="55"></Run>
+                  <Run Text="{Binding CurrentCatalog.Index}"></Run>
                   <Run Text="/"></Run>
-                  <Run Text="1000"></Run>
+                  <Run Text="{Binding   CatalogCount}"></Run>
             </TextBlock>
         </Grid>
 
-        <ScrollViewer   ManipulationMode="System,TranslateX"  x:Name="Viewer" Canvas.ZIndex="-1"   Padding="8,2" Grid.Row="1" Style="{StaticResource ContentScrollViewerStyle}" >
+        <ScrollViewer   ManipulationMode="System,TranslateX"  x:Name="Viewer" Canvas.ZIndex="-1"   Grid.Row="1" Style="{StaticResource ContentScrollViewerStyle}" >
             <TextBlock  x:Name="ContentText" 
-                           Padding="0,60,0,100"
+                        Text="{Binding CurrentCatalogContent, Mode=OneWay}"
+                           Margin="12,60,5,80"
                            TextWrapping="Wrap" LineHeight="{Binding Instance.OnlineBookContent.LineHeight,Source={StaticResource Locator}}" 
                            Foreground="{Binding Instance.OnlineBookContent.ContentColor.Item2,Source={StaticResource Locator}}"
                            FontSize="{Binding Instance.OnlineBookContent.FontSize,Source={StaticResource Locator}}"

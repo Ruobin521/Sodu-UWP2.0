@@ -34,9 +34,9 @@
                 </AppBarButton.Content>
             </AppBarButton>
 
-            <AppBarButton   Grid.Column="2"  Foreground="White" Command="{Binding ClearAllCommand}" RenderTransformOrigin="0.5,0.5" >
+            <AppBarButton   Grid.Column="2"  Width="80" Foreground="White" Command="{Binding ClearAllCommand}"   RenderTransformOrigin="0.5,0.5" >
                 <AppBarButton.Content>
-                    <TextBlock Text="清空记录" Foreground="White" VerticalAlignment="Center" Margin="0,0"></TextBlock>
+                    <TextBlock Text="清空记录" Foreground="White" TextAlignment="Center" Width="80" VerticalAlignment="Center"></TextBlock>
                 </AppBarButton.Content>
             </AppBarButton>
         </Grid>

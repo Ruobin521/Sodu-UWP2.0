@@ -5,6 +5,7 @@
     xmlns:local="using:Sodu.View"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:userControl="using:Sodu.UserControl"
     mc:Ignorable="d"
     x:Name="Root"
         DataContext="{Binding  Instance.OnlineBookContent,Source={StaticResource Locator}}">
@@ -191,7 +192,7 @@
                             <RowDefinition Height="30"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <Image Grid.Row="0" Grid.Column="0" Source="{Binding CurrentBook,Converter={StaticResource BookCoverConverter}}" Height="100" Width="75" Stretch="Fill" />
+                        <userControl:CoverImage Grid.Row="0" Grid.Column="0" DataContext="{Binding CurrentBook}" Height="100" Width="75"  />
                         <Grid Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Margin="10,0,0,0">
                             <Grid.RowDefinitions>
                                 <RowDefinition/>

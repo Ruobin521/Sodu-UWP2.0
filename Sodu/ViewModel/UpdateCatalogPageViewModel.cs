@@ -196,9 +196,8 @@ namespace Sodu.ViewModel
             }
 
             NavigationService.NavigateTo(typeof(OnlineContentPage));
-            var vm = new OnlineContentPageViewModel();
-            ViewModelInstance.Instance.OnlineBookContent = vm;
-            vm.LoadData((Book)obj);
+            ViewModelInstance.Instance.OnlineBookContent.ResDeta();
+            ViewModelInstance.Instance.OnlineBookContent.LoadData((Book)obj);
         }
 
 

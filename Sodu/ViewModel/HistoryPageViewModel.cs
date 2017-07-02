@@ -28,7 +28,16 @@ namespace Sodu.ViewModel
         {
             Task.Run(() =>
             {
-                DbHistory.ClearBooks(AppDataPath.GetAppCacheDbPath());
+                var result = DbHistory.ClearBooks(AppDataPath.GetAppCacheDbPath());
+
+                DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                {
+                    if (result)
+                    {
+                        Books.Clear();
+                    }
+                });
+
             });
         }
 

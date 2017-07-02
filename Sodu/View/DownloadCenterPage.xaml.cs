@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Sodu.ViewModel;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -25,6 +26,18 @@ namespace Sodu.View
         public DownloadCenterPage()
         {
             this.InitializeComponent();
+            Loaded += DownLoadCenterPage_Loaded;
+            Unloaded += DownLoadCenterPage_Unloaded;
+        }
+
+        private void DownLoadCenterPage_Unloaded(object sender, RoutedEventArgs e)
+        {
+            ViewModelInstance.Instance.DownloadCenter.IsFrameContent = false;
+        }
+
+        private void DownLoadCenterPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            ViewModelInstance.Instance.DownloadCenter.IsFrameContent = true;
         }
     }
 }

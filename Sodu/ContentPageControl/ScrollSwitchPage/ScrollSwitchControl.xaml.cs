@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Notifications;
@@ -30,9 +31,12 @@ namespace Sodu.ContentPageControl.ScrollSwitchPage
 
         private double SwipeX { get; set; }//用来接收手势水平滑动的长度
 
-        private double Threshold { get; set; } = 80;
+        private double Threshold { get; set; } = 50;
 
         private OnlineContentPageViewModel ViewModel { get; set; }
+
+        private bool IsAnimating { get; set; }
+
 
         public ScrollSwitchControl()
         {
@@ -51,19 +55,19 @@ namespace Sodu.ContentPageControl.ScrollSwitchPage
 
             Messenger.Default.Register<string>(this, "ContentTextChanged", OnContentTextChanged);
 
-            this.Loaded += ScrollSwitchControl_Loaded;
+
+            ViewModel = ViewModelInstance.Instance.OnlineBookContent;
+
+            SizeChanged += ScrollSwitchControl_SizeChanged;
         }
 
-        private void ScrollSwitchControl_Loaded(object sender, RoutedEventArgs e)
+        private void ScrollSwitchControl_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            ViewModel = DataContext as OnlineContentPageViewModel;
+
+            ViewModel?.ResizePageContent();
         }
 
 
-        public Tuple<double, double> GetPageSize()
-        {
-            return new Tuple<double, double>(_centerControl.ActualWidth, _centerControl.ActualHeight);
-        }
 
         private void MainPage_SizeChanged(object sender, SizeChangedEventArgs e)
         {
@@ -77,15 +81,23 @@ namespace Sodu.ContentPageControl.ScrollSwitchPage
 
         private void The_ManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
         {
+            if (IsAnimating)
+            {
+                return;
+            }
             SwipeX = 0;
-            SetLeftPageData();
-            SetRightPageData();
+            SetLeftPageData(_leftControl);
+            SetRightPageData(_rightControl);
         }
 
         private void The_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
         {
-
             var x = e.Delta.Translation.X;
+
+            if (IsAnimating)
+            {
+                return;
+            }
 
             if (x > 0 && !CanSwitchToPre())
             {
@@ -110,36 +122,32 @@ namespace Sodu.ContentPageControl.ScrollSwitchPage
             (_leftControl.RenderTransform as CompositeTransform).TranslateX = -_leftControl.ActualWidth + SwipeX;
         }
 
-
-
-
         private void The_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
         {
-            if (Math.Abs(SwipeX) < Threshold)
+            if (SwipeX == 0.0)
             {
-                RevertAnimation();
                 return;
             }
-
             //上一页（章节）
-            if (SwipeX > Threshold)
+            if (SwipeX > 0)
             {
                 RightAnimation();
-
-                ViewModel.CurrentCatalog = _leftControl.Tag as BookCatalog;
-
             }
             // 下一页（章节）
-            else if (SwipeX < -Threshold)
+            else if (SwipeX < 0)
             {
                 LeftAnimation();
+            }
 
-                ViewModel.CurrentCatalog = _rightControl.Tag as BookCatalog;
+            if (_centerControl.Catalog != null)
+            {
+              //  ViewModel.CurrentCatalog = _centerControl.Catalog;
             }
         }
 
-        private void LeftAnimation()
+        private async void LeftAnimation()
         {
+            IsAnimating = true;
             _centerControl.CenterToLeftAction();
             _rightControl.RightToCenterAction();
             _leftControl.LeftToRightAction();
@@ -149,10 +157,14 @@ namespace Sodu.ContentPageControl.ScrollSwitchPage
             _centerControl = _rightControl;
             _rightControl = control;
 
+            await Task.Delay(200);
+            IsAnimating = false;
         }
 
-        private void RightAnimation()
+        private async void RightAnimation()
         {
+            IsAnimating = true;
+
             _leftControl.LeftToCenterAction();
             _centerControl.CenterToRightAction();
             _rightControl.RightToLeftAction();
@@ -162,6 +174,11 @@ namespace Sodu.ContentPageControl.ScrollSwitchPage
             _rightControl = _centerControl;
             _centerControl = _leftControl;
             _leftControl = control;
+
+
+            await Task.Delay(200);
+            IsAnimating = false;
+
         }
 
 
@@ -191,33 +208,37 @@ namespace Sodu.ContentPageControl.ScrollSwitchPage
 
         private void OnContentTextChanged(string obj)
         {
+            if (ViewModel.CurrentBook == null || ViewModel.CurrentCatalog == null)
+            {
+                return;
+            }
+
             var pages = ViewModel.GetCatalogPagesFormDicrionary(ViewModel.CurrentCatalog.CatalogUrl);
 
             if (pages == null || pages.Count <= 0)
             {
                 return;
             }
-            _centerControl.Title = ViewModel.CurrentCatalog.CatalogName;
             _centerControl.Text = pages[0];
             _centerControl.CatalogIndex = ViewModel.CurrentCatalog.Index;
             _centerControl.CatalogCount = ViewModel.CurrentBook.CatalogList?.Count ?? 0;
             _centerControl.PageIndex = 0;
             _centerControl.PageCount = pages.Count;
+            _centerControl.Catalog = ViewModel.CurrentCatalog;
 
-            _centerControl.Tag = ViewModel.CurrentCatalog;
+
         }
 
 
-        public async void SetLeftPageData()
+        public async void SetLeftPageData(ScrollSwitchItem item)
         {
-            var centerCatalog = _centerControl.Tag as BookCatalog;
+            var catalog = ViewModel.CurrentCatalog;
 
-            if (centerCatalog == null)
+            if (catalog == null)
             {
                 return;
             }
-
-            var value = await ViewModel.GetCatalogContent(centerCatalog);
+            var value = await ViewModel.GetCatalogContent(catalog);
 
             if (value == null)
             {
@@ -227,45 +248,53 @@ namespace Sodu.ContentPageControl.ScrollSwitchPage
 
             if (index > 0 && index <= value.Item1.Count - 1)
             {
-                _leftControl.Title = centerCatalog.CatalogName;
-                _leftControl.Text = value.Item1[index - 1];
-                _leftControl.CatalogIndex = centerCatalog.Index;
-                _leftControl.CatalogCount = ViewModel.CurrentBook.CatalogList?.Count ?? 0;
-                _leftControl.PageIndex = index - 1;
-                _leftControl.PageCount = value.Item1.Count;
-
-                _leftControl.Tag = centerCatalog;
+                item.SetData(value.Item1[index - 1], 
+                    catalog.Index, 
+                    ViewModel.CurrentBook.CatalogList?.Count ?? 0, 
+                    index - 1, 
+                    value.Item1.Count,
+                    catalog);
             }
-            else
+            else if (index == 0)
             {
-                var preCatalogData = await ViewModel.GetCatalogDataByDirection(CatalogDirection.Pre);
-
-                if (preCatalogData == null)
+                if (ViewModel.PreCatalog == null)
                 {
                     return;
                 }
-                var precatalog = preCatalogData.Item3;
 
-                _leftControl.Title = precatalog.CatalogName;
-                _leftControl.Text = preCatalogData.Item1.LastOrDefault();
-                _leftControl.CatalogIndex = precatalog.Index;
-                _leftControl.CatalogCount = ViewModel.CurrentBook.CatalogList?.Count ?? 0;
-                _leftControl.PageIndex = preCatalogData.Item1.Count - 1;
-                _leftControl.PageCount = preCatalogData.Item1.Count;
-                _leftControl.Tag = precatalog;
+                var preCatalogData = ViewModel.GetCatalogPagesFormDicrionary(ViewModel.PreCatalog.CatalogUrl);
+
+                if (preCatalogData == null)
+                {
+                    _leftControl.ClearData();
+                    return;
+                }
+                var precatalog = ViewModel.PreCatalog;
+
+                item.SetData(preCatalogData.LastOrDefault(),
+                    precatalog.Index, 
+                    ViewModel.CurrentBook.CatalogList?.Count ?? 0, 
+                    preCatalogData.Count - 1,
+                    preCatalogData.Count, 
+                    precatalog);
+
+            }
+            else
+            {
+
             }
         }
 
-        public async void SetRightPageData()
+        public async void SetRightPageData(ScrollSwitchItem item)
         {
-            var centerCatalog = _centerControl.Tag as BookCatalog;
+            var catalog = _centerControl.Catalog;
 
-            if (centerCatalog == null)
+            if (catalog == null)
             {
                 return;
             }
 
-            var value = await ViewModel.GetCatalogContent(centerCatalog);
+            var value = await ViewModel.GetCatalogContent(catalog);
 
             if (value == null)
             {
@@ -274,15 +303,12 @@ namespace Sodu.ContentPageControl.ScrollSwitchPage
             var index = _centerControl.PageIndex;
             if (index >= 0 && index < value.Item1.Count - 1)
             {
-                _leftControl.Title = centerCatalog.CatalogName;
-                _rightControl.Text = value.Item1[index + 1];
-
-                _rightControl.CatalogIndex = centerCatalog.Index;
-                _rightControl.CatalogCount = ViewModel.CurrentBook.CatalogList?.Count ?? 0;
-                _rightControl.PageIndex = index + 1;
-                _rightControl.PageCount = value.Item1.Count;
-
-                _rightControl.Tag = centerCatalog;
+                item.SetData(value.Item1[index + 1],
+                   catalog.Index,
+                    ViewModel.CurrentBook.CatalogList?.Count ?? 0,
+                    index + 1,
+                    value.Item1.Count,
+                    catalog);
             }
             else
             {
@@ -290,17 +316,16 @@ namespace Sodu.ContentPageControl.ScrollSwitchPage
 
                 if (catalogData == null)
                 {
+                    _rightControl.ClearData();
                     return;
                 }
-                var catalog = catalogData.Item3;
-
-                _rightControl.Title = catalog.CatalogName;
-                _rightControl.Text = catalogData.Item1.FirstOrDefault();
-                _rightControl.CatalogIndex = catalog.Index;
-                _rightControl.CatalogCount = ViewModel.CurrentBook.CatalogList?.Count ?? 0;
-                _rightControl.PageIndex = 0;
-                _rightControl.PageCount = catalogData.Item1.Count;
-                _rightControl.Tag = catalog;
+                var tempcatalog = catalogData.Item3;
+                item.SetData(catalogData.Item1.FirstOrDefault(),
+                  tempcatalog.Index,
+                  ViewModel.CurrentBook.CatalogList?.Count ?? 0,
+                  0,
+                  catalogData.Item1.Count,
+                  tempcatalog);
             }
         }
 
@@ -311,7 +336,7 @@ namespace Sodu.ContentPageControl.ScrollSwitchPage
         /// <returns></returns>
         private bool CanSwitchToNext()
         {
-            var catalog = _centerControl.Tag as BookCatalog;
+            var catalog = _centerControl.Catalog;
 
             if (catalog == null)
             {
@@ -343,7 +368,7 @@ namespace Sodu.ContentPageControl.ScrollSwitchPage
         /// <returns></returns>
         private bool CanSwitchToPre()
         {
-            var catalog = _centerControl.Tag as BookCatalog;
+            var catalog = _centerControl.Catalog;
 
             if (catalog == null)
             {
@@ -364,7 +389,7 @@ namespace Sodu.ContentPageControl.ScrollSwitchPage
                 return true;
             }
 
-            var temp = ViewModel.GetCatalogByDirction(CatalogDirection.Next);
+            var temp = ViewModel.GetCatalogByDirction(CatalogDirection.Pre);
 
             return temp != null;
         }

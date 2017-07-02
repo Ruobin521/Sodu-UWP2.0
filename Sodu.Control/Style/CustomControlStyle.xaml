@@ -152,12 +152,12 @@
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState x:Name="Pressed">
-                                    <!--<Storyboard>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="RootGrid">
+                                    <Storyboard>
+                                        <!--<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="RootGrid">
                                             <DiscreteObjectKeyFrame KeyTime="0"  Value="LightGray"/>
-                                        </ObjectAnimationUsingKeyFrames>
+                                        </ObjectAnimationUsingKeyFrames>-->
                                         <PointerDownThemeAnimation Storyboard.TargetName="RootGrid"/>
-                                    </Storyboard>-->
+                                    </Storyboard>
                                 </VisualState>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
@@ -241,7 +241,7 @@
 
 
     <Style x:Key="InfoTextStyle" TargetType="TextBlock">
-        <Setter  Property="FontSize" Value="14"></Setter>
+        <Setter  Property="FontSize" Value="12"></Setter>
         <Setter  Property="FontFamily" Value="Arial"></Setter>
         <Setter  Property="Foreground" Value="#FF555555"></Setter>
         <Setter  Property="TextTrimming" Value="WordEllipsis"></Setter>

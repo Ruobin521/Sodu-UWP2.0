@@ -134,7 +134,7 @@ namespace Sodu.Core.HtmlService
                     if (type == AnalisysType.CatalogPageData)
                     {
                         var baseUrl = "http://" + host;
-                        var value = GetCatalogPageDataCommon(baseUrl, baseUrl, html,
+                        var value = GetCatalogPageDataCommon(url, baseUrl, html,
                             catalogsRegex: "<table.*?class=\"list\">.*?</table>",
                             catalogRegex: "<td><a href=\"(.*?)\".*?>(.*?)</a></td>",
                             introRegex: "<div class=\"msgarea\">(.*?)</p>",
@@ -490,6 +490,10 @@ namespace Sodu.Core.HtmlService
             html = html.Replace("&lt;/div&gt;", "");
             html = html.Replace("  ", "　");
             html = html.Replace("\n\n", "\n");
+            html = html.Replace("　　　　　　", "　　");
+            html = html.Trim(' ');
+            html = html.Trim('\n');
+           
             return html;
         }
 

@@ -136,7 +136,6 @@ namespace Sodu.Core.DataBase
             return result;
         }
 
-
         public static bool CheckBookExist(string path, string bookId)
         {
             bool result = false;
@@ -165,25 +164,127 @@ namespace Sodu.Core.DataBase
             return result;
         }
 
-        public static bool ClearBooks(string path)
+        public static bool InsertOrUpdateBookCatalogs(string path, List<BookCatalog> catalogs)
         {
-            bool result = true;
+            var result = true;
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), path))
             {
-                db.CreateTable<LocalBook>();
+                db.CreateTable<BookCatalog>();
                 db.RunInTransaction(() =>
                 {
                     try
                     {
-                        db.DeleteAll<LocalBook>();
+                        foreach (var catalog in catalogs)
+                        {
+                            db.Insert(catalog);
+                        }
                     }
-                    catch (Exception)
+                    catch (Exception e)
                     {
+                        Debug.WriteLine(e.Message + "\n" + e.StackTrace);
                         result = false;
                     }
                 });
             }
             return result;
         }
+
+        public static bool DeleteBookCatalogsByBookId(string path, string bookId)
+        {
+            var result = true;
+            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), path))
+            {
+                db.CreateTable<BookCatalog>();
+                db.RunInTransaction(() =>
+                {
+                    try
+                    {
+                        var catalogs = (from m in db.Table<BookCatalog>()
+                                        where m.BookId == bookId
+                                        select m);
+
+                        var count = db.Delete(catalogs);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.WriteLine(e.Message + "\n" + e.StackTrace);
+                        result = false;
+                    }
+                });
+            }
+            return result;
+        }
+
+
+        public static List<BookCatalog> SelectBookCatalogsByBookId(string path, string bookId)
+        {
+            var result = new List<BookCatalog>();
+            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), path))
+            {
+                db.CreateTable<BookCatalog>();
+                db.RunInTransaction(() =>
+                {
+                    try
+                    {
+                        var catalogs = (from m in db.Table<BookCatalog>()
+                                        where m.BookId == bookId
+                                        select m);
+
+                        result = catalogs.OrderBy(p => p.Index).ToList();
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.WriteLine(e.Message + "\n" + e.StackTrace);
+                        result = null;
+                    }
+                });
+            }
+            return result;
+        }
+
+        public static bool DeleteBook(string path, string bookId)
+        {
+            var result = true;
+
+            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), path))
+            {
+                db.CreateTable<BookCatalog>();
+                db.RunInTransaction(() =>
+                {
+                    try
+                    {
+                        var book = (from m in db.Table<LocalBook>()
+                                    where m.BookId == bookId
+                                    select m).FirstOrDefault();
+
+                        if (book != null)
+                        {
+                            db.Delete(book);
+                        }
+
+                        var catalogs = (from m in db.Table<BookCatalog>()
+                                        where m.BookId == bookId
+                                        select m);
+
+                        if (!catalogs.Any())
+                        {
+                            return;
+                        }
+
+                        foreach (var bookCatalog in catalogs)
+                        {
+                            db.Delete(bookCatalog);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.WriteLine(e.Message + "\n" + e.StackTrace);
+                        result = false;
+                    }
+                });
+            }
+            return result;
+        }
+
     }
 }

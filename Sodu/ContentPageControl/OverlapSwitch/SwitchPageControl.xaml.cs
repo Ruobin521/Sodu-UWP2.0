@@ -160,11 +160,11 @@ namespace Sodu.ContentPageControl
                 {
                     DispatcherHelper.CheckBeginInvokeOnUI(() =>
                     {
-                        vm.ContentText = value.Item2;
-                        Item1.Text = value.Item1[0];
-                        vm.PageIndex = 0;
-                        vm.PageCount = value.Item1.Count;
-                        vm.CurrentCatalog = value.Item3;
+                        //vm.ContentText = value.Item2;
+                        //Item1.Text = value.Item1[0];
+                        //vm.PageIndex = 0;
+                        //vm.PageCount = value.Item1.Count;
+                        //vm.CurrentCatalog = value.Item3;
                     });
 
                     return true;
@@ -206,11 +206,11 @@ namespace Sodu.ContentPageControl
                 {
                     DispatcherHelper.CheckBeginInvokeOnUI(() =>
                     {
-                        vm.ContentText = value.Item2;
-                        Item1.Text = value.Item1.LastOrDefault();
-                        vm.PageIndex = value.Item1.Count - 1;
-                        vm.PageCount = value.Item1.Count;
-                        vm.CurrentCatalog = value.Item3;
+                        //vm.ContentText = value.Item2;
+                        //Item1.Text = value.Item1.LastOrDefault();
+                        //vm.PageIndex = value.Item1.Count - 1;
+                        //vm.PageCount = value.Item1.Count;
+                        //vm.CurrentCatalog = value.Item3;
                     });
 
                     return true;

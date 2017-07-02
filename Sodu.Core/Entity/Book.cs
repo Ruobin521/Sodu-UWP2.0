@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
@@ -93,7 +94,6 @@ namespace Sodu.Core.Entity
         }
 
 
-
         private string _lastReadChapterName;
         /// <summary>
         ///最后阅读的章节名称
@@ -128,23 +128,7 @@ namespace Sodu.Core.Entity
             }
         }
 
-        private string _unReadCountData;
-        /// <summary>
-        ///未读提示
-        /// </summary>
-        [Ignore]
-        public string UnReadCountData
-        {
-            get
-            {
-                return _unReadCountData;
-            }
-            set
-            {
-                Set(ref _unReadCountData, value);
-            }
-        }
-
+        
         private bool _isNew;
         /// <summary>
         ///是否有更新
@@ -264,46 +248,26 @@ namespace Sodu.Core.Entity
             }
         }
 
-        [Ignore]
-        public ObservableCollection<BookCatalog> CatalogList { get; set; }
-
-        [Ignore]
-        public ObservableCollection<BookCatalog> UnDownloadCatalogList { get; set; }
-
         /// <summary>
-        /// 是否为编辑状态
+        /// 是否书架在线
         /// </summary>
-        private bool _isInEdit;
-        [Ignore]
-        public bool IsInEdit
+        private bool _isTxt;
+        public bool IsTxt
         {
             get
             {
-                return _isInEdit;
+                return _isTxt;
             }
             set
             {
-                Set(ref _isInEdit, value);
+                Set(ref _isTxt, value);
             }
         }
 
-        /// <summary>
-        /// 是否勾选
-        /// </summary>
-        private bool _isSelected;
+
         [Ignore]
-        [XmlIgnore]
-        public bool IsSelected
-        {
-            get
-            {
-                return _isSelected;
-            }
-            set
-            {
-                Set(ref _isSelected, value);
-            }
-        }
+        [JsonIgnore]
+        public List<BookCatalog> CatalogList { get; set; }
 
 
         public Book Clone()

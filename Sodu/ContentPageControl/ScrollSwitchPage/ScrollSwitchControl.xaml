@@ -11,7 +11,7 @@
      DataContext="{Binding  Instance.OnlineBookContent,Source={StaticResource Locator}}">
 
     <Grid>
-        <Grid Background="Transparent" ManipulationMode="System,TranslateX" Padding="8,3,6,0">
+        <Grid Background="Transparent" ManipulationMode="System,TranslateX" >
             <local:ScrollSwitchItem Background="{Binding ContentColor.Item1}" x:Name="Control1" />
             <local:ScrollSwitchItem Background="{Binding ContentColor.Item1}" x:Name="Control2" />
             <local:ScrollSwitchItem Background="{Binding ContentColor.Item1}" x:Name="Control3"  />

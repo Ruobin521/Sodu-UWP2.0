@@ -48,9 +48,12 @@ namespace Sodu.ViewModel
         /// </summary>
         private bool IsLoadingCatalogData { get; set; }
 
+        public bool IsPreLoadingNextCatalog { get; set; }
+        public bool IsPreLoadingPreCatalog { get; set; }
         public bool IsPreLoadingCatalog { get; set; }
 
-
+        public BookCatalog NextCatalog { get; set; }
+        public BookCatalog PreCatalog { get; set; }
 
         private BookCatalog _currentCatalog;
 
@@ -64,9 +67,22 @@ namespace Sodu.ViewModel
                 return _currentCatalog;
 
             }
-            set
+            private set
             {
                 Set(ref _currentCatalog, value);
+            }
+        }
+
+        private string _currentCatalogContent;
+        /// <summary>
+        ///当前章节内容（未分页）
+        /// </summary>
+        public string CurrentCatalogContent
+        {
+            get { return _currentCatalogContent; }
+            set
+            {
+                Set(ref _currentCatalogContent, value);
             }
         }
 
@@ -82,19 +98,19 @@ namespace Sodu.ViewModel
 
 
 
-        private string _contentText;
-        /// <summary>
-        ///当前章节内容（未分页）
-        /// </summary>
-        public string ContentText
-        {
-            get { return _contentText; }
-            set
-            {
-                Set(ref _contentText, value);
+        //private string _contentText;
+        ///// <summary>
+        /////当前章节内容（未分页）
+        ///// </summary>
+        //public string ContentText
+        //{
+        //    get { return _contentText; }
+        //    set
+        //    {
+        //        Set(ref _contentText, value);
 
-            }
-        }
+        //    }
+        //}
 
         private int _catalogCount;
 
@@ -129,7 +145,6 @@ namespace Sodu.ViewModel
         public void OnCatalogCloseCommand(object obj)
         {
             NavigationService.GoBack();
-            HideStatusBar(true);
         }
 
         private ICommand _catalogSelectedCommand;
@@ -184,19 +199,11 @@ namespace Sodu.ViewModel
 
         #region 方法
 
-        ~OnlineContentPageViewModel()
-        {
-            _battery.RemainingChargePercentChanged -= _battery_RemainingChargePercentChanged;
-            _timer.Stop();
-        }
-
-
         public OnlineContentPageViewModel()
         {
             InitBattery();
             InitTimer();
             InitSettingValue();
-            HideStatusBar(true);
         }
 
 
@@ -209,10 +216,8 @@ namespace Sodu.ViewModel
                 CatalogName = book.LastReadChapterName,
                 CatalogUrl = book.LastReadChapterUrl,
             };
-
-            CurrentCatalog = catalog;
-            SetCatalogsData(catalog);
             SetCurrentContent(catalog);
+            InitCatalogsData(catalog);
         }
 
         public async void SetCurrentContent(BookCatalog catalog)
@@ -222,65 +227,45 @@ namespace Sodu.ViewModel
                 return;
             }
 
+
             CurrentCatalog = catalog;
             PreLoadPreAndNextCatalog();
 
             var value = await GetCatalogContent(catalog, true);
             if (value != null)
             {
-                ContentText = value.Item2;
+                CurrentCatalogContent = value.Item2;
                 CurrentBook.LastReadChapterName = catalog.CatalogName;
                 CurrentBook.LastReadChapterUrl = catalog.CatalogUrl;
                 UpdateHistory();
+                IsRetry = false;
             }
             else
             {
                 IsRetry = true;
-                ContentText = "";
+                CurrentCatalogContent = "";
             }
 
-            Messenger.Default.Send(ContentText, "ContentTextChanged");
+            Messenger.Default.Send(CurrentCatalogContent, "CurrentCatalogContentChanged");
         }
 
         private void PreLoadPreAndNextCatalog()
         {
-            if (CurrentBook == null)
+            if (IsPreLoadingCatalog || CurrentBook?.CatalogList == null)
             {
                 return;
             }
 
-            if (IsPreLoadingCatalog || CurrentBook.CatalogList == null || CurrentBook.CatalogList.Count == 0)
-            {
-                return;
-            }
-
-            IsPreLoadingCatalog = true;
-
-            var temp = CurrentBook.CatalogList.FirstOrDefault(p => p.CatalogUrl == CurrentCatalog.CatalogUrl);
-            if (temp == null)
-            {
-                return;
-            }
-
-            var index = CurrentBook.CatalogList.IndexOf(temp);
             var tasks = new Task[2];
-            tasks[0] = Task.Run(async () =>
-            {
-                var value = GetCatalogByDirction(CatalogDirection.Next);
-                if (value != null)
-                {
-                    await GetCatalogContent(value.Item2);
-                }
 
-            });
+            tasks[0] = Task.Run(() =>
+           {
+               PreLoadNextCatalog();
+           });
 
-            tasks[1] = Task.Run(async () =>
+            tasks[1] = Task.Run(() =>
             {
-                var value = GetCatalogByDirction(CatalogDirection.Pre);
-                if (value != null)
-                {
-                    await GetCatalogContent(value.Item2);
-                }
+                PreLoadPreCatalog();
             });
 
             Task.Factory.ContinueWhenAll(tasks, (c) =>
@@ -290,30 +275,66 @@ namespace Sodu.ViewModel
 
         }
 
-        public void SwitchCatalog(CatalogDirection dir)
+
+        private async void PreLoadNextCatalog()
         {
-            if (IsLoading)
+            if (IsPreLoadingNextCatalog)
             {
                 return;
             }
-            var value = GetCatalogByDirction(dir);
 
-            if (value != null)
+            IsPreLoadingNextCatalog = true;
+
+            if (CurrentBook == null)
             {
-                SetCurrentContent(value.Item2);
+                return;
             }
+            var nextcatalog = GetCatalogByDirction(CatalogDirection.Next);
+
+            if (nextcatalog == null)
+            {
+                return;
+            }
+            await GetCatalogContent(nextcatalog);
+
+            IsPreLoadingNextCatalog = false;
+
+        }
+
+        private async void PreLoadPreCatalog()
+        {
+            if (CurrentBook == null)
+            {
+                return;
+            }
+
+            if (IsPreLoadingPreCatalog)
+            {
+                return;
+            }
+
+            IsPreLoadingPreCatalog = true;
+
+            var nextcatalog = GetCatalogByDirction(CatalogDirection.Pre);
+
+            if (nextcatalog == null)
+            {
+                return;
+            }
+            await GetCatalogContent(nextcatalog);
+            IsPreLoadingPreCatalog = false;
         }
 
 
-        public async Task<Tuple<List<string>,BookCatalog>> GetCatalogPagesByDirection(CatalogDirection dir, bool isShowLoading = false)
+        public async Task<Tuple<List<string>, BookCatalog>> GetCatalogPagesByDirection(CatalogDirection dir, bool isShowLoading = false)
         {
             var catalog = GetCatalogByDirction(dir);
             if (catalog == null)
             {
                 return null;
             }
-            var value = await GetCatalogContent(catalog.Item2, isShowLoading);
-            return  new Tuple<List<string>, BookCatalog>(value.Item1, catalog.Item2);
+            var value = await GetCatalogContent(catalog, isShowLoading);
+            return new Tuple<List<string>, BookCatalog>(value.Item1, catalog);
         }
 
         public async Task<Tuple<List<string>, string, BookCatalog>> GetCatalogDataByDirection(CatalogDirection dir, bool isShowLoading = false)
@@ -324,13 +345,13 @@ namespace Sodu.ViewModel
                 return null;
             }
 
-            var value = await GetCatalogContent(catalog.Item2, isShowLoading);
-            return new Tuple<List<string>, string, BookCatalog>(value.Item1, value.Item2, catalog.Item2);
+            var value = await GetCatalogContent(catalog, isShowLoading);
+            return new Tuple<List<string>, string, BookCatalog>(value.Item1, value.Item2, catalog);
         }
 
-        public Tuple<int, BookCatalog> GetCatalogByDirction(CatalogDirection dir)
+        public BookCatalog GetCatalogByDirction(CatalogDirection dir)
         {
-            if (CurrentBook.CatalogList == null || CurrentBook.CatalogList.Count == 0)
+            if (CurrentCatalog == null || CurrentBook.CatalogList == null || CurrentBook.CatalogList.Count == 0)
             {
                 return null;
             }
@@ -339,12 +360,12 @@ namespace Sodu.ViewModel
 
             if (temp == null && dir == CatalogDirection.Next)
             {
-                return new Tuple<int, BookCatalog>(CurrentBook.CatalogList.Count - 1, CurrentBook.CatalogList.LastOrDefault());
+                return null;
             }
 
             if (temp == null && dir == CatalogDirection.Current)
             {
-                return new Tuple<int, BookCatalog>(0, CurrentCatalog);
+                return CurrentCatalog;
             }
 
             var index = CurrentBook.CatalogList.IndexOf(temp);
@@ -352,17 +373,17 @@ namespace Sodu.ViewModel
             switch (dir)
             {
                 case CatalogDirection.Current:
-                    return new Tuple<int, BookCatalog>(index, temp);
+                    return temp;
                 case CatalogDirection.Next:
                     if (index < CurrentBook.CatalogList.Count - 1)
                     {
-                        return new Tuple<int, BookCatalog>(index, CurrentBook.CatalogList[index + 1]);
+                        return CurrentBook.CatalogList[index + 1];
                     }
                     break;
                 case CatalogDirection.Pre:
                     if (index > 0)
                     {
-                        return new Tuple<int, BookCatalog>(index, CurrentBook.CatalogList[index - 1]);
+                        return CurrentBook.CatalogList[index - 1];
                     }
                     break;
             }
@@ -374,7 +395,9 @@ namespace Sodu.ViewModel
         {
             if (CurrentBook.IsLocal || CurrentBook.IsOnline)
             {
-                DbLocalBook.InsertOrUpdatBook(AppDataPath.GetAppCacheDbPath(), CurrentBook);
+                ViewModelInstance.Instance.LocalBookPage.InserOrUpdateBook(CurrentBook);
+
+              //  DbLocalBook.InsertOrUpdatBook(AppDataPath.GetAppCacheDbPath(), CurrentBook);
             }
             else
             {
@@ -458,27 +481,52 @@ namespace Sodu.ViewModel
             finally
             {
                 DispatcherHelper.CheckBeginInvokeOnUI(() =>
-                {
-                    IsLoading = false;
-                });
+               {
+                   IsLoading = false;
+               });
             }
             return value;
         }
 
 
-        public void SetCatalogsData(BookCatalog catalog)
+        /// <summary>
+        /// 获取目录页数据
+        /// </summary>
+        /// <param name="catalog"></param>
+        public void InitCatalogsData(BookCatalog catalog)
         {
-            //本地书架
-            if (CurrentBook.IsLocal)
+            Task.Run(() =>
             {
-                //从数据库中获取杂志目录及内容
-            }
-            else
-            {
+                //本地书架
+                if (CurrentBook.IsLocal)
+                {
+                    //从数据库中获取杂志目录及内容
+
+                    var catalogs = DbLocalBook.SelectBookCatalogsByBookId(AppDataPath.GetLocalBookDbPath(),
+                        CurrentBook.BookId);
+
+                    CurrentBook.CatalogList = catalogs;
+
+                    if (catalogs != null && catalogs.Count > 0)
+                    {
+                        var temp = GetCatalogByDirction(CatalogDirection.Current);
+                        DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                        {
+                            CatalogCount = CurrentBook.CatalogList.Count;
+                            if (temp != null)
+                            {
+                                CurrentCatalog = temp;
+                            }
+                        });
+                        return;
+                    }
+                }
+
                 var catalogUrl = AnalisysSourceHelper.GetCatalogPageUrl(catalog.CatalogUrl);
                 SetCatalogPageData(catalogUrl);
-            }
+            });
         }
+
 
         private async void SetCatalogPageData(string url, int retryCount = 3)
         {
@@ -490,7 +538,7 @@ namespace Sodu.ViewModel
                 Tuple<List<BookCatalog>, string, string, string> value = null;
                 while (i <= retryCount)
                 {
-                    value = await AnalisysSourceHelper.GetCatalogPageData(url);
+                    value = await AnalisysSourceHelper.GetCatalogPageData(url, CurrentBook.BookId);
                     if (value != null)
                     {
                         break;
@@ -505,27 +553,29 @@ namespace Sodu.ViewModel
                     return;
                 }
 
-                if (value.Item1 != null)
+                DispatcherHelper.CheckBeginInvokeOnUI(() =>
                 {
-                    CurrentBook.CatalogList = new ObservableCollection<BookCatalog>();
-                    foreach (var bookCatalog in value.Item1)
+                    if (value.Item1 != null)
                     {
-                        CurrentBook.CatalogList.Add(bookCatalog);
+                        CurrentBook.CatalogList = new List<BookCatalog>();
+                        foreach (var bookCatalog in value.Item1)
+                        {
+                            CurrentBook.CatalogList.Add(bookCatalog);
+                        }
+
+                        CatalogCount = CurrentBook.CatalogList.Count;
+                        var temp = CurrentBook.CatalogList.FirstOrDefault(p => p.CatalogUrl == CurrentCatalog.CatalogUrl);
+                        if (temp != null)
+                        {
+                            CurrentCatalog = temp;
+                            PreLoadPreAndNextCatalog();
+                        }
+
                     }
-
-                    var temp = CurrentBook.CatalogList.FirstOrDefault(p => p.CatalogUrl == CurrentCatalog.CatalogUrl);
-                    if (temp != null)
-                    {
-                        CurrentCatalog = temp;
-                        // PreLoadPreAndNextCatalog();
-                    }
-
-                    CatalogCount = CurrentBook.CatalogList.Count;
-                }
-                CurrentBook.Description = value.Item2;
-                CurrentBook.Cover = value.Item3;
-                CurrentBook.AuthorName = value.Item4;
-
+                    CurrentBook.Description = value.Item2;
+                    CurrentBook.Cover = value.Item3;
+                    CurrentBook.AuthorName = value.Item4;
+                });
             }
             catch (Exception ex)
             {
@@ -584,21 +634,20 @@ namespace Sodu.ViewModel
         public override void OnBackCommand(object obj)
         {
             base.OnBackCommand(obj);
-            ShowStatusBar();
             ResDeta();
         }
 
 
-        private void ResDeta()
+        public void ResDeta()
         {
             PageIndex = 0;
             PageCount = 0;
             CatalogCount = 0;
-
+            IsRetry = false;
 
             CurrentBook = null;
             CurrentCatalog = null;
-            ContentText = null;
+            CurrentCatalogContent = null;
 
             DicContentCache.Clear();
         }
@@ -607,10 +656,32 @@ namespace Sodu.ViewModel
 
         #region 分页相关
 
-
+        private double ContainerWidth { get; set; } = 0.0;
+        private double ContainerHeight { get; set; } = 0.0;
 
         public async void ResizePageContent()
         {
+            if (string.IsNullOrEmpty(CurrentCatalogContent))
+            {
+                return;
+            }
+
+            Tuple<double, double> size = null;
+            await App.RootFrame.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+            {
+                var content = NavigationService.ContentFrame.Content as OnlineContentPage;
+                if (content == null)
+                {
+                    return;
+                }
+                size = content.GetControlSize();
+            });
+
+            if (Math.Abs(size.Item1 - ContainerWidth) < 0.0001 && Math.Abs(size.Item2 - ContainerHeight) < 0.0001)
+            {
+                return;
+            }
+
             for (int i = 0; i < DicContentCache.Count; i++)
             {
                 var tuple = DicContentCache[DicContentCache.Keys.ToList()[i]];
@@ -618,13 +689,13 @@ namespace Sodu.ViewModel
                 DicContentCache[DicContentCache.Keys.ToList()[i]] = new Tuple<List<string>, string>(new List<string>(), tuple.Item2);
             }
 
-            var pages = await SplitContentToPages(ContentText);
+            var pages = await SplitContentToPages(CurrentCatalogContent);
 
             if (pages == null)
             {
                 return;
             }
-            DicContentCache[CurrentCatalog.CatalogUrl] = new Tuple<List<string>, string>(pages, ContentText);
+            DicContentCache[CurrentCatalog.CatalogUrl] = new Tuple<List<string>, string>(pages, CurrentCatalogContent);
 
             if (PageIndex > pages.Count - 1)
             {
@@ -632,7 +703,7 @@ namespace Sodu.ViewModel
             }
             PageCount = pages.Count;
 
-            Messenger.Default.Send(ContentText, "ContentTextChanged");
+            // Messenger.Default.Send(CurrentCatalogContent, "ContentTextChanged");
         }
 
 
@@ -751,6 +822,30 @@ namespace Sodu.ViewModel
             return pages;
         }
 
+
+
+        #endregion
+
+
+        #region 滚动切换章节
+
+        public async void ScrollToSwitchCurrentCatalog(CatalogDirection dir)
+        {
+            if (IsLoading)
+            {
+                return;
+            }
+            var value = GetCatalogByDirction(dir);
+            if (value != null)
+            {
+                SetCurrentContent(value);
+            }
+            else
+            {
+                await Task.Delay(10);
+                NavigationService.NavigateTo(typeof(CatalogPage));
+            }
+        }
 
 
         #endregion
@@ -977,7 +1072,7 @@ namespace Sodu.ViewModel
                        }));
 
         private ICommand _catalogCommand;
-        public ICommand Catalogcommand => _catalogCommand ?? (
+        public ICommand CatalogCommand => _catalogCommand ?? (
                  _catalogCommand = new RelayCommand<object>(
                        (obj) =>
                        {
@@ -986,7 +1081,50 @@ namespace Sodu.ViewModel
                                ToastHelper.ShowMessage("正在加载目录，请稍后");
                                return;
                            }
+
+                           if (CurrentBook.CatalogList == null)
+                           {
+                               ToastHelper.ShowMessage("获取目录数据失败，请换个来源重试");
+                               return;
+                           }
                            NavigationService.NavigateTo(typeof(CatalogPage));
+                       }));
+
+
+        private ICommand _downloadCommand;
+        public ICommand DownloadCommand => _downloadCommand ?? (
+                 _downloadCommand = new RelayCommand<object>(
+                       (obj) =>
+                       {
+
+                           if (IsLoadingCatalogData)
+                           {
+                               ToastHelper.ShowMessage("正在加载目录数据，请稍后");
+                               return;
+                           }
+                           if (CurrentBook?.CatalogList == null || CurrentBook.CatalogList.Count == 0)
+                           {
+                               ToastHelper.ShowMessage("获取目录数据失败，无法缓存，请换个尝试换个来源");
+                               return;
+                           }
+
+                           var ifExist = ViewModelInstance.Instance.LocalBookPage.CheckBookExist(CurrentBook.BookId);
+
+                           if (ifExist)
+                           {
+                               ToastHelper.ShowMessage(CurrentBook.BookName + "已缓存在本地书架，无需再次缓存");
+                               return;
+                           }
+
+                           var count = ViewModelInstance.Instance.LocalBookPage.GetLocalBooksCount();
+                           if (!App.IsPro && count >= 3)
+                           {
+                               ToastHelper.ShowMessage("免费版本只能缓存三本小说，专业版无此限制");
+                               return;
+                           }
+
+                           ViewModelInstance.Instance.DownloadCenter.AddDownItem(CurrentBook);
+
                        }));
 
         private void InitSettingValue()

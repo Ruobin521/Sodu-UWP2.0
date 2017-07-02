@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Sodu.Core.Entity;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -24,28 +25,27 @@ namespace Sodu.ContentPageControl.ScrollSwitchPage
 
         public string Text
         {
-            get { return (string) GetValue(TextProperty); }
+            get { return (string)GetValue(TextProperty); }
             set { SetValue(TextProperty, value); }
         }
 
 
+        public static readonly DependencyProperty CatalogProperty = DependencyProperty.Register(
+            "Catalog", typeof(BookCatalog), typeof(ScrollSwitchItem), new PropertyMetadata(default(BookCatalog)));
 
-        public static readonly DependencyProperty TitleProperty = DependencyProperty.Register(
-            "Title", typeof(string), typeof(ScrollSwitchItem), new PropertyMetadata(default(string)));
 
-        public string Title
+        public BookCatalog Catalog
         {
-            get { return (string) GetValue(TitleProperty); }
-            set { SetValue(TitleProperty, value); }
+            get { return (BookCatalog) GetValue(CatalogProperty); }
+            set { SetValue(CatalogProperty, value); }
         }
-
 
         public static readonly DependencyProperty PageCountProperty = DependencyProperty.Register(
             "PageCount", typeof(int), typeof(ScrollSwitchItem), new PropertyMetadata(default(int)));
 
         public int PageCount
         {
-            get { return (int) GetValue(PageCountProperty); }
+            get { return (int)GetValue(PageCountProperty); }
             set { SetValue(PageCountProperty, value); }
         }
 
@@ -55,7 +55,7 @@ namespace Sodu.ContentPageControl.ScrollSwitchPage
 
         public int PageIndex
         {
-            get { return (int) GetValue(PageIndexProperty); }
+            get { return (int)GetValue(PageIndexProperty); }
             set { SetValue(PageIndexProperty, value); }
         }
 
@@ -65,7 +65,7 @@ namespace Sodu.ContentPageControl.ScrollSwitchPage
 
         public int CatalogCount
         {
-            get { return (int) GetValue(CatalogCountProperty); }
+            get { return (int)GetValue(CatalogCountProperty); }
             set { SetValue(CatalogCountProperty, value); }
         }
 
@@ -74,7 +74,7 @@ namespace Sodu.ContentPageControl.ScrollSwitchPage
 
         public int CatalogIndex
         {
-            get { return (int) GetValue(CatalogIndexProperty); }
+            get { return (int)GetValue(CatalogIndexProperty); }
             set { SetValue(CatalogIndexProperty, value); }
         }
 
@@ -150,7 +150,33 @@ namespace Sodu.ContentPageControl.ScrollSwitchPage
 
         public Tuple<double, double> GetContainerSize()
         {
-            return  new Tuple<double, double>(this.Grid.ActualWidth,this.Grid.ActualHeight);
-        }	
+            return new Tuple<double, double>(this.Grid.ActualWidth, this.Grid.ActualHeight);
+        }
+
+        public bool EmptyData = true;
+
+        public void ClearData()
+        {
+            EmptyData = true;
+
+            this.Text = "";
+            this.CatalogIndex = 0;
+            this.CatalogCount = 0;
+            this.PageIndex = 0;
+            this.PageCount = 0;
+            this.Catalog = null;
+        }
+
+        public void SetData(string text,int catalogIndex,int catalogCount,int pageIndex,int pageCount,BookCatalog catalog)
+        {
+            EmptyData = false;
+            this.Text = text;
+            this.CatalogIndex = catalogIndex;
+            this.CatalogCount = catalogCount;
+            this.PageIndex = pageIndex;
+            this.PageCount = pageCount;
+            this.Catalog = catalog;
+
+        }
     }
 }

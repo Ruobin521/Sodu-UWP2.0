@@ -130,6 +130,14 @@ namespace Sodu.ViewModel
             }
         }
 
-
+        private DownloadCenterPageViewModel _downloadCenter;
+        public DownloadCenterPageViewModel DownloadCenter
+        {
+            get { return _downloadCenter ?? (_downloadCenter = new DownloadCenterPageViewModel()); }
+            set
+            {
+                Set(ref _downloadCenter, value);
+            }
+        }
     }
 }

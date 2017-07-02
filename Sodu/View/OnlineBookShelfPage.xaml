@@ -39,7 +39,6 @@
                            ItemRightCommand="{Binding RemoveCommand}"
                            ItemLeftCommand="{Binding SetHadReadCommand}"
                            ItemLeftBackground="{StaticResource AppThemeColor}"
-                           
                            Grid.Row="1">
             <swipeListControl:SwipeListView.ItemLeftContentTemplate>
                 <DataTemplate>

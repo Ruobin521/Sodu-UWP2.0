@@ -50,7 +50,8 @@ namespace Sodu
 
             var package = Windows.ApplicationModel.Package.Current;
 
-            IsPro = package.DisplayName.Equals("小说搜索阅读 UWP");
+            IsPro = !package.DisplayName.Equals("小说搜索阅读 UWP");
+
             if (!IsPro)
             {
                 CookieHelper.SetCookie(SoduPageValue.HomePage, false);
@@ -133,6 +134,30 @@ namespace Sodu
                 }
                 // 确保当前窗口处于活动状态
                 Window.Current.Activate();
+            }
+        }
+
+        public static async void HideStatusBar(bool isContent = false)
+        {
+            if (PlatformHelper.IsMobileDevice)
+            {
+                StatusBar statusBar = StatusBar.GetForCurrentView();
+                statusBar.ForegroundColor = Colors.White;
+                statusBar.BackgroundOpacity = 1;
+                statusBar.BackgroundColor = isContent ? Color.FromArgb(255, 25, 25, 25) : Contants.ConstantValue.AppMainColor;
+                await statusBar.HideAsync();
+            }
+        }
+
+        public static async void ShowStatusBar(bool isContent = false)
+        {
+            if (PlatformHelper.IsMobileDevice)
+            {
+                StatusBar statusBar = StatusBar.GetForCurrentView();
+                statusBar.ForegroundColor = Colors.White;
+                statusBar.BackgroundOpacity = 1;
+                statusBar.BackgroundColor = isContent ? Color.FromArgb(255, 25, 25, 25) : Contants.ConstantValue.AppMainColor;
+                await statusBar.ShowAsync();
             }
         }
 

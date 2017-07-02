@@ -23,76 +23,45 @@
 
 
         <converter:LightValueConverter x:Key="LightValueConverter"></converter:LightValueConverter>
-        <KeyTime x:Key="SbKeyTime">0:0:0.35</KeyTime>
+        <KeyTime x:Key="SbKeyTime">0:0:0.20</KeyTime>
         <Storyboard x:Name="MenuBarHide">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="TopBar">
                 <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                <EasingDoubleKeyFrame KeyTime="{StaticResource SbKeyTime}" Value="-45">
-                    <EasingDoubleKeyFrame.EasingFunction>
-                        <PowerEase/>
-                    </EasingDoubleKeyFrame.EasingFunction>
-                </EasingDoubleKeyFrame>
+                <EasingDoubleKeyFrame KeyTime="{StaticResource SbKeyTime}" Value="-45"/>
             </DoubleAnimationUsingKeyFrames>
 
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="BottomBar">
                 <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                <EasingDoubleKeyFrame KeyTime="{StaticResource SbKeyTime}" Value="55">
-                    <EasingDoubleKeyFrame.EasingFunction>
-                        <PowerEase  />
-                    </EasingDoubleKeyFrame.EasingFunction>
-                </EasingDoubleKeyFrame>
+                <EasingDoubleKeyFrame KeyTime="{StaticResource SbKeyTime}" Value="55"/>
             </DoubleAnimationUsingKeyFrames>
 
             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="TopBar">
-                <DiscreteObjectKeyFrame KeyTime="{StaticResource SbKeyTime}">
-                    <DiscreteObjectKeyFrame.Value>
-                        <Visibility>Collapsed</Visibility>
-                    </DiscreteObjectKeyFrame.Value>
-                </DiscreteObjectKeyFrame>
+                <DiscreteObjectKeyFrame KeyTime="{StaticResource SbKeyTime}"  Value="Collapsed" />
             </ObjectAnimationUsingKeyFrames>
 
-
             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="BottomBar">
-                <DiscreteObjectKeyFrame KeyTime="{StaticResource SbKeyTime}">
-                    <DiscreteObjectKeyFrame.Value>
-                        <Visibility>Collapsed</Visibility>
-                    </DiscreteObjectKeyFrame.Value>
-                </DiscreteObjectKeyFrame>
+                <DiscreteObjectKeyFrame KeyTime="{StaticResource SbKeyTime}" Value="Collapsed" />
             </ObjectAnimationUsingKeyFrames>
 
         </Storyboard>
         <Storyboard x:Name="MenuBarShow">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="TopBar">
                 <EasingDoubleKeyFrame KeyTime="0" Value="-45"/>
-                <EasingDoubleKeyFrame KeyTime="{StaticResource SbKeyTime}" Value="0">
-                    <EasingDoubleKeyFrame.EasingFunction>
-                        <PowerEase  />
-                    </EasingDoubleKeyFrame.EasingFunction>
-                </EasingDoubleKeyFrame>
+                <EasingDoubleKeyFrame KeyTime="{StaticResource SbKeyTime}" Value="0"/>
+                
             </DoubleAnimationUsingKeyFrames>
 
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="BottomBar">
                 <EasingDoubleKeyFrame KeyTime="0" Value="55"/>
-                <EasingDoubleKeyFrame KeyTime="{StaticResource SbKeyTime}" Value="0">
-                    <EasingDoubleKeyFrame.EasingFunction>
-                        <PowerEase />
-                    </EasingDoubleKeyFrame.EasingFunction>
-                </EasingDoubleKeyFrame>
+                <EasingDoubleKeyFrame KeyTime="{StaticResource SbKeyTime}" Value="0"/>
+                
             </DoubleAnimationUsingKeyFrames>
             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="TopBar">
-                <DiscreteObjectKeyFrame KeyTime="0:0:0.0">
-                    <DiscreteObjectKeyFrame.Value>
-                        <Visibility>Visible</Visibility>
-                    </DiscreteObjectKeyFrame.Value>
-                </DiscreteObjectKeyFrame>
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.0" Value="Visible" />
             </ObjectAnimationUsingKeyFrames>
 
             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="BottomBar">
-                <DiscreteObjectKeyFrame KeyTime="0:0:0.0">
-                    <DiscreteObjectKeyFrame.Value>
-                        <Visibility>Visible</Visibility>
-                    </DiscreteObjectKeyFrame.Value>
-                </DiscreteObjectKeyFrame>
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.0" Value="Visible" />
             </ObjectAnimationUsingKeyFrames>
         </Storyboard>
 
@@ -468,11 +437,12 @@
 
                 <control:TabbarButton  Grid.Column="1"  Foreground="#FFADADAD"  Label="目录"
                                     PathData="{StaticResource CatalogPathData}" 
-                                        Command="{Binding Catalogcommand}"
+                                        Command="{Binding CatalogCommand}"
                                     HighLightBackColor="Black" />
 
                 <control:TabbarButton  Grid.Column="2"  Foreground="#FFADADAD"  Label="缓存"
                                     PathData="{StaticResource DownloadPathData}"
+                                         Command="{Binding DownloadCommand}"
                                     HighLightBackColor="Black"/>
 
                 <control:TabbarButton x:Name="BtnFontSetingPanel"  Grid.Column="3"  Foreground="#FFADADAD"  Label="设置"

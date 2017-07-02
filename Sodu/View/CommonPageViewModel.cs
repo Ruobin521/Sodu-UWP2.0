@@ -110,30 +110,6 @@ namespace Sodu.View
         }
 
 
-        public async void HideStatusBar(bool isContent = false)
-        {
-            if (PlatformHelper.IsMobileDevice)
-            {
-                StatusBar statusBar = StatusBar.GetForCurrentView();
-                statusBar.ForegroundColor = Colors.White;
-                statusBar.BackgroundOpacity = 1;
-                statusBar.BackgroundColor = isContent ? Color.FromArgb(255, 25, 25, 25) : Contants.ConstantValue.AppMainColor;
-                await statusBar.HideAsync();
-            }
-        }
-
-        public async void ShowStatusBar(bool isContent = false)
-        {
-            if (PlatformHelper.IsMobileDevice)
-            {
-                StatusBar statusBar = StatusBar.GetForCurrentView();
-                statusBar.ForegroundColor = Colors.White;
-                statusBar.BackgroundOpacity = 1;
-                statusBar.BackgroundColor = isContent ? Color.FromArgb(255, 25, 25, 25) : Contants.ConstantValue.AppMainColor;
-                await statusBar.ShowAsync();
-            }
-        }
-
         #endregion
 
         #region 命令

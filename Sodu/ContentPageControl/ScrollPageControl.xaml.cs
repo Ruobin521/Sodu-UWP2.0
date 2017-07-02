@@ -25,53 +25,78 @@ namespace Sodu.ContentPageControl
 {
     public sealed partial class ScrollPageControl : Windows.UI.Xaml.Controls.UserControl
     {
-
-        private bool IsLoading { get; set; }
+        private bool IsLoadingContent { get; set; }
 
         public ScrollPageControl()
         {
             this.InitializeComponent();
             Viewer.ViewChanged += Viewer_ViewChanged;
 
-            Messenger.Default.Register<string>(this, "ContentTextChanged", UpdateScrollContent);
+            Messenger.Default.Register<string>(this, "CurrentCatalogContentChanged", OnCurrentCatalogContentChanged);
+
         }
 
-        private async void UpdateScrollContent(string str)
+        private async void OnCurrentCatalogContentChanged(string str)
         {
-            IsLoading = true;
+            IsLoadingContent = true;
 
             var windowHeight = Window.Current.Bounds.Height;
-
-            ContentText.Text = "";
             ContentText.Height = double.NaN;
-            await Task.Delay(1);
-
             Viewer.ChangeView(0, 0, null, true);
+            await Task.Delay(2);
 
-            if (string.IsNullOrEmpty(str))
+            var textHeight = ContentText.ActualHeight;
+            if (textHeight < windowHeight + 200)
             {
                 ContentText.Height = windowHeight + 200;
-                await Task.Delay(1);
+                await Task.Delay(2);
             }
             else
             {
-                ContentText.Text = str;
-                await Task.Delay(1);
-                var textHeight = ContentText.ActualHeight;
-                if (textHeight < windowHeight + 100)
-                {
-                    ContentText.Height = windowHeight + 200;
-                }
-                else
-                {
-                    ContentText.Height = textHeight;
-                }
-                await Task.Delay(1);
+                ContentText.Height = textHeight;
             }
 
             Viewer.ChangeView(0, 50, null, Viewer.VerticalOffset > 50);
-            IsLoading = false;
+
+            IsLoadingContent = false;
         }
+
+        //private async void UpdateScrollContent(string str)
+        //{
+        //    IsLoadingContent = true;
+
+        //    //var windowHeight = Window.Current.Bounds.Height;
+
+        //    //ContentText.Text = "";
+        //    //ContentText.Height = double.NaN;
+        //    //await Task.Delay(1);
+
+        //    //Viewer.ChangeView(0, 0, null, true);
+
+        //    //if (string.IsNullOrEmpty(str))
+        //    //{
+        //    //    ContentText.Height = windowHeight + 200;
+        //    //    await Task.Delay(1);
+        //    //}
+        //    //else
+        //    //{
+        //    //    ContentText.Text = str;
+        //    //    await Task.Delay(1);
+        //    //    var textHeight = ContentText.ActualHeight;
+        //    //    if (textHeight < windowHeight + 100)
+        //    //    {
+        //    //        ContentText.Height = windowHeight + 200;
+        //    //    }
+        //    //    else
+        //    //    {
+        //    //        ContentText.Height = textHeight;
+        //    //    }
+        //    //    await Task.Delay(1);
+        //    //}
+
+        //    //Viewer.ChangeView(0, 50, null, Viewer.VerticalOffset > 50);
+        //    //IsLoadingContent = false;
+        //}
 
 
 
@@ -79,7 +104,7 @@ namespace Sodu.ContentPageControl
         {
             var vm = (OnlineContentPageViewModel)DataContext;
 
-            if (IsLoading || vm.IsLoading)
+            if (IsLoadingContent || vm.IsLoading)
             {
                 return;
             }
@@ -91,11 +116,11 @@ namespace Sodu.ContentPageControl
             var v2 = Viewer.ViewportHeight;
 
             //向上滚动
-            if (Math.Abs((Viewer.VerticalOffset - 0.1)) <= 0.1)
+            if (Math.Abs(Viewer.VerticalOffset) <= 1.0)
             {
                 if (!e.IsIntermediate)
                 {
-                    SwitchToPre();
+                    SwitchCatalog(CatalogDirection.Pre);
                 }
             }
 
@@ -103,53 +128,34 @@ namespace Sodu.ContentPageControl
             {
                 if (!e.IsIntermediate)
                 {
-                    SwitchToNext();
+                    SwitchCatalog(CatalogDirection.Next);
                 }
             }
         }
 
 
-        private async void SwitchToPre()
+        private void SwitchCatalog(CatalogDirection dir)
         {
-            var vm = (OnlineContentPageViewModel)DataContext;
-
-            if (IsLoading)
-            {
-                return;
-            }
-
-            vm.SwitchCatalog(CatalogDirection.Pre);
-            await Task.Delay(5);
-
-        }
-
-        private async void SwitchToNext()
-        {
-            var vm = (OnlineContentPageViewModel)DataContext;
             try
             {
-                if (IsLoading)
+                if (IsLoadingContent)
                 {
                     return;
                 }
-                var value = vm.GetCatalogByDirction(CatalogDirection.Next);
-
-                if (value == null)
-                {
-                    await Task.Delay(10);
-                    NavigationService.NavigateTo(typeof(CatalogPage));
-                }
-                else
-                {
-                    vm.SwitchCatalog(CatalogDirection.Next);
-                    await Task.Delay(5);
-                }
-
+                IsLoadingContent = true;
+                var vm = (OnlineContentPageViewModel)DataContext;
+                vm.ScrollToSwitchCurrentCatalog(dir);
             }
-            catch (Exception exception)
+            catch (Exception e)
             {
-                Console.WriteLine(exception);
+                Console.WriteLine(e);
             }
+            finally
+            {
+                IsLoadingContent = false;
+            }
+
         }
+
     }
 }

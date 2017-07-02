@@ -120,8 +120,10 @@
     <Compile Include="Entity\LocalBook.cs" />
     <Compile Include="Entity\TabbarItem.cs" />
     <Compile Include="Extend\AutoLoadCollection.cs" />
+    <Compile Include="Extend\ColorExtend.cs" />
     <Compile Include="Extend\IncrementalLoadingBase.cs" />
     <Compile Include="Extend\IncrementalLoadingCollection.cs" />
+    <Compile Include="Extend\ListExtend.cs" />
     <Compile Include="HtmlService\AnalisysSourceHtmlHelper.cs" />
     <Compile Include="HtmlService\AnalisysSourceHelper.cs" />
     <Compile Include="HtmlService\SourceWebValue.cs" />

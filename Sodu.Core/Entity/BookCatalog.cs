@@ -16,19 +16,8 @@ namespace Sodu.Core.Entity
         public string BookId { get; set; }
         public string CatalogName { get; set; }
         public string CatalogUrl { get; set; }
-        public string LyWeb { get; set; }
+        public string CatalogContent { get; set; }
         public int Index { get; set; }
 
-    }
-
-    public class BookCatalogContent
-    {
-
-        [PrimaryKey]// 主键。
-        [AutoIncrement]// 自动增长。
-        public int Id { get; set; }
-        public string BookId { get; set; }
-        public string Content { get; set; }
-        public string CatalogUrl { get; set; }
     }
 }
