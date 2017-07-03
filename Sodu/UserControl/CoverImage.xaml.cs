@@ -13,6 +13,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
+using GalaSoft.MvvmLight.Threading;
 using Sodu.Core.Config;
 using Sodu.Core.Entity;
 using Sodu.Core.Util;
@@ -42,8 +43,13 @@ namespace Sodu.UserControl
             {
                 if (!string.IsNullOrEmpty(book.Cover))
                 {
-                    DownloadCoverHelper.SaveHttpImage(AppDataPath.GetBookCoverFolderPath(), book.BookId + ".jpg", book.Cover,
-                SetCoverImage);
+                    DownloadCoverHelper.SaveHttpImage(AppDataPath.GetBookCoverFolderPath(), book.BookId + ".jpg",
+                        book.Cover,
+                        SetCoverImage);
+                }
+                else
+                {
+                    this.ImageCover.Source = null;
                 }
             }
             else
@@ -54,9 +60,12 @@ namespace Sodu.UserControl
         public void SetCoverImage()
         {
             var book = DataContext as Book;
-            var filePath = AppDataPath.GetBookCoverPath(book.BookId);
+            var filePath = AppDataPath.GetBookCoverPath(book?.BookId);
+            DispatcherHelper.CheckBeginInvokeOnUI(() =>
+            {
+                this.ImageCover.Source = new BitmapImage(new Uri(filePath, UriKind.Absolute));
+            });
 
-            this.ImageCover.Source = new BitmapImage(new Uri(filePath, UriKind.Absolute));
         }
     }
 }

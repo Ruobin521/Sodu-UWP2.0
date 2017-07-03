@@ -49,7 +49,9 @@
             </swipeListControl:SwipeListView.ItemRightContentTemplate>
             <swipeListControl:SwipeListView.ItemTemplate>
                 <DataTemplate>
-                    <userControl:RankListItem DataContext="{Binding}" FlyoutBase.AttachedFlyout="{StaticResource BtnMenuFlyout}"   Command="{Binding  Instance.Rank.ItemClickCommand,Source={ StaticResource  Locator}}" CommandParameter="{Binding}"></userControl:RankListItem>
+                    <Button Style="{StaticResource ListViewItemButtonStyle}">
+                        <userControl:RankListItem DataContext="{Binding}" FlyoutBase.AttachedFlyout="{StaticResource BtnMenuFlyout}"   Command="{Binding  Instance.Rank.ItemClickCommand,Source={ StaticResource  Locator}}" CommandParameter="{Binding}"></userControl:RankListItem>
+                    </Button>
                 </DataTemplate>
             </swipeListControl:SwipeListView.ItemTemplate>
         </swipeListControl:SwipeListView>

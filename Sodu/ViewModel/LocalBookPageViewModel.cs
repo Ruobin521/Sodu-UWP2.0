@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.Storage;
@@ -14,8 +17,10 @@ using Newtonsoft.Json;
 using Sodu.Core.Config;
 using Sodu.Core.DataBase;
 using Sodu.Core.Entity;
+using Sodu.Core.Util;
 using Sodu.Service;
 using Sodu.View;
+using UnicodeEncoding = Windows.Storage.Streams.UnicodeEncoding;
 
 namespace Sodu.ViewModel
 {
@@ -36,6 +41,8 @@ namespace Sodu.ViewModel
             }
             set { Set(ref _localBooks, value); }
         }
+
+        private bool IsInit { get; set; }
 
         #endregion
 
@@ -95,27 +102,134 @@ namespace Sodu.ViewModel
 
         private async void OnAddTxtCommand(object obj)
         {
-            ToastHelper.ShowMessage("点击添加Txt文件");
-
             FileOpenPicker openFile = new FileOpenPicker();
             openFile.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
             openFile.ViewMode = PickerViewMode.List;
             openFile.FileTypeFilter.Add(".txt");
 
             // 选取单个文件
-            StorageFile file = await openFile.PickSingleFileAsync();
+            var file = await openFile.PickSingleFileAsync();
+
             if (file != null)
             {
-                var str = "你所选择的文件是： " + file.Name;
-
-                ToastHelper.ShowMessage(str);
-            }
-            else
-            {
-                var str = "打开文件操作被取消。";
-                ToastHelper.ShowMessage(str);
+                LoadTxtFile(file);
             }
         }
+
+
+        private void LoadTxtFile(StorageFile file)
+        {
+            Task.Run(async () =>
+            {
+                try
+                {
+                    DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                    {
+                        IsLoading = true;
+                    });
+
+                    string txt;
+                    using (Stream stream = await file.OpenStreamForReadAsync())
+                    {
+                        using (StreamReader read = new StreamReader(stream, Encoding.GetEncoding("GBK")))
+                        {
+                            txt = read.ReadToEnd();
+                        }
+                    }
+
+                    var matches = Regex.Matches(txt, @"(?<title>第?\w*章\s\w{1,20}[！]?\s?[--，]?\w{1,20}\(?（?\w{1,20}\)?）?)", RegexOptions.Compiled);
+
+                    if (matches.Count <= 0)
+                    {
+                        return;
+                    }
+
+                    Debug.WriteLine(matches.Count);
+
+                    var catalogs = new List<BookCatalog>();
+
+                    var bookId = Guid.NewGuid().ToString();
+
+                    for (int i = 0; i < matches.Count; i++)
+                    {
+                        var currentMatch = matches[i];
+                        if (currentMatch == null)
+                        {
+                            continue; ;
+                        }
+
+
+                        if (i == 0 && !string.IsNullOrEmpty(txt.Substring(0, currentMatch.Index)?.Trim()))
+                        {
+                            var temp = new BookCatalog
+                            {
+                                BookId = bookId,
+                                Index = 0,
+                                CatalogName = "前言",
+                                CatalogContent = txt.Substring(0, currentMatch.Index),
+                                CatalogUrl = "0"
+                            };
+                            catalogs.Add(temp);
+                        }
+
+                        var catalog = new BookCatalog
+                        {
+                            CatalogName = currentMatch.ToString(),
+                            BookId = bookId,
+                            Index = i + 1
+                        };
+                        if (i == matches.Count - 1)
+                        {
+                            catalog.CatalogContent = txt.Substring(currentMatch.Index, txt.Length - currentMatch.Index);
+                            catalog.CatalogUrl = currentMatch.Index.ToString();
+                            catalog.CatalogUrl = (i + 1).ToString();
+                        }
+                        else
+                        {
+                            var nextMatch = matches[i + 1];
+                            catalog.CatalogContent = txt.Substring(currentMatch.Index, nextMatch.Index - currentMatch.Index);
+                            catalog.CatalogUrl = (i + 1).ToString();
+                        }
+                        catalog.CatalogContent = catalog.CatalogContent?.Replace("\r\n\r\n", "\r\n");
+
+                        catalogs.Add(catalog);
+
+                    }
+
+                    var book = new Book();
+                    book.IsTxt = true;
+                    book.BookId = bookId;
+                    book.BookName = file.DisplayName;
+                    book.LastReadChapterName = catalogs.FirstOrDefault().CatalogName;
+                    book.LastReadChapterUrl = catalogs.FirstOrDefault().CatalogUrl;
+                    book.NewestChapterName = catalogs.LastOrDefault().CatalogName;
+                    book.NewestChapterUrl = catalogs.LastOrDefault().CatalogUrl;
+
+                    DbLocalBook.InsertOrUpdateBookCatalogs(AppDataPath.GetLocalBookDbPath(), catalogs);
+
+                    DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                    {
+                        this.InserOrUpdateBook(book);
+
+                        IsLoading = false;
+                    });
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                    {
+                        IsLoading = false;
+                    });
+                }
+
+            });
+        }
+
+
 
         public override void OnItemClickCommand(object obj)
         {
@@ -124,10 +238,12 @@ namespace Sodu.ViewModel
             {
                 return;
             }
-            localbook.CurrentBook.IsLocal = true;
-            localbook.CurrentBook.IsNew = false;
+            if (localbook.CurrentBook.IsNew)
+            {
+                OnSetHadReadCommand(localbook);
+            }
+
             NavigationService.NavigateTo(typeof(OnlineContentPage));
-            ViewModelInstance.Instance.OnlineBookContent.ResDeta();
             ViewModelInstance.Instance.OnlineBookContent.LoadData(localbook.CurrentBook);
         }
 
@@ -142,17 +258,12 @@ namespace Sodu.ViewModel
                 "使用帮助：" + "\n" +
                 "1.点击阅读正文菜单中的“缓存”按钮即可缓存全部章节内容,可在“设置-下载中心”中查看下载进度。" + "\n" +
                 "2.点击阅读正文右下方红色按钮，添加该小说至本地书架进行在线阅读。" + "\n" +
-                "3.下载或添加完毕后即可在此处点击阅读" + "\n" +
+                "3.下载或添加完毕后即可在此处点击阅读。" + "\n" +
                 "4.手机用户向左滑动即可删除当前项，向右滑动可标记为已读。" + "\n" +
-                "5.PC用户点击鼠标右键进行相关不操作" + "\n" +
-                "6.免费版本在本地书架中最多只能存三本。Pro版本无此限制" + "\n";
+                "5.PC用户点击鼠标右键进行相关不操作。" + "\n" +
+                "6.免费版本在本地书架中最多只能存三本。Pro版本无此限制。" + "\n" +
+                "7.Pro版本点击加号即可添加本地Txt文件阅读。" + "\n";
 
-
-            if (!App.IsPro)
-            {
-                // HelpText +=  "6.本地书架暂不支持本地TXT文件阅读。" + "\n";
-
-            }
         }
 
 
@@ -170,9 +281,12 @@ namespace Sodu.ViewModel
         private void GetLocalBookFromDb()
         {
             LocalBooks.Clear();
+
+            IsLoading = true;
+
             Task.Run(async () =>
             {
-                await Task.Delay(100);
+                await Task.Delay(1);
                 var list = DbLocalBook.GetBooks(AppDataPath.GetLocalBookDbPath());
                 if (list == null || list.Count <= 0)
                 {
@@ -185,20 +299,32 @@ namespace Sodu.ViewModel
                     {
                         CurrentBook = book
                     };
-                    DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                    DispatcherHelper.CheckBeginInvokeOnUI(async () =>
                     {
                         LocalBooks.Add(localVm);
+                        await Task.Delay(10);
                     });
 
                     localVm.CheckUpdate();
                 }
-            });
 
+                DispatcherHelper.CheckBeginInvokeOnUI(() =>
+              {
+                  IsLoading = false;
+              });
+
+                IsInit = true;
+            });
 
         }
 
         public override void OnRefreshCommand(object obj)
         {
+            if (IsLoading)
+            {
+                return;
+            }
+
             if (LocalBooks.Any(p => p.IsUpdating == true))
             {
                 ToastHelper.ShowMessage("正在更新数据，请稍后刷新");
@@ -218,16 +344,19 @@ namespace Sodu.ViewModel
             var temp = LocalBooks.FirstOrDefault(p => p.CurrentBook.BookId == book.BookId);
             DbLocalBook.InsertOrUpdatBook(AppDataPath.GetLocalBookDbPath(), book);
 
-            if (temp != null)
-            {
-                LocalBooks.Remove(temp);
-            }
-
             DispatcherHelper.CheckBeginInvokeOnUI(() =>
             {
+                if (temp != null)
+                {
+                    LocalBooks.Remove(temp);
+                }
                 LocalBooks.Insert(0, new LocalBookItemViewModel(book));
-
             });
+
+            if (!IsInit)
+            {
+                GetLocalBookFromDb();
+            }
         }
 
         public int GetLocalBooksCount()

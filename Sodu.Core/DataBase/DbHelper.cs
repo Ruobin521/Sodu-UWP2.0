@@ -14,11 +14,8 @@ namespace Sodu.Core.DataBase
 
         private static bool isOperating = false;
 
-        public static void AddDbOperator(Action action)
+        private static void StartAction()
         {
-            Actions.Add(action);
-
-            Debug.WriteLine("---------------------------------" + Actions.Count + "---------------------------------");
             if (isOperating)
             {
                 return;
@@ -28,14 +25,31 @@ namespace Sodu.Core.DataBase
 
             while (Actions.Count > 0)
             {
-                Actions.FirstOrDefault()?.Invoke();
-                Actions.RemoveAt(0);
+                try
+                {
+                    Actions.FirstOrDefault()?.Invoke();
+                    Actions.RemoveAt(0);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
             }
 
             if (Actions.Count == 0)
             {
                 isOperating = false;
             }
+        }
+
+        public static void AddDbOperator(Action action)
+        {
+            Actions.Add(action);
+
+            Debug.WriteLine("---------------------------------" + Actions.Count + "---------------------------------");
+
+            StartAction();
+
         }
 
 

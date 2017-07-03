@@ -96,6 +96,7 @@ namespace Sodu.ViewModel
                             CurrentBook.IsNew = true;
                             CurrentBook.NewestChapterName = lastWebCatalog.CatalogName;
                             CurrentBook.NewestChapterUrl = lastWebCatalog.CatalogUrl;
+                            ViewModelInstance.Instance.LocalBookPage.InserOrUpdateBook(CurrentBook);
                         });
                     }
                     catch (Exception e)
@@ -109,7 +110,6 @@ namespace Sodu.ViewModel
                     {
                         return;
                     }
-                    DbLocalBook.InsertOrUpdatBook(AppDataPath.GetLocalBookDbPath(), CurrentBook);
                 });
             }
 
@@ -259,18 +259,18 @@ namespace Sodu.ViewModel
 
                 await Task.Factory.ContinueWhenAll(tasks, (obj) =>
                 {
-                    var reslut = DbLocalBook.InsertOrUpdateBookCatalogs(AppDataPath.GetLocalBookDbPath(),
-                        NeedUpdateCatalogs);
-
-                    if (reslut)
+                    DbHelper.AddDbOperator(new Action(() =>
                     {
-                        DispatcherHelper.CheckBeginInvokeOnUI(() =>
-                        {
-                            NeedUpdateCount = "";
-                        });
+                        var reslut = DbLocalBook.InsertOrUpdateBookCatalogs(AppDataPath.GetLocalBookDbPath(),
+                       NeedUpdateCatalogs);
 
+                    }));
 
-                    }
+                    DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                    {
+                        NeedUpdateCount = "";
+                    });
+
                 });
             }
             catch (Exception e)

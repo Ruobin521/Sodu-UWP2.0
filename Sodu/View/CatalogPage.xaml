@@ -9,6 +9,13 @@
     mc:Ignorable="d"
     x:Name="Root"
         DataContext="{Binding  Instance.OnlineBookContent,Source={StaticResource Locator}}">
+    <Page.Transitions>
+        <TransitionCollection>
+            <NavigationThemeTransition>
+                <SlideNavigationTransitionInfo></SlideNavigationTransitionInfo>
+            </NavigationThemeTransition>
+        </TransitionCollection>
+    </Page.Transitions>
     <Page.Resources>
         <Style x:Key="CatalogListViewStyle" TargetType="ListView">
             <Setter Property="IsTabStop" Value="False"/>

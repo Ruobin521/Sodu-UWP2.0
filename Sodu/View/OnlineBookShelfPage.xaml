@@ -58,9 +58,11 @@
             </swipeListControl:SwipeListView.ItemRightContentTemplate>
             <swipeListControl:SwipeListView.ItemTemplate>
                 <DataTemplate>
-                    <userControl:OnlineBookShelfItem DataContext="{Binding}" FlyoutBase.AttachedFlyout="{StaticResource BtnMenuFlyout}" 
+                    <Button Style="{StaticResource ListViewItemButtonStyle}">
+                        <userControl:OnlineBookShelfItem DataContext="{Binding}" FlyoutBase.AttachedFlyout="{StaticResource BtnMenuFlyout}" 
                                                      Command="{Binding  Instance.OnLineBookShelf.ItemClickCommand,Source={ StaticResource  Locator}}"
                                                      CommandParameter="{Binding}"></userControl:OnlineBookShelfItem>
+                    </Button>
                 </DataTemplate>
             </swipeListControl:SwipeListView.ItemTemplate>
         </swipeListControl:SwipeListView>

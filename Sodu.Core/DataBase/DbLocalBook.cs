@@ -242,6 +242,43 @@ namespace Sodu.Core.DataBase
             return result;
         }
 
+
+        public static BookCatalog SelectBookCatalogById(string path, string bookId, string catalogUrl)
+        {
+            BookCatalog result = null;
+            Debug.WriteLine("进入数据库");
+            using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), path))
+            {
+                try
+                {
+                    db.BusyTimeout = TimeSpan.FromMilliseconds(1);
+                    db.CreateTable<BookCatalog>();
+                    db.RunInTransaction(() =>
+                    {
+                        try
+                        {
+                            var catalog = (from m in db.Table<BookCatalog>()
+                                           where m.BookId == bookId && m.CatalogUrl == catalogUrl
+                                           select m).FirstOrDefault();
+
+                            result = catalog;
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.WriteLine(e.Message + "\n" + e.StackTrace);
+                            result = null;
+                        }
+                    });
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.Message + "\n" + e.StackTrace);
+                }
+               
+            }
+            return result;
+        }
+
         public static bool DeleteBook(string path, string bookId)
         {
             var result = true;

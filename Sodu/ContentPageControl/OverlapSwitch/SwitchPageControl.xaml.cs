@@ -125,20 +125,20 @@ namespace Sodu.ContentPageControl
 
             if (vm.PageIndex < vm.PageCount - 1)
             {
-                if (!vm.DicContentCache.ContainsKey(vm.CurrentCatalog.CatalogUrl))
-                {
-                    return false;
-                }
+                //if (!vm.DicContentCache.ContainsKey(vm.CurrentCatalog.CatalogUrl))
+                //{
+                //    return false;
+                //}
 
-                var value = vm.DicContentCache[vm.CurrentCatalog.CatalogUrl];
-                if (value?.Item1 != null && value.Item1.Count > 0)
-                {
-                    Item1.Text = value.Item1[vm.PageIndex + 1];
+                //var value = vm.DicContentCache[vm.CurrentCatalog.CatalogUrl];
+                //if (value?.Item1 != null && value.Item1.Count > 0)
+                //{
+                //    Item1.Text = value.Item1[vm.PageIndex + 1];
 
-                    vm.PageIndex += 1;
+                //    vm.PageIndex += 1;
 
-                    return true;
-                }
+                //    return true;
+                //}
             }
             else
             {
@@ -183,13 +183,13 @@ namespace Sodu.ContentPageControl
 
             if (vm.PageIndex > 0)
             {
-                var value = vm.DicContentCache[vm.CurrentCatalog.CatalogUrl];
-                if (value?.Item1 != null && value.Item1.Count > 0)
-                {
-                    Item1.Text = value.Item1[vm.PageIndex - 1];
-                    vm.PageIndex -= 1;
-                    return true;
-                }
+                //var value = vm.DicContentCache[vm.CurrentCatalog.CatalogUrl];
+                //if (value?.Item1 != null && value.Item1.Count > 0)
+                //{
+                //    Item1.Text = value.Item1[vm.PageIndex - 1];
+                //    vm.PageIndex -= 1;
+                //    return true;
+                //}
             }
             else
             {

@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControl="using:Sodu.UserControl"
     xmlns:swipeListControl="using:Sodu.Control.SwipeListControl"
+    xmlns:control="using:Sodu.Control"
     DataContext="{Binding  Instance.LocalBookPage,Source={StaticResource Locator}}"
     mc:Ignorable="d">
     <local:BaseListUserControl.Resources>
@@ -34,17 +35,11 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="本地书架" Foreground="White" FontSize="18" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,2"></TextBlock>
-            <AppBarButton Grid.Column="2"  Icon="Add" Foreground="White" Command="{Binding AddTxtCommand}" ></AppBarButton>
-            <AppBarButton Grid.Column="3" Icon="Refresh" Foreground="White" Command="{Binding RefreshCommand}" ></AppBarButton>
-            <AppBarButton  Grid.Column="0"  Foreground="White" Command="{Binding SearchCommand,ElementName=root}"
-                           Margin="0,0" >
-                <AppBarButton.Content>
-                    <TextBlock Text="全部更新" Foreground="White" FontSize="15" Margin="5,0"></TextBlock>
-                </AppBarButton.Content>
-            </AppBarButton>
+            <TextBlock Text="本地书架" Foreground="White" FontSize="18" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,2"></TextBlock>
+            <AppBarButton Grid.Column="2" Icon="Refresh" Foreground="White" Command="{Binding RefreshCommand}" ></AppBarButton>
+            <AppBarButton Grid.Column="0"  Icon="Add" Foreground="White" Command="{Binding AddTxtCommand}" ></AppBarButton>
+
         </Grid>
 
 
@@ -75,10 +70,12 @@
             </swipeListControl:SwipeListView.ItemRightContentTemplate>
             <swipeListControl:SwipeListView.ItemTemplate>
                 <DataTemplate>
-                    <userControl:LocalBookItem DataContext="{Binding }"  
+                    <Button Style="{StaticResource ListViewItemButtonStyle}">
+                        <userControl:LocalBookItem DataContext="{Binding }"  
                                                FlyoutBase.AttachedFlyout="{StaticResource BtnMenuFlyout}" 
              Command="{Binding  Instance.LocalBookPage.ItemClickCommand,Source={ StaticResource  Locator}}"
                                                 CommandParameter="{Binding}"></userControl:LocalBookItem>
+                    </Button>
                 </DataTemplate>
             </swipeListControl:SwipeListView.ItemTemplate>
         </swipeListControl:SwipeListView>
@@ -94,6 +91,6 @@
             </TextBlock>
 
         </Grid>
-    
+        <control:LoadingControl IsActive="{Binding IsLoading}" Grid.Row="1"></control:LoadingControl>
     </Grid>
 </local:BaseListUserControl>

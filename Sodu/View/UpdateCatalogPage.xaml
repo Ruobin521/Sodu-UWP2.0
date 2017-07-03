@@ -35,7 +35,9 @@
             </swipeListControl:SwipeListView.ItemRightContentTemplate>
             <swipeListControl:SwipeListView.ItemTemplate>
                 <DataTemplate>
-                    <userControl:UpdateListItem DataContext="{Binding}"   Command="{Binding  Instance.UpdateCatalog.ItemClickCommand,Source={ StaticResource  Locator}}" CommandParameter="{Binding}"></userControl:UpdateListItem>
+                    <Button Style="{StaticResource ListViewItemButtonStyle}">
+                        <userControl:UpdateListItem DataContext="{Binding}"   Command="{Binding  Instance.UpdateCatalog.ItemClickCommand,Source={ StaticResource  Locator}}" CommandParameter="{Binding}"></userControl:UpdateListItem>
+                    </Button>
                 </DataTemplate>
             </swipeListControl:SwipeListView.ItemTemplate>
         </swipeListControl:SwipeListView>

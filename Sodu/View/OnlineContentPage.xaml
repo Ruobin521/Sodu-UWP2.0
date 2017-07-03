@@ -27,7 +27,7 @@
         <Storyboard x:Name="MenuBarHide">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="TopBar">
                 <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                <EasingDoubleKeyFrame KeyTime="{StaticResource SbKeyTime}" Value="-45"/>
+                <EasingDoubleKeyFrame KeyTime="{StaticResource SbKeyTime}" Value="-55"/>
             </DoubleAnimationUsingKeyFrames>
 
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="BottomBar">
@@ -46,7 +46,7 @@
         </Storyboard>
         <Storyboard x:Name="MenuBarShow">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="TopBar">
-                <EasingDoubleKeyFrame KeyTime="0" Value="-45"/>
+                <EasingDoubleKeyFrame KeyTime="0" Value="-55"/>
                 <EasingDoubleKeyFrame KeyTime="{StaticResource SbKeyTime}" Value="0"/>
                 
             </DoubleAnimationUsingKeyFrames>

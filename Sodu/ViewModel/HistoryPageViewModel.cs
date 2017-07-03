@@ -78,26 +78,27 @@ namespace Sodu.ViewModel
 
         public void InserOrUpdateHistory(Book book)
         {
+            if (book == null)
+            {
+                return;
+            }
+
             Task.Run(() =>
             {
                 DbHelper.AddDbOperator(new Action(() =>
                 {
-                    if (book == null)
-                    {
-                        return;
-                    }
-                    book.UpdateTime = DateTime.Now.ToString();
                     DbHistory.InsertOrUpdatHistory(AppDataPath.GetAppCacheDbPath(), book);
-                    var temp = Books.FirstOrDefault(p => p.BookId == book.BookId);
-                    DispatcherHelper.CheckBeginInvokeOnUI(() =>
-                    {
-                        if (temp != null)
-                        {
-                            Books.Remove(temp);
-                        }
-                        Books.Insert(0, book);
-                    });
                 }));
+
+                var temp = Books.FirstOrDefault(p => p.BookId == book.BookId);
+                DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                {
+                    if (temp != null)
+                    {
+                        Books.Remove(temp);
+                    }
+                    Books.Insert(0, book);
+                });
             });
 
         }

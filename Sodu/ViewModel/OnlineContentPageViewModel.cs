@@ -8,12 +8,15 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.Graphics.Display;
 using Windows.Phone.Devices.Power;
+using Windows.Storage;
 using Windows.UI;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
@@ -41,7 +44,11 @@ namespace Sodu.ViewModel
         /// <summary>
         /// 缓存数据（url,pages ,content）
         /// </summary>
-        public Dictionary<string, Tuple<List<string>, string>> DicContentCache = new Dictionary<string, Tuple<List<string>, string>>();
+        public Dictionary<string, string> DicContentCache = new Dictionary<string, string>();
+        public Dictionary<string, List<string>> DicPagesCache = new Dictionary<string, List<string>>();
+
+
+
 
         /// <summary>
         /// 是否正在加载目录页数据（目录，简介，封面，作者）
@@ -152,8 +159,16 @@ namespace Sodu.ViewModel
 
         public void OnCatalogSelectedCommand(object obj)
         {
-            NavigationService.GoBack();
-            SetCurrentContent(obj as BookCatalog);
+            try
+            {
+                NavigationService.GoBack();
+                SetCurrentContent(obj as BookCatalog);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine($"{e.Message}\n{e.StackTrace}");
+
+            }
         }
 
 
@@ -170,30 +185,7 @@ namespace Sodu.ViewModel
         private ICommand _addToLocalShelfCommand;
         public ICommand AddToLocalShelfCommand => _addToLocalShelfCommand ?? (_addToLocalShelfCommand = new RelayCommand<object>(OnAddToLocalShelfCommand));
 
-        public async void OnAddToLocalShelfCommand(object obj)
-        {
-            var dialog = new MessageDialog("是否添加本小说到本地收藏?", "收藏提示");
 
-            dialog.Commands.Add(new UICommand("确定", cmd =>
-            {
-                if (!App.IsPro && ViewModelInstance.Instance.LocalBookPage.GetLocalBooksCount() >= 3)
-                {
-                    ToastHelper.ShowMessage("免费版本本地书架只能收藏三本，专业版无限制.");
-                    return;
-                }
-
-                CurrentBook.IsOnline = true;
-                CurrentBook.IsLocal = true;
-                ViewModelInstance.Instance.LocalBookPage.InserOrUpdateBook(CurrentBook);
-
-            }, commandId: 0));
-            dialog.Commands.Add(new UICommand("取消", cmd =>
-            {
-            }, commandId: 1));
-
-            //获取返回值
-            await dialog.ShowAsync();
-        }
 
         #endregion
 
@@ -216,127 +208,160 @@ namespace Sodu.ViewModel
                 CatalogName = book.LastReadChapterName,
                 CatalogUrl = book.LastReadChapterUrl,
             };
+
             SetCurrentContent(catalog);
+
             InitCatalogsData(catalog);
         }
 
         public async void SetCurrentContent(BookCatalog catalog)
         {
-            if (catalog == null)
+            try
             {
-                return;
+                if (catalog == null) { return; }
+
+                CurrentCatalog = catalog;
+
+                //  PreLoadPreAndNextCatalog();
+                Debug.WriteLine("-----------开始获取目录数据");
+
+                var value = await GetCatalogContent(catalog, true);
+
+
+                Debug.WriteLine("-----------获取目录数据完成");
+
+
+                if (value != null)
+                {
+                    CurrentCatalogContent = value.Item2;
+                    CurrentBook.LastReadChapterName = catalog.CatalogName;
+                    CurrentBook.LastReadChapterUrl = catalog.CatalogUrl;
+                    UpdateDatabase();
+                    IsRetry = false;
+                }
+                else
+                {
+                    IsRetry = true;
+                    CurrentCatalogContent = "";
+                }
+
+                Messenger.Default.Send(CurrentCatalogContent, "CurrentCatalogContentChanged");
             }
-
-
-            CurrentCatalog = catalog;
-            PreLoadPreAndNextCatalog();
-
-            var value = await GetCatalogContent(catalog, true);
-            if (value != null)
+            catch (Exception e)
             {
-                CurrentCatalogContent = value.Item2;
-                CurrentBook.LastReadChapterName = catalog.CatalogName;
-                CurrentBook.LastReadChapterUrl = catalog.CatalogUrl;
-                UpdateHistory();
-                IsRetry = false;
+                Debug.WriteLine($"{e.Message}\n{e.StackTrace}");
             }
-            else
-            {
-                IsRetry = true;
-                CurrentCatalogContent = "";
-            }
-
-            Messenger.Default.Send(CurrentCatalogContent, "CurrentCatalogContentChanged");
         }
 
+        /// <summary>
+        /// 预加载上一章节下一章节
+        /// </summary>
         private void PreLoadPreAndNextCatalog()
         {
-            if (IsPreLoadingCatalog || CurrentBook?.CatalogList == null)
+            try
             {
-                return;
+                if (IsPreLoadingCatalog || CurrentBook?.CatalogList == null)
+                {
+                    return;
+                }
+
+                var tasks = new Task[2];
+
+                tasks[0] = Task.Run(() =>
+                {
+                    PreLoadNextCatalog();
+                });
+
+                tasks[1] = Task.Run(() =>
+                {
+                    PreLoadPreCatalog();
+                });
+
+                Task.Factory.ContinueWhenAll(tasks, (c) =>
+                {
+                    IsPreLoadingCatalog = false;
+                });
             }
-
-            var tasks = new Task[2];
-
-            tasks[0] = Task.Run(() =>
-           {
-               PreLoadNextCatalog();
-           });
-
-            tasks[1] = Task.Run(() =>
+            catch (Exception e)
             {
-                PreLoadPreCatalog();
-            });
-
-            Task.Factory.ContinueWhenAll(tasks, (c) =>
-            {
-                IsPreLoadingCatalog = false;
-            });
-
+                Debug.WriteLine($"{e.Message}\n{e.StackTrace}");
+            }
         }
 
-
+        /// <summary>
+        /// 预加载下一章节
+        /// </summary>
         private async void PreLoadNextCatalog()
         {
-            if (IsPreLoadingNextCatalog)
+            try
             {
-                return;
+                if (IsPreLoadingNextCatalog)
+                {
+                    return;
+                }
+
+                IsPreLoadingNextCatalog = true;
+
+                if (CurrentBook == null)
+                {
+                    return;
+                }
+                var nextcatalog = GetCatalogByDirction(CatalogDirection.Next);
+
+                if (nextcatalog == null)
+                {
+                    return;
+                }
+                await GetCatalogContent(nextcatalog);
+
+                IsPreLoadingNextCatalog = false;
             }
-
-            IsPreLoadingNextCatalog = true;
-
-            if (CurrentBook == null)
+            catch (Exception e)
             {
-                return;
+                Debug.WriteLine($"{e.Message}\n{e.StackTrace}");
             }
-            var nextcatalog = GetCatalogByDirction(CatalogDirection.Next);
-
-            if (nextcatalog == null)
-            {
-                return;
-            }
-            await GetCatalogContent(nextcatalog);
-
-            IsPreLoadingNextCatalog = false;
-
         }
 
+        /// <summary>
+        /// 预加载上一章节
+        /// </summary>
         private async void PreLoadPreCatalog()
         {
-            if (CurrentBook == null)
+            try
             {
-                return;
-            }
+                if (CurrentBook == null)
+                {
+                    return;
+                }
 
-            if (IsPreLoadingPreCatalog)
+                if (IsPreLoadingPreCatalog)
+                {
+                    return;
+                }
+
+                IsPreLoadingPreCatalog = true;
+
+                var nextcatalog = GetCatalogByDirction(CatalogDirection.Pre);
+
+                if (nextcatalog == null)
+                {
+                    return;
+                }
+                await GetCatalogContent(nextcatalog);
+                IsPreLoadingPreCatalog = false;
+            }
+            catch (Exception e)
             {
-                return;
+                Debug.WriteLine($"{e.Message}\n{e.StackTrace}");
             }
-
-            IsPreLoadingPreCatalog = true;
-
-            var nextcatalog = GetCatalogByDirction(CatalogDirection.Pre);
-
-            if (nextcatalog == null)
-            {
-                return;
-            }
-            await GetCatalogContent(nextcatalog);
-            IsPreLoadingPreCatalog = false;
         }
 
-
-        public async Task<Tuple<List<string>, BookCatalog>> GetCatalogPagesByDirection(CatalogDirection dir, bool isShowLoading = false)
-        {
-            var catalog = GetCatalogByDirction(dir);
-            if (catalog == null)
-            {
-                return null;
-            }
-            var value = await GetCatalogContent(catalog, isShowLoading);
-            return new Tuple<List<string>, BookCatalog>(value.Item1, catalog);
-        }
-
+        /// <summary>
+        /// 根据方向获取目录数据
+        /// </summary>
+        /// <param name="dir"></param>
+        /// <param name="isShowLoading"></param>
+        /// <returns></returns>
         public async Task<Tuple<List<string>, string, BookCatalog>> GetCatalogDataByDirection(CatalogDirection dir, bool isShowLoading = false)
         {
             var catalog = GetCatalogByDirction(dir);
@@ -346,9 +371,15 @@ namespace Sodu.ViewModel
             }
 
             var value = await GetCatalogContent(catalog, isShowLoading);
+
             return new Tuple<List<string>, string, BookCatalog>(value.Item1, value.Item2, catalog);
         }
 
+        /// <summary>
+        ///  根据方向获取目录
+        /// </summary>
+        /// <param name="dir"></param>
+        /// <returns></returns>
         public BookCatalog GetCatalogByDirction(CatalogDirection dir)
         {
             if (CurrentCatalog == null || CurrentBook.CatalogList == null || CurrentBook.CatalogList.Count == 0)
@@ -373,14 +404,19 @@ namespace Sodu.ViewModel
             switch (dir)
             {
                 case CatalogDirection.Current:
+
                     return temp;
+
                 case CatalogDirection.Next:
+
                     if (index < CurrentBook.CatalogList.Count - 1)
                     {
                         return CurrentBook.CatalogList[index + 1];
                     }
                     break;
+
                 case CatalogDirection.Pre:
+
                     if (index > 0)
                     {
                         return CurrentBook.CatalogList[index - 1];
@@ -391,92 +427,54 @@ namespace Sodu.ViewModel
             return null;
         }
 
-        private void UpdateHistory()
-        {
-            if (CurrentBook.IsLocal || CurrentBook.IsOnline)
-            {
-                ViewModelInstance.Instance.LocalBookPage.InserOrUpdateBook(CurrentBook);
-
-              //  DbLocalBook.InsertOrUpdatBook(AppDataPath.GetAppCacheDbPath(), CurrentBook);
-            }
-            else
-            {
-                ViewModelInstance.Instance.History.InserOrUpdateHistory(CurrentBook);
-            }
-        }
-
+        /// <summary>
+        /// 获取目录内容入口
+        /// </summary>
+        /// <param name="catalog"></param>
+        /// <param name="showLoading"></param>
+        /// <returns></returns>
         public async Task<Tuple<List<string>, string>> GetCatalogContent(BookCatalog catalog, bool showLoading = false)
         {
             Tuple<List<string>, string> value = null;
             try
             {
-
                 if (showLoading)
                 {
-                    DispatcherHelper.CheckBeginInvokeOnUI(() =>
-                    {
-                        IsLoading = true;
-                    });
+                    DispatcherHelper.CheckBeginInvokeOnUI(() => { IsLoading = true; });
                 }
 
                 await Task.Run(async () =>
                 {
                     try
                     {
-                        if (DicContentCache.ContainsKey(catalog.CatalogUrl))
+                        if (CurrentBook.IsLocal || CurrentBook.IsTxt)
                         {
-                            value = DicContentCache[catalog.CatalogUrl];
+                            Debug.WriteLine("-----------开始获取本地-------------目录数据");
 
-                            if ((value.Item1 == null || value.Item1.Count == 0) && !string.IsNullOrEmpty(value.Item2))
-                            {
-                                var pages = await SplitContentToPages(value.Item2);
-                                var temp = new Tuple<List<string>, string>(pages, value.Item2);
-                                DicContentCache[catalog.CatalogUrl] = temp;
-                                value = temp;
-                                return;
-                            }
-                            return;
+                            value = await GetLoaclBookCatalogContent(catalog);
+
+                            Debug.WriteLine("-----------获取在线-------------目录数据完成");
+
                         }
-
-                        string html;
-                        List<string> list;
-                        if (CurrentBook.IsLocal)
+                        else
                         {
-                            html = await GetCatalogContentFormDb(catalog);
-                            list = await SplitContentToPages(html);
-                            if (html != null && list != null)
-                            {
-                                value = new Tuple<List<string>, string>(list, html);
-                                if (!DicContentCache.ContainsKey(catalog.CatalogUrl))
-                                {
-                                    DicContentCache.Add(catalog.CatalogUrl, value);
-                                }
-                                return;
-                            }
-                        }
+                            Debug.WriteLine("-----------开始获取在线-------------目录数据");
 
-                        html = await GetCatalogContentFromWeb(catalog);
-                        list = await SplitContentToPages(html);
-                        if (html != null && list != null)
-                        {
-                            value = new Tuple<List<string>, string>(list, html);
-                            if (!DicContentCache.ContainsKey(catalog.CatalogUrl))
-                            {
-                                DicContentCache.Add(catalog.CatalogUrl, value);
-                            }
+                            value = await GetOnlineBookCatalogContent(catalog);
+
+                            Debug.WriteLine("-----------获取在线-------------目录数据完成");
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception e)
                     {
-                        Debug.WriteLine(ex.Message + "\n" + ex.StackTrace);
+                        Debug.WriteLine(e.Message + "\n" + e.StackTrace);
                     }
                 });
-
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                Debug.WriteLine(ex.Message + "\n" + ex.StackTrace);
-                return null;
+                Debug.WriteLine(e.Message + "\n" + e.StackTrace);
+                value = null;
             }
             finally
             {
@@ -488,105 +486,140 @@ namespace Sodu.ViewModel
             return value;
         }
 
-
         /// <summary>
-        /// 获取目录页数据
+        /// 获取本地图书数据 Txt，本地缓存
         /// </summary>
         /// <param name="catalog"></param>
-        public void InitCatalogsData(BookCatalog catalog)
+        /// <returns></returns>
+        private async Task<Tuple<List<string>, string>> GetLoaclBookCatalogContent(BookCatalog catalog)
         {
-            Task.Run(() =>
-            {
-                //本地书架
-                if (CurrentBook.IsLocal)
-                {
-                    //从数据库中获取杂志目录及内容
+            string html = null;
+            List<string> list = null;
 
-                    var catalogs = DbLocalBook.SelectBookCatalogsByBookId(AppDataPath.GetLocalBookDbPath(),
-                        CurrentBook.BookId);
-
-                    CurrentBook.CatalogList = catalogs;
-
-                    if (catalogs != null && catalogs.Count > 0)
-                    {
-                        var temp = GetCatalogByDirction(CatalogDirection.Current);
-                        DispatcherHelper.CheckBeginInvokeOnUI(() =>
-                        {
-                            CatalogCount = CurrentBook.CatalogList.Count;
-                            if (temp != null)
-                            {
-                                CurrentCatalog = temp;
-                            }
-                        });
-                        return;
-                    }
-                }
-
-                var catalogUrl = AnalisysSourceHelper.GetCatalogPageUrl(catalog.CatalogUrl);
-                SetCatalogPageData(catalogUrl);
-            });
-        }
-
-
-        private async void SetCatalogPageData(string url, int retryCount = 3)
-        {
             try
             {
-                IsLoadingCatalogData = true;
-
-                var i = 0;
-                Tuple<List<BookCatalog>, string, string, string> value = null;
-                while (i <= retryCount)
+                if (DicContentCache.ContainsKey(catalog.CatalogUrl))
                 {
-                    value = await AnalisysSourceHelper.GetCatalogPageData(url, CurrentBook.BookId);
-                    if (value != null)
-                    {
-                        break;
-                    }
-                    Debug.WriteLine($"加载目录失败，第{i + 1}次尝试");
-                    i++;
+                    html = DicContentCache[catalog.CatalogUrl];
                 }
-
-                if (value == null)
+                else
                 {
-                    Debug.WriteLine("加载目录失败，不再次尝试");
-                    return;
-                }
-
-                DispatcherHelper.CheckBeginInvokeOnUI(() =>
-                {
-                    if (value.Item1 != null)
+                    if (CurrentBook.CatalogList != null)
                     {
-                        CurrentBook.CatalogList = new List<BookCatalog>();
-                        foreach (var bookCatalog in value.Item1)
+                        var tempCatalog = CurrentBook.CatalogList.FirstOrDefault(p => p.CatalogUrl == catalog.CatalogUrl);
+
+                        if (!string.IsNullOrEmpty(tempCatalog?.CatalogContent))
                         {
-                            CurrentBook.CatalogList.Add(bookCatalog);
+                            html = tempCatalog.CatalogContent;
                         }
+                    }
+                    else
+                    {
+                        Debug.WriteLine("-----------检索sqlite数据库------------");
 
-                        CatalogCount = CurrentBook.CatalogList.Count;
-                        var temp = CurrentBook.CatalogList.FirstOrDefault(p => p.CatalogUrl == CurrentCatalog.CatalogUrl);
+                        var temp = GetCatalogContentFormDb(catalog);
+
+                        Debug.WriteLine("-----------检索完毕------------");
+
                         if (temp != null)
                         {
-                            CurrentCatalog = temp;
-                            PreLoadPreAndNextCatalog();
+                            html = temp;
                         }
-
+                        else
+                        {
+                            if (!CurrentBook.IsTxt)
+                            {
+                                html = await GetCatalogContentFromWeb(catalog);
+                            }
+                        }
                     }
-                    CurrentBook.Description = value.Item2;
-                    CurrentBook.Cover = value.Item3;
-                    CurrentBook.AuthorName = value.Item4;
-                });
+                }
+
+                if (html == null)
+                {
+                    return null;
+                }
+
+                list = GetCatalogPagesFormDicrionary(catalog.CatalogUrl);
+
+                if (list != null)
+                {
+                    return new Tuple<List<string>, string>(list, html);
+                }
+
+                list = await SplitContentToPages(html);
+
+                if (list == null || list.Count <= 0)
+                {
+                    return null;
+                }
+
+                DicContentCache.Add(catalog.CatalogUrl, html);
+                DicPagesCache.Add(catalog.CatalogUrl, list);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                Debug.WriteLine(ex.Message + "\n" + ex.StackTrace);
+                Debug.WriteLine($"{e.Message}\n{e.StackTrace}");
+                return null;
             }
-            finally
-            {
-                IsLoadingCatalogData = false;
-            }
+            return new Tuple<List<string>, string>(list, html);
         }
 
+        /// <summary>
+        /// 获取在线章节 Online
+        /// </summary>
+        /// <param name="catalog"></param>
+        /// <returns></returns>
+        private async Task<Tuple<List<string>, string>> GetOnlineBookCatalogContent(BookCatalog catalog)
+        {
+            string html = null;
+            List<string> list = null;
+            try
+            {
+                if (DicContentCache.ContainsKey(catalog.CatalogUrl))
+                {
+                    html = DicContentCache[catalog.CatalogUrl];
+                }
+                else
+                {
+                    html = await GetCatalogContentFromWeb(catalog);
+                }
+
+                if (html == null)
+                {
+                    return null;
+                }
+
+                list = GetCatalogPagesFormDicrionary(catalog.CatalogUrl);
+
+                if (list != null)
+                {
+                    return new Tuple<List<string>, string>(list, html);
+                }
+
+                list = await SplitContentToPages(html);
+                if (list == null || list.Count <= 0)
+                {
+                    return null;
+                }
+
+                DicContentCache.Add(catalog.CatalogUrl, html);
+                DicPagesCache.Add(catalog.CatalogUrl, list);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine($"{e.Message}\n{e.StackTrace}");
+                return null;
+            }
+            return new Tuple<List<string>, string>(list, html);
+        }
+
+        /// <summary>
+        /// 获取在线数据具体实现方法
+        /// </summary>
+        /// <param name="catalog"></param>
+        /// <param name="retryCount"></param>
+        /// <returns></returns>
         private async Task<string> GetCatalogContentFromWeb(BookCatalog catalog, int retryCount = 3)
         {
             var i = 0;
@@ -617,19 +650,239 @@ namespace Sodu.ViewModel
             return html;
         }
 
-
-        private async Task<string> GetCatalogContentFormDb(BookCatalog catalog)
+        /// <summary>
+        /// 获取本地数据库数据具体实现方法
+        /// </summary>
+        /// <param name="catalog"></param>
+        /// <returns></returns>
+        private string GetCatalogContentFormDb(BookCatalog catalog)
         {
-            await Task.Delay(100);
-            return null;
+            string result = null;
+            try
+            {
+                Debug.WriteLine($"-----------开始搜索:{catalog.CatalogUrl}------------");
+
+                var tempCatalog = DbLocalBook.SelectBookCatalogById(AppDataPath.GetLocalBookDbPath(), CurrentBook.BookId,
+                           catalog.CatalogUrl);
+
+                Debug.WriteLine($"-----------搜索:{catalog.CatalogUrl}完成------------");
+
+
+                result = tempCatalog?.CatalogContent;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                result = null;
+            }
+            return result;
         }
 
+        /// <summary>
+        /// 获取目录页数据入口方法
+        /// </summary>
+        /// <param name="catalog"></param>
+        public void InitCatalogsData(BookCatalog catalog)
+        {
+            Task.Run(() =>
+            {
+                if (CurrentBook == null || catalog?.CatalogUrl == null)
+                {
+                    return;
+                }
+
+                if (CurrentBook.IsLocal || CurrentBook.IsTxt)
+                {
+                    SetLocalBookCatalogsData(catalog);
+                }
+                else
+                {
+                    SetOnlineBookCatalogsData(AnalisysSourceHelper.GetCatalogPageUrl(catalog.CatalogUrl));
+                }
+            });
+        }
+
+        /// <summary>
+        /// 获取在线所有目录数据具体实现方法
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="retryCount"></param>
+        private async void SetOnlineBookCatalogsData(string url, int retryCount = 3)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(url))
+                {
+                    return;
+                }
+
+                IsLoadingCatalogData = true;
+
+                var i = 0;
+                Tuple<List<BookCatalog>, string, string, string> value = null;
+                while (i <= retryCount)
+                {
+                    value = await AnalisysSourceHelper.GetCatalogPageData(url, CurrentBook.BookId);
+                    if (value != null)
+                    {
+                        break;
+                    }
+                    Debug.WriteLine($"加载目录失败，第{i + 1}次尝试");
+                    i++;
+                }
+
+                if (value == null)
+                {
+                    Debug.WriteLine("加载目录失败，不再次尝试");
+                    return;
+                }
+
+                DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                {
+                    if (value.Item1 != null)
+                    {
+                        if (CurrentBook == null)
+                        {
+                            return;
+                        }
+
+                        CurrentBook.CatalogList = new List<BookCatalog>();
+                        foreach (var bookCatalog in value.Item1)
+                        {
+                            CurrentBook.CatalogList.Add(bookCatalog);
+                        }
+
+                        CatalogCount = CurrentBook.CatalogList.Count;
+                        var temp = CurrentBook.CatalogList.FirstOrDefault(p => p.CatalogUrl == CurrentCatalog.CatalogUrl);
+                        if (temp != null)
+                        {
+                            CurrentCatalog = temp;
+                            // PreLoadPreAndNextCatalog();
+                        }
+
+                    }
+                    CurrentBook.Description = value.Item2;
+                    CurrentBook.Cover = value.Item3;
+                    CurrentBook.AuthorName = value.Item4;
+                });
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message + "\n" + ex.StackTrace);
+            }
+            finally
+            {
+                IsLoadingCatalogData = false;
+            }
+        }
+
+        /// <summary>
+        /// 获取本所有地数据库目录数据
+        /// </summary>
+        private void SetLocalBookCatalogsData(BookCatalog catalog)
+        {
+            Task.Run(() =>
+            {
+                IsPreLoadingCatalog = true;
+
+                var catalogs = DbLocalBook.SelectBookCatalogsByBookId(AppDataPath.GetLocalBookDbPath(),
+               CurrentBook.BookId);
+
+                CurrentBook.CatalogList = catalogs;
+
+                if (catalogs == null || catalogs.Count <= 0)
+                {
+                    return;
+                }
+
+                var temp = catalogs.LastOrDefault(p => p.CatalogUrl == catalog.CatalogUrl);
+
+                DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                {
+                    CatalogCount = CurrentBook.CatalogList.Count;
+
+                    if (temp != null)
+                    {
+                        CurrentCatalog = temp;
+                    }
+                });
+
+                IsPreLoadingCatalog = false;
+            });
+        }
+
+
+        /// <summary>
+        /// 更新历史纪录，更新本地图书记录
+        /// </summary>
+        private void UpdateDatabase()
+        {
+            try
+            {
+                if (CurrentBook.IsLocal || CurrentBook.IsOnline || CurrentBook.IsTxt)
+                {
+
+                    DbHelper.AddDbOperator(() =>
+                    {
+                        ViewModelInstance.Instance.LocalBookPage.InserOrUpdateBook(CurrentBook);
+                    });
+                }
+                else
+                {
+                    DbHelper.AddDbOperator(() =>
+                    {
+                        ViewModelInstance.Instance.History.InserOrUpdateHistory(CurrentBook);
+                    });
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine($"{e.Message}\n{e.StackTrace}");
+            }
+        }
+
+        /// <summary>
+        /// 添加本地书架在线版本
+        /// </summary>
+        /// <param name="obj"></param>
+        public async void OnAddToLocalShelfCommand(object obj)
+        {
+            var dialog = new MessageDialog("是否添加本小说到本地收藏?", "收藏提示");
+
+            dialog.Commands.Add(new UICommand("确定", cmd =>
+            {
+                if (!App.IsPro && ViewModelInstance.Instance.LocalBookPage.GetLocalBooksCount() >= 3)
+                {
+                    ToastHelper.ShowMessage("免费版本本地书架只能收藏三本，专业版无限制.");
+                    return;
+                }
+
+                CurrentBook.IsOnline = true;
+                ViewModelInstance.Instance.LocalBookPage.InserOrUpdateBook(CurrentBook);
+
+            }, commandId: 0));
+            dialog.Commands.Add(new UICommand("取消", cmd =>
+            {
+            }, commandId: 1));
+
+            //获取返回值
+            await dialog.ShowAsync();
+        }
+
+
+        public string GetCatalogContentFormDicrionary(string url)
+        {
+            return DicContentCache.ContainsKey(url) ? DicContentCache[url] : null;
+        }
 
         public List<string> GetCatalogPagesFormDicrionary(string url)
         {
-            return DicContentCache.ContainsKey(url) ? DicContentCache[url].Item1 : null;
+            return DicPagesCache.ContainsKey(url) ? DicPagesCache[url] : null;
         }
 
+
+
+        #region 通用方法
 
         public override void OnBackCommand(object obj)
         {
@@ -651,7 +904,12 @@ namespace Sodu.ViewModel
 
             DicContentCache.Clear();
         }
+
+
         #endregion
+
+        #endregion
+
 
 
         #region 分页相关
@@ -682,12 +940,8 @@ namespace Sodu.ViewModel
                 return;
             }
 
-            for (int i = 0; i < DicContentCache.Count; i++)
-            {
-                var tuple = DicContentCache[DicContentCache.Keys.ToList()[i]];
+            DicPagesCache.Clear();
 
-                DicContentCache[DicContentCache.Keys.ToList()[i]] = new Tuple<List<string>, string>(new List<string>(), tuple.Item2);
-            }
 
             var pages = await SplitContentToPages(CurrentCatalogContent);
 
@@ -695,25 +949,25 @@ namespace Sodu.ViewModel
             {
                 return;
             }
-            DicContentCache[CurrentCatalog.CatalogUrl] = new Tuple<List<string>, string>(pages, CurrentCatalogContent);
+
+            DicPagesCache.Add(CurrentCatalog.CatalogUrl, pages);
 
             if (PageIndex > pages.Count - 1)
             {
                 PageIndex = pages.Count - 1;
             }
+
             PageCount = pages.Count;
 
             // Messenger.Default.Send(CurrentCatalogContent, "ContentTextChanged");
         }
 
-
-        /// <summary>
-        /// 将html分页
-        /// </summary>
-        /// <param name="html"></param>
-        /// <returns></returns>
         private async Task<List<string>> SplitContentToPages(string html)
         {
+            if (string.IsNullOrEmpty(html))
+            {
+                return null;
+            }
             List<string> list = null;
             await Task.Run(async () =>
           {
@@ -821,8 +1075,6 @@ namespace Sodu.ViewModel
             }
             return pages;
         }
-
-
 
         #endregion
 

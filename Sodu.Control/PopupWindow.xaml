@@ -23,7 +23,7 @@
                                 <BackEase EasingMode="EaseOut" />
                             </EasingDoubleKeyFrame.EasingFunction>
                         </EasingDoubleKeyFrame>
-                        <EasingDoubleKeyFrame KeyTime="0:0:1.5" x:Name="easeKeyframe" Value="-150">
+                        <EasingDoubleKeyFrame KeyTime="0:0:1.5" x:Name="easeKeyframe" Value="-170">
                             <EasingDoubleKeyFrame.EasingFunction>
                                 <BackEase EasingMode="EaseOut" Amplitude="0.5" />
                             </EasingDoubleKeyFrame.EasingFunction>

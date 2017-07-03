@@ -1,11 +1,11 @@
-﻿using System.Collections.ObjectModel;
-using System.Net;
-using System.Windows.Input;
-using GalaSoft.MvvmLight.Command;
+﻿using GalaSoft.MvvmLight.Command;
 using Sodu.Core.Entity;
 using Sodu.Core.HtmlService;
-using Sodu.View;
 using Sodu.Service;
+using Sodu.View;
+using System.Collections.ObjectModel;
+using System.Net;
+using System.Windows.Input;
 
 namespace Sodu.ViewModel
 {

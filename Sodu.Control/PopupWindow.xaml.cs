@@ -79,8 +79,8 @@ namespace Sodu.Control
         {
             this.tb_Notify.Text = this.txtMessage;
             this.storyBoard = this.tb_Notify_in;
-            this.easeKeyframe.Value = -(this.tb_Notify.Text.Length * 16 > 150 ? this.tb_Notify.Text.Length * this.tb_Notify.FontSize : 150);
-            this.easeKeyframe2.Value = -(this.tb_Notify.Text.Length * 16 > 150 ? this.tb_Notify.Text.Length * this.tb_Notify.FontSize : 150);
+            this.easeKeyframe.Value = -((this.tb_Notify.Text.Length * 16 > 150 ? this.tb_Notify.Text.Length * this.tb_Notify.FontSize : 150) + 15);
+            this.easeKeyframe2.Value = -((this.tb_Notify.Text.Length * 16 > 150 ? this.tb_Notify.Text.Length * this.tb_Notify.FontSize : 150) + 15);
             this.storyBoard.Completed += StoryBoard_Completed;
             this.storyBoard.Begin();
         }

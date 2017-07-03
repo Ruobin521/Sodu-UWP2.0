@@ -128,7 +128,7 @@ namespace Sodu.Core.Entity
             }
         }
 
-        
+
         private bool _isNew;
         /// <summary>
         ///是否有更新
@@ -263,6 +263,8 @@ namespace Sodu.Core.Entity
                 Set(ref _isTxt, value);
             }
         }
+
+        public string TxtPath { get; set; }
 
 
         [Ignore]
