@@ -57,6 +57,11 @@ namespace Sodu.ViewModel
 
         private void OnDeleteCommand(object obj)
         {
+            if (IsLoading)
+            {
+                ToastHelper.ShowMessage("加载中，请稍后");
+                return;
+            }
             var localItem = obj as LocalBookItemViewModel;
             if (localItem == null)
             {
@@ -102,6 +107,11 @@ namespace Sodu.ViewModel
 
         private async void OnAddTxtCommand(object obj)
         {
+            if (IsLoading)
+            {
+                return;
+            }
+
             FileOpenPicker openFile = new FileOpenPicker();
             openFile.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
             openFile.ViewMode = PickerViewMode.List;
@@ -136,11 +146,14 @@ namespace Sodu.ViewModel
                             txt = read.ReadToEnd();
                         }
                     }
+                    //@"(第?\w*章\s\w{1,20}[\(【（]?\w{1,20}[\)】）]?\n)"
+                       var matches1 = Regex.Matches(txt, @"(?<title>第?\w*章\s\w{1,20}[！]?\s?[--，]?\w{1,20}\(?（?\w{1,20}\)?）?)", RegexOptions.Compiled);
+                    var matches = Regex.Matches(txt, @"(第?\w*章\s\w{1,20}[\(【（]?\w{1,20}[\)】）]?)", RegexOptions.Compiled);
 
-                    var matches = Regex.Matches(txt, @"(?<title>第?\w*章\s\w{1,20}[！]?\s?[--，]?\w{1,20}\(?（?\w{1,20}\)?）?)", RegexOptions.Compiled);
 
                     if (matches.Count <= 0)
                     {
+                        ToastHelper.ShowMessage("文件解析失败。");
                         return;
                     }
 
@@ -204,6 +217,9 @@ namespace Sodu.ViewModel
                     book.LastReadChapterUrl = catalogs.FirstOrDefault().CatalogUrl;
                     book.NewestChapterName = catalogs.LastOrDefault().CatalogName;
                     book.NewestChapterUrl = catalogs.LastOrDefault().CatalogUrl;
+                    book.AuthorName ="某位大神";
+                    book.Description = "不管三七二十一，就是好看。";
+                    book.LyWeb = "本地TXT文档";
 
                     DbLocalBook.InsertOrUpdateBookCatalogs(AppDataPath.GetLocalBookDbPath(), catalogs);
 

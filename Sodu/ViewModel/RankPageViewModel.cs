@@ -67,6 +67,10 @@ namespace Sodu.ViewModel
 
         public override void OnRefreshCommand(object obj)
         {
+            if (IsLoading)
+            {
+                return;
+            }
             GetData(1);
         }
 

@@ -1094,6 +1094,12 @@ namespace Sodu.ViewModel
             }
             else
             {
+                if (CurrentBook.CatalogList == null)
+                {
+                    ToastHelper.ShowMessage("没有目录数据");
+                    return;
+                }
+
                 await Task.Delay(10);
                 NavigationService.NavigateTo(typeof(CatalogPage));
             }

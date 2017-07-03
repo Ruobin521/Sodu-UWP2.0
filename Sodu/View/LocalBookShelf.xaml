@@ -38,7 +38,10 @@
             </Grid.ColumnDefinitions>
             <TextBlock Text="本地书架" Foreground="White" FontSize="18" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,2"></TextBlock>
             <AppBarButton Grid.Column="2" Icon="Refresh" Foreground="White" Command="{Binding RefreshCommand}" ></AppBarButton>
-            <AppBarButton Grid.Column="0"  Icon="Add" Foreground="White" Command="{Binding AddTxtCommand}" ></AppBarButton>
+            <AppBarButton Grid.Column="0"  Icon="Add" Foreground="White"
+                          Command="{Binding AddTxtCommand}" 
+                          Visibility="{Binding Instance.Setting.IsPro,Source={StaticResource Locator},Converter={StaticResource  BooleanToVisibilityConverter}}"
+                          ></AppBarButton>
 
         </Grid>
 

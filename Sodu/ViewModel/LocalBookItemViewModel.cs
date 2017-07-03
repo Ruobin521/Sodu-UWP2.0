@@ -113,7 +113,7 @@ namespace Sodu.ViewModel
                 });
             }
 
-            else
+            else if(CurrentBook.IsLocal)
             {
                 Task.Run(async () =>
                 {

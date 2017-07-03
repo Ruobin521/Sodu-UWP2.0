@@ -15,15 +15,15 @@ namespace Sodu.ViewModel
     {
         #region 属性
 
-        private AutoLoadCollection<Book> _books;
+        private ObservableCollection<Book> _books;
         /// <summary>
         ///列表项
         /// </summary>
-        public AutoLoadCollection<Book> Books
+        public ObservableCollection<Book> Books
         {
             get
             {
-                return _books ?? (_books = new AutoLoadCollection<Book>(LoadMore));
+                return _books ?? (_books = new ObservableCollection<Book>());
             }
             set
             {

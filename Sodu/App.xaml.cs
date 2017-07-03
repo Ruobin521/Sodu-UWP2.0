@@ -1,22 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using GalaSoft.MvvmLight.Threading;
 using Sodu.Contants;
@@ -50,7 +40,13 @@ namespace Sodu
 
             var package = Windows.ApplicationModel.Package.Current;
 
-            IsPro = !package.DisplayName.Equals("小说搜索阅读 UWP");
+#if !DEBUG
+            IsPro = package.DisplayName.Equals("小说搜索阅读 UWP");
+#endif
+
+#if DEBUG
+            IsPro = true;
+#endif
 
             if (!IsPro)
             {

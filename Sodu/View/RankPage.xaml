@@ -38,6 +38,7 @@
                            ItemLeftBehavior="Disabled"
                            ItemRightCommand="{Binding AddToOnlineShelfCommand}"
                            ItemRightBackground="{StaticResource AppThemeColor}"
+                           RequestCommand="{Binding PullToLoadCommand}"
                            Grid.Row="1">
             <swipeListControl:SwipeListView.ItemRightContentTemplate>
                 <DataTemplate>
@@ -55,7 +56,7 @@
                 </DataTemplate>
             </swipeListControl:SwipeListView.ItemTemplate>
         </swipeListControl:SwipeListView>
- 
+
         <control:LoadingControl IsActive="{Binding IsLoading}" Grid.Row="1"></control:LoadingControl>
     </Grid>
 </local:BaseListUserControl>
