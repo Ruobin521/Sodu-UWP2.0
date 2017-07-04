@@ -196,7 +196,6 @@ namespace Sodu.ViewModel
             }
 
             NavigationService.NavigateTo(typeof(OnlineContentPage));
-            ViewModelInstance.Instance.OnlineBookContent.ResDeta();
             ViewModelInstance.Instance.OnlineBookContent.LoadData((Book)obj);
         }
 

@@ -7,11 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:entity="using:Sodu.Core.Entity"
     mc:Ignorable="d"
-    d:DesignHeight="300"
-    d:DesignWidth="400">
-<!--<UserControl.DataContext>
-        <entity:Book></entity:Book>
-</UserControl.DataContext>-->
+    d:DesignHeight="75"
+    d:DesignWidth="55">
     <Grid>
         <Image Source="../Assets/Icon/cover.png"  Stretch="Fill"></Image>
         <Image x:Name="ImageCover" Stretch="Fill"></Image>

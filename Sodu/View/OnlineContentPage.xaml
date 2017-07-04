@@ -43,6 +43,10 @@
                 <DiscreteObjectKeyFrame KeyTime="{StaticResource SbKeyTime}" Value="Collapsed" />
             </ObjectAnimationUsingKeyFrames>
 
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="BtnAddContainer">
+                <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed" />
+            </ObjectAnimationUsingKeyFrames>
+
         </Storyboard>
         <Storyboard x:Name="MenuBarShow">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="TopBar">
@@ -62,6 +66,10 @@
 
             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="BottomBar">
                 <DiscreteObjectKeyFrame KeyTime="0:0:0.0" Value="Visible" />
+            </ObjectAnimationUsingKeyFrames>
+
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="BtnAddContainer">
+                <DiscreteObjectKeyFrame KeyTime="{StaticResource SbKeyTime}" Value="Visible" />
             </ObjectAnimationUsingKeyFrames>
         </Storyboard>
 
@@ -421,7 +429,7 @@
                 </Grid>
             </ScrollViewer>
 
-            <Grid  Grid.Row="1" x:Name="BottomBar" Visibility="Collapsed"  Tapped="Prevent_OnTapped" Background="#FF191919"  Height="55"  RenderTransformOrigin="0.5,0.5">
+            <Grid  Grid.Row="1" x:Name="BottomBar" Visibility="Visible"  Tapped="Prevent_OnTapped" Background="#FF191919"  Height="55"  RenderTransformOrigin="0.5,0.5">
                 <Grid.RenderTransform>
                     <CompositeTransform/>
                 </Grid.RenderTransform>
@@ -448,25 +456,34 @@
                 <control:TabbarButton x:Name="BtnFontSetingPanel"  Grid.Column="3"  Foreground="#FFADADAD"  Label="设置"
                                     PathData="{StaticResource SettingPathData}"  Click="BtnFontSetingPanel_OnClick"
                                    HighLightBackColor="Black"/>
+
+              
+             
             </Grid>
         </Grid>
-        <Button x:Name="BtnAdd" 
-            Height="35" Width="35" Background="Red" 
+
+        <Grid x:Name="BtnAddContainer" Height="35" Width="35" HorizontalAlignment="Right" 
+                VerticalAlignment="Bottom"  Margin="0,0,20,0"  Canvas.ZIndex="97"  >
+            <Grid.RenderTransform>
+                <TranslateTransform Y="-80"></TranslateTransform>
+            </Grid.RenderTransform>
+            <Button x:Name="BtnAdd"
+                Height="35" Width="35" Background="Red" 
+                Visibility="{Binding IsLocalBook,Converter={StaticResource BooleanToCollapsedConverter}}"
                 Click="BtnAdd_OnClick"
-                HorizontalAlignment="Right" 
-                VerticalAlignment="Bottom" 
-                Canvas.ZIndex="97" 
-                Margin="0,0,30,75"
+               
                 Command="{Binding AddToLocalShelfCommand}"
                 Style="{StaticResource CloseButtonStyle}"
                 Foreground="White" 
                 HorizontalContentAlignment="Center"
                 VerticalContentAlignment="Top">
-            <Button.Content>
-                <Image  Source="../Assets/Icon/plus@3x.png" Margin="8"></Image>
-            </Button.Content>
+                <Button.Content>
+                    <Image  Source="../Assets/Icon/plus@3x.png" Margin="8"></Image>
+                </Button.Content>
+            </Button>
+        </Grid>
+        
 
-        </Button>
 
         <control:CustomLoadingControl x:Name="LoadingControl" Tapped="Prevent_OnTapped"  IsActive="{Binding IsLoading}" VerticalAlignment="Center" Margin="0,0,0,100"
                                   CancleCommand="{Binding CancleHttpRequestCommand}"     Canvas.ZIndex="97"/>

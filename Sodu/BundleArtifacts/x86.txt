@@ -1,0 +1,2 @@
+MainPackage=F:\Sodu2\Sodu\bin\x86\Release\Sodu_2.0.0.0_x86.appx
+SymbolPackage=F:\Sodu2\Sodu\AppPackages\Sodu_2.0.0.0_Test\Sodu_2.0.0.0_x86.appxsym

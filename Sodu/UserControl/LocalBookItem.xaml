@@ -10,16 +10,13 @@
     mc:Ignorable="d"
      Height="90"
     d:DesignWidth="500">
-    <UserControl.DataContext>
-        <viewModel:LocalBookItemViewModel></viewModel:LocalBookItemViewModel>
-    </UserControl.DataContext>
     <Grid Background="Transparent" x:Name="RootGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="70"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid  Height="75" Width="55">
-            <local:CoverImage DataContext="{Binding CurrentBook}"></local:CoverImage>
+            <local:CoverImage CurrentBook="{Binding CurrentBook}"></local:CoverImage>
             <Border Background="#FF007AFF" Height="14" Width="25" HorizontalAlignment="Right" VerticalAlignment="Bottom" CornerRadius="1" Visibility="{Binding CurrentBook.IsOnline,Converter={StaticResource BooleanToVisibilityConverter}}">
                 <TextBlock FontSize="8" Text="在线" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
             </Border>
@@ -38,22 +35,22 @@
             </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="0"  Margin="0,0,60,0" Orientation="Horizontal">
-                <TextBlock Text="{Binding CurrentBook.BookName}" Foreground="#FF282828" FontWeight="Normal" VerticalAlignment="Center"  FontSize="17"></TextBlock>
+                <TextBlock Text="{Binding CurrentBook.BookName}"  Style="{StaticResource ListViewItemTitleText}"></TextBlock>
                 <Image Source="../Assets/Icon/new_blue@3x.png" Margin="5,5,0,0" Stretch="Fill" Height="25" Width="28" Visibility="{Binding CurrentBook.IsNew,Converter={StaticResource BooleanToVisibilityConverter} }" ></Image>
             </StackPanel>
 
-            <TextBlock Grid.Row="0"  Text="{Binding  NeedUpdateCount}" Width="30" Margin="10,0"
-                       Foreground="{StaticResource AppThemeColor}" FontWeight="Normal" HorizontalAlignment="Right" VerticalAlignment="Center" 
-                       FontSize="14"></TextBlock>
+            <TextBlock Grid.Row="0"  Text="{Binding  NeedUpdateCount}" Width="30" Margin="10,0"   Style="{StaticResource ListViewItemInfoText}"
+                        HorizontalAlignment="Right" 
+                       ></TextBlock>
 
 
-            <TextBlock   Grid.Row="1" Foreground="{StaticResource AppTextColor}"    VerticalAlignment="Center"  FontSize="14">
+            <TextBlock   Grid.Row="1" Style="{StaticResource ListViewItemInfoText}" FontSize="14">
             <Run Text="最新："></Run>
             <Run Text="{Binding CurrentBook.NewestChapterName}"></Run>
             </TextBlock>
 
 
-            <TextBlock   Grid.Row="2" Foreground="{StaticResource AppTextColor}"  VerticalAlignment="Center"  FontSize="14">
+            <TextBlock   Grid.Row="2" Style="{StaticResource ListViewItemInfoText}" FontSize="14">
             <Run Text="读至："></Run>
             <Run Text="{Binding CurrentBook.LastReadChapterName}"></Run>
             </TextBlock>

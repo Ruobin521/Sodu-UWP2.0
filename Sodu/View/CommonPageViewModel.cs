@@ -128,14 +128,13 @@ namespace Sodu.View
                 return;
             }
 
-            if (!ViewModelInstance.Instance.Main.IsLogin)
+            if (!ViewModelInstance.Instance.Main.IsLogin && ViewModelInstance.Instance.Setting.IsPro)
             {
                 ToastHelper.ShowMessage("您尚未登陆，请登录后操作");
                 return;
             }
             if (ViewModelInstance.Instance.OnLineBookShelf.Books.FirstOrDefault(p => p.BookId == book.BookId) != null)
             {
-                ToastHelper.ShowMessage("您已添加该小说至在线书架");
                 return;
             }
 
@@ -148,7 +147,7 @@ namespace Sodu.View
                 temp.LastReadChapterName = temp.NewestChapterName;
                 var result = DbBookShelf.InsertOrUpdateBook(AppDataPath.GetAppCacheDbPath(), temp, AppSettingService.GetKeyValue(SettingKey.UserName) as string);
                 ViewModelInstance.Instance.OnLineBookShelf.Books.Insert(0, temp);
-                ToastHelper.ShowMessage("添加到在线书架成功");
+                ToastHelper.ShowMessage($"成功添加{book.BookName}到在线书架");
             }
             else
             {

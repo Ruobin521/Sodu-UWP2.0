@@ -358,15 +358,14 @@
     <Language Code="zu-za" InMinimumRequirementSet="true" />
   </SupportedLocales>
   <ProductReservedInfo>
-    <MainPackageIdentityName>54654Ruobin.UWP</MainPackageIdentityName>
+    <MainPackageIdentityName>54654Ruobin.6164113DB160F</MainPackageIdentityName>
     <ReservedNames>
-      <ReservedName>小说搜索阅读 UWP</ReservedName>
-      <ReservedName>搜读 UWP</ReservedName>
-      <ReservedName>搜阅 UWP</ReservedName>
+      <ReservedName>小说搜索阅读内测版</ReservedName>
     </ReservedNames>
   </ProductReservedInfo>
   <AccountPackageIdentityNames>
+    <MainPackageIdentityName>54654Ruobin.UWP</MainPackageIdentityName>
     <MainPackageIdentityName>54654Ruobin.447138BAFE36C</MainPackageIdentityName>
   </AccountPackageIdentityNames>
-  <PackageInfoList LandingUrl="https://developer.microsoft.com/dashboard/Application?appId=9NBLGGH4SK4V" />
+  <PackageInfoList LandingUrl="https://developer.microsoft.com/dashboard/Application?appId=9PDCK7G55L1F" />
 </StoreAssociation>

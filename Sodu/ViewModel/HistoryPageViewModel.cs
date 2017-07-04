@@ -76,12 +76,13 @@ namespace Sodu.ViewModel
 
         }
 
-        public void InserOrUpdateHistory(Book book)
+        public void InserOrUpdateHistory(Book bookPara)
         {
-            if (book == null)
+            if (bookPara == null)
             {
                 return;
             }
+            var book = bookPara.Clone();
 
             Task.Run(() =>
             {
@@ -107,7 +108,6 @@ namespace Sodu.ViewModel
         public override void OnItemClickCommand(object obj)
         {
             NavigationService.NavigateTo(typeof(OnlineContentPage));
-            ViewModelInstance.Instance.OnlineBookContent = new OnlineContentPageViewModel();
             ViewModelInstance.Instance.OnlineBookContent.LoadData(obj as Book);
         }
 

@@ -32,7 +32,7 @@ namespace Sodu.Core.DataBase
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e);
+                    Debug.WriteLine($"DbHelper：StartAction->{e.Message}\n{e.StackTrace}");
                 }
             }
 

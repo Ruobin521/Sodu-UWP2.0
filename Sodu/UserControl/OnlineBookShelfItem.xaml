@@ -23,20 +23,19 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0"  Margin="0,0,160,0" Orientation="Horizontal"  HorizontalAlignment="Left">
-            <TextBlock Text="{Binding BookName}" Foreground="Black" FontWeight="Normal"  FontFamily="Arial" VerticalAlignment="Center"  FontSize="17" Width="Auto"></TextBlock>
+            <TextBlock Text="{Binding BookName}"  Style="{StaticResource  ListViewItemTitleText}"></TextBlock>
             <Image Source="../Assets/Icon/new_blue@3x.png" Margin="5,5,0,0" Stretch="Fill" Height="25" Width="28" Visibility="{Binding IsNew,Converter={StaticResource BooleanToVisibilityConverter} }" ></Image>
         </StackPanel>
 
         <TextBlock Text="{Binding UpdateTime}" Grid.Row="0" HorizontalAlignment="Right" Foreground="{StaticResource AppTextColor}" Width="140"  Margin="0,0,15,0"  VerticalAlignment="Center"  FontSize="15"></TextBlock>
 
-        <TextBlock   Grid.Row="1" Foreground="{StaticResource AppTextColor}"  FontWeight="Light" 
-                    FontFamily="Arial" VerticalAlignment="Center"  FontSize="15"  HorizontalAlignment="Left">
+        <TextBlock   Grid.Row="1"  Style="{StaticResource  ListViewItemInfoText}">
             <Run Text="最新："></Run>
             <Run Text="{Binding NewestChapterName}"></Run>
         </TextBlock>
 
 
-        <TextBlock   Grid.Row="2" Foreground="{StaticResource AppTextColor}" FontWeight="Light"    FontFamily="Arial" VerticalAlignment="Center"  FontSize="15"  HorizontalAlignment="Left">
+        <TextBlock   Grid.Row="2" Style="{StaticResource  ListViewItemInfoText}">
             <Run Text="读至："></Run>
             <Run Text="{Binding LastReadChapterName}"></Run>
         </TextBlock>

@@ -326,6 +326,7 @@ namespace Sodu.Core.HtmlService
                     }
                     if (type == AnalisysType.CatalogPageData)
                     {
+
                         var baseUrl = "http://" + host;
                         var value = GetCatalogPageDataCommon(baseUrl, baseUrl, html,
                             catalogsRegex: "<h2 class=\"bookTitle\">.*?<div id=\"uyan_frame\">",
@@ -333,6 +334,36 @@ namespace Sodu.Core.HtmlService
                             introRegex: "<div class=\"reBook borderF\">(.*?)</div>",
                             coverRegex: "<div style=\"width:600px; padding:5px\">.*?<img.*?src=\"(.*?)\".*?>",
                             authorRegex: "<p>作者：(.*?)&nbsp;&nbsp;&nbsp;</p>");
+
+                        if (value != null)
+                        {
+                            var temp = (Tuple<List<BookCatalog>, string, string, string>)value;
+
+                            var tempUri = new Uri(url);
+                            var id = tempUri.Query.Replace("?aid=", "");
+                            string seg1 = "";
+
+                            if (id.Length >= 5)
+                            {
+                                seg1 = id.Substring(0, 2);
+                            }
+                            else if (id.Length == 4)
+                            {
+                                seg1 = id.Substring(0, 1);
+                            }
+                            else if (id.Length == 3)
+                            {
+                                seg1 = "0";
+                            }
+
+                            //http://www.lwtxt.net/files/article/image/1/1210/1210s.jpg
+
+                            var cover = $"http://www.lwtxt.net/files/article/image/{seg1}/{id}/{id}s.jpg";
+
+                            value = new Tuple<List<BookCatalog>, string, string, string>(temp.Item1, temp.Item2,
+                               cover, temp.Item4);
+                        }
+
                         return value;
                     }
                     break;
@@ -406,6 +437,7 @@ namespace Sodu.Core.HtmlService
                     }
                     if (type == AnalisysType.CatalogPageData)
                     {
+                        //http://www.dashubao.cc/files/article/image/21/21467/21467s.jpg
                         var baseUrl = "http://" + host;
                         var value = GetCatalogPageDataCommon(baseUrl, "", html,
                             catalogsRegex: "<h2 class=\"bookTitle\">.*?<div id=\"uyan_frame\">",
@@ -413,6 +445,35 @@ namespace Sodu.Core.HtmlService
                             introRegex: "<div class=\"reBook borderF\">(.*?)</div>",
                             coverRegex: "<div style=\"width:600px; padding:5px\">.*?<img.*?src=\"(.*?)\".*?>",
                             authorRegex: "<p>作者：(.*?)&nbsp;&nbsp;&nbsp;</p>");
+
+                        if (value != null)
+                        {
+                            var temp = (Tuple<List<BookCatalog>, string, string, string>)value;
+
+                            var tempUri = new Uri(url);
+                            var id = tempUri.Query.Replace("?aid=", "");
+                            string seg1 = "";
+
+                            if (id.Length >= 5)
+                            {
+                                seg1 = id.Substring(0, 2);
+                            }
+                            else if (id.Length == 4)
+                            {
+                                seg1 = id.Substring(0, 1);
+                            }
+                            else if (id.Length == 3)
+                            {
+                                seg1 = "0";
+                            }
+
+                            var cover = $"http://www.dashubao.cc/files/article/image/{seg1}/{id}/{id}s.jpg";
+
+                            value = new Tuple<List<BookCatalog>, string, string, string>(temp.Item1, temp.Item2,
+                               cover, temp.Item4);
+                        }
+
+
                         return value;
                     }
                     break;
@@ -433,7 +494,7 @@ namespace Sodu.Core.HtmlService
                     if (type == AnalisysType.CatalogPageData)
                     {
                         var baseUrl = "https://" + host;
-                        var value = GetCatalogPageDataCommon(baseUrl, baseUrl, html,
+                        var value = GetCatalogPageDataCommon(baseUrl, "", html,
                             catalogsRegex: "<dl class=\"chapterlist\">.*?</dl>",
                             catalogRegex: "<dd><a href=\"(.*?)\">(.*?)</a></dd>",
                             introRegex: "<p class=\"book-intro\">(.*?)</p>",
@@ -493,7 +554,7 @@ namespace Sodu.Core.HtmlService
             html = html.Replace("　　　　　　", "　　");
             html = html.Trim(' ');
             html = html.Trim('\n');
-           
+
             return html;
         }
 

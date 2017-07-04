@@ -41,7 +41,7 @@
         <ScrollViewer   ManipulationMode="System,TranslateX"  x:Name="Viewer" Canvas.ZIndex="-1"   Grid.Row="1" Style="{StaticResource ContentScrollViewerStyle}" >
             <TextBlock  x:Name="ContentText" 
                         Text="{Binding CurrentCatalogContent, Mode=OneWay}"
-                           Margin="12,60,5,80"
+                           Margin="12,60,5,180"
                            TextWrapping="Wrap" LineHeight="{Binding Instance.OnlineBookContent.LineHeight,Source={StaticResource Locator}}" 
                            Foreground="{Binding Instance.OnlineBookContent.ContentColor.Item2,Source={StaticResource Locator}}"
                            FontSize="{Binding Instance.OnlineBookContent.FontSize,Source={StaticResource Locator}}"

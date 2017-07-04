@@ -56,6 +56,6 @@
             </swipeListControl:SwipeListView.ItemTemplate>
         </swipeListControl:SwipeListView>
 
-        <control:LoadingControl IsActive="{Binding IsLoading}" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Row="1"></control:LoadingControl>
+        <control:CustomLoadingControl IsActive="{Binding IsLoading}" CloeseButtonVisility="Collapsed" Grid.Row="1" Margin="0,0,0,80"></control:CustomLoadingControl>
     </Grid>
 </local:BaseListUserControl>

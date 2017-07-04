@@ -20,8 +20,9 @@
                     <Setter Property="Background" Value="White"/>
                 </Style>
             </MenuFlyout.MenuFlyoutPresenterStyle>
-            <MenuFlyoutItem Text="标为已读" Command="{Binding Instance.OnLineBookShelf.SetHadReadCommand,Source={StaticResource Locator}}"  CommandParameter="{Binding}" Width="150"/>
-            <MenuFlyoutSeparator/>
+            <MenuFlyoutItem Text="标为已读" Visibility="{Binding IsNew,Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Command="{Binding Instance.OnLineBookShelf.SetHadReadCommand,Source={StaticResource Locator}}"  CommandParameter="{Binding}" Width="150"/>
+            <MenuFlyoutSeparator Visibility="{Binding IsNew,Converter={StaticResource BooleanToVisibilityConverter}}"/>
             <MenuFlyoutItem Text="移出书架" Command="{Binding Instance.OnLineBookShelf.RemoveCommand,Source={StaticResource Locator}}"  CommandParameter="{Binding}" Tag="B" Width="150"/>
         </MenuFlyout>
     </local:BaseListUserControl.Resources>
@@ -73,12 +74,12 @@
                 <ColumnDefinition Width="8*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="{Binding HelpText}"  Grid.Column="1" Foreground="{StaticResource AppTextColor}" TextWrapping="Wrap" FontSize="15" LineHeight="30">
+            <TextBlock Text="{Binding HelpText}" FontFamily="Arial"  Grid.Column="1" Foreground="{StaticResource AppTextColor}" TextWrapping="Wrap" FontSize="15" LineHeight="30">
             </TextBlock>
 
         </Grid>
 
-        <control:LoadingControl IsActive="{Binding IsLoading}" Grid.Row="1"></control:LoadingControl>
+        <control:CustomLoadingControl IsActive="{Binding IsLoading}" CloeseButtonVisility="Collapsed" Grid.Row="1" Margin="0,0,0,80"></control:CustomLoadingControl>
     </Grid>
 </local:BaseListUserControl>
 

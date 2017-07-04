@@ -87,7 +87,7 @@
         <Grid  Height="40" Width="40">
             <ProgressRing IsActive="True" Foreground="White"     HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></ProgressRing>
         </Grid>
-        <Grid  HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-15,-15,0">
+        <Grid Visibility="{Binding ElementName=Root,Path=CloeseButtonVisility}" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-15,-15,0">
             <Button Height="35" Width="35" Padding="0" Style="{StaticResource CloseButtonStyle2}" Command="{Binding ElementName=Root,Path= CancleCommand}">
                 <Border  Background="#D8919191" CornerRadius="90" Padding="10">
                     <Path Fill="White" Stretch="Fill"

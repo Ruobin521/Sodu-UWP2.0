@@ -1,0 +1,6 @@
+MainPackage=F:\Sodu2\Sodu\bin\ARM\Release\Upload\Sodu_2.0.0.0_ARM.appx
+SymbolPackage=F:\Sodu2\Sodu\AppPackages\Sodu_2.0.0.0\Sodu_2.0.0.0_ARM.appxsym
+ResourcePack=F:\Sodu2\Sodu\_scale-100.appx
+ResourcePack=F:\Sodu2\Sodu\_scale-125.appx
+ResourcePack=F:\Sodu2\Sodu\_scale-150.appx
+ResourcePack=F:\Sodu2\Sodu\_scale-400.appx

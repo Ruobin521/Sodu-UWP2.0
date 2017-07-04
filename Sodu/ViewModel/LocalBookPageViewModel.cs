@@ -67,6 +67,7 @@ namespace Sodu.ViewModel
             {
                 return;
             }
+            IsLoading = true;
 
             Task.Run(() =>
             {
@@ -82,6 +83,7 @@ namespace Sodu.ViewModel
                     }
                     localItem.IsDeleted = true;
                     LocalBooks.Remove(localItem);
+                    IsLoading = false;
                 });
             });
         }
@@ -147,13 +149,13 @@ namespace Sodu.ViewModel
                         }
                     }
                     //@"(第?\w*章\s\w{1,20}[\(【（]?\w{1,20}[\)】）]?\n)"
-                       var matches1 = Regex.Matches(txt, @"(?<title>第?\w*章\s\w{1,20}[！]?\s?[--，]?\w{1,20}\(?（?\w{1,20}\)?）?)", RegexOptions.Compiled);
-                    var matches = Regex.Matches(txt, @"(第?\w*章\s\w{1,20}[\(【（]?\w{1,20}[\)】）]?)", RegexOptions.Compiled);
+                    var matches1 = Regex.Matches(txt, @"(?<title>第?\w*章\s\w{1,20}[！]?\s?[--，]?\w{1,20}\(?（?\w{1,20}\)?）?)", RegexOptions.Compiled);
+                    var matches = Regex.Matches(txt, @"(第?\w*章\s\w{0,20}[\(【（]?\w{0,20}[\)】）]?)", RegexOptions.Compiled);
 
 
                     if (matches.Count <= 0)
                     {
-                        ToastHelper.ShowMessage("文件解析失败。");
+                        ToastHelper.ShowMessage("文件解析失败");
                         return;
                     }
 
@@ -187,7 +189,7 @@ namespace Sodu.ViewModel
 
                         var catalog = new BookCatalog
                         {
-                            CatalogName = currentMatch.ToString(),
+                            CatalogName = currentMatch.ToString().Replace("\r", "").Replace("\n", ""),
                             BookId = bookId,
                             Index = i + 1
                         };
@@ -217,7 +219,7 @@ namespace Sodu.ViewModel
                     book.LastReadChapterUrl = catalogs.FirstOrDefault().CatalogUrl;
                     book.NewestChapterName = catalogs.LastOrDefault().CatalogName;
                     book.NewestChapterUrl = catalogs.LastOrDefault().CatalogUrl;
-                    book.AuthorName ="某位大神";
+                    book.AuthorName = "某位大神";
                     book.Description = "不管三七二十一，就是好看。";
                     book.LyWeb = "本地TXT文档";
 
@@ -296,41 +298,51 @@ namespace Sodu.ViewModel
 
         private void GetLocalBookFromDb()
         {
-            LocalBooks.Clear();
 
-            IsLoading = true;
-
-            Task.Run(async () =>
+            DispatcherHelper.CheckBeginInvokeOnUI(() =>
             {
-                await Task.Delay(1);
-                var list = DbLocalBook.GetBooks(AppDataPath.GetLocalBookDbPath());
-                if (list == null || list.Count <= 0)
-                {
-                    return;
-                }
+                LocalBooks.Clear();
+                GC.Collect();
+                IsLoading = true;
+            });
 
-                foreach (var book in list)
-                {
-                    var localVm = new LocalBookItemViewModel()
-                    {
-                        CurrentBook = book
-                    };
-                    DispatcherHelper.CheckBeginInvokeOnUI(async () =>
+            Task.Run(() =>
+          {
+              try
+              {
+                  var list = DbLocalBook.GetBooks(AppDataPath.GetLocalBookDbPath());
+                  if (list == null || list.Count <= 0)
+                  {
+                      return;
+                  }
+
+                  foreach (var book in list)
+                  {
+                      var localVm = new LocalBookItemViewModel()
+                      {
+                          CurrentBook = book
+                      };
+                      DispatcherHelper.CheckBeginInvokeOnUI(() =>
                     {
                         LocalBooks.Add(localVm);
-                        await Task.Delay(10);
                     });
 
-                    localVm.CheckUpdate();
-                }
-
-                DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                      localVm.CheckUpdate();
+                  }
+              }
+              catch (Exception e)
               {
-                  IsLoading = false;
-              });
-
-                IsInit = true;
-            });
+                  Debug.WriteLine($"{e.Message}\n{e.StackTrace}");
+              }
+              finally
+              {
+                  DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                  {
+                      IsLoading = false;
+                      IsInit = true;
+                  });
+              }
+          });
 
         }
 

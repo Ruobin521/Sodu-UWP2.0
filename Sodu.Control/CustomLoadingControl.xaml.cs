@@ -43,6 +43,15 @@ namespace Sodu.Control
             set { SetValue(IsActiveProperty, value); }
         }
 
+        public static readonly DependencyProperty CloeseButtonVisilityProperty = DependencyProperty.Register(
+            "CloeseButtonVisility", typeof(Visibility), typeof(CustomLoadingControl), new PropertyMetadata(Windows.UI.Xaml.Visibility.Visible));
+
+        public Visibility CloeseButtonVisility
+        {
+            get { return (Visibility) GetValue(CloeseButtonVisilityProperty); }
+            set { SetValue(CloeseButtonVisilityProperty, value); }
+        }
+
         public CustomLoadingControl()
         {
             this.InitializeComponent();

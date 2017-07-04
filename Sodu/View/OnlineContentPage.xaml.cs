@@ -34,8 +34,6 @@ namespace Sodu.View
 
             BlackControl.Visibility = Visibility.Visible;
 
-            BtnAdd.Visibility = Visibility.Collapsed;
-
             MenuBarShow.Completed += MenuBarShow_Completed;
             MenuBarHide.Completed += MenuBarHide_Completed;
 
@@ -66,8 +64,7 @@ namespace Sodu.View
 
             ScrollControl.IsEnabled = true;
             SwitchControl.IsEnabled = true;
-
-            BtnAdd.Visibility = Visibility.Collapsed;
+           
         }
 
         private void MenuBarShow_Completed(object sender, object e)
@@ -78,22 +75,7 @@ namespace Sodu.View
             ScrollControl.IsEnabled = false;
             SwitchControl.IsEnabled = false;
 
-            Task.Run(() =>
-            {
-                if (ViewModelInstance.Instance.OnlineBookContent.CurrentBook == null)
-                {
-                    return;
-                }
-                var bookId = ViewModelInstance.Instance.OnlineBookContent.CurrentBook.BookId;
-
-                var ifExist = ViewModelInstance.Instance.LocalBookPage.CheckBookExist(bookId);
-
-                DispatcherHelper.CheckBeginInvokeOnUI(() =>
-                {
-                    BtnAdd.Visibility = ifExist ? Visibility.Collapsed : Visibility.Visible;
-                });
-            });
-
+           
         }
 
         private void OnlineContentPage_Loaded(object sender, RoutedEventArgs e)

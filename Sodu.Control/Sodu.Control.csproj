@@ -126,6 +126,7 @@
     <Compile Include="SwipeListControl\SwipeListView.cs" />
     <Compile Include="SwipeListControl\SwipeListViewItem.cs" />
     <Compile Include="TabbarButton.cs" />
+    <Compile Include="VerticalTextBlock.cs" />
     <EmbeddedResource Include="Properties\Sodu.Control.rd.xml" />
   </ItemGroup>
   <ItemGroup>

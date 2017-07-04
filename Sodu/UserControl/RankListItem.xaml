@@ -24,12 +24,12 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="{Binding BookName}" Grid.Row="0" Foreground="Black" FontWeight="Normal" VerticalAlignment="Center"  FontSize="17"></TextBlock>
-        <TextBlock   Grid.Row="1" Foreground="{StaticResource AppTextColor}"  FontWeight="Normal"   VerticalAlignment="Center"  FontSize="15">
+        <TextBlock Text="{Binding BookName}" Grid.Row="0" Style="{StaticResource  ListViewItemTitleText}"></TextBlock>
+        <TextBlock   Grid.Row="1" Foreground="{StaticResource AppTextColor}"   Style="{StaticResource  ListViewItemInfoText}">
             <Run Text="最新章节："></Run>
             <Run Text="{Binding NewestChapterName}"></Run>
         </TextBlock>
-        <TextBlock   Grid.Row="2"  Foreground="{StaticResource AppTextColor}" FontWeight="Normal"   VerticalAlignment="Center"  FontSize="15">
+        <TextBlock   Grid.Row="2"   Style="{StaticResource  ListViewItemInfoText}">
             <Run Text="更新时间："></Run>
             <Run Text="{Binding UpdateTime}"></Run>
         </TextBlock>

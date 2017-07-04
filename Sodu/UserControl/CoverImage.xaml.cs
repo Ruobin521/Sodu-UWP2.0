@@ -24,14 +24,57 @@ namespace Sodu.UserControl
 {
     public sealed partial class CoverImage : Windows.UI.Xaml.Controls.UserControl
     {
+
+        public static readonly DependencyProperty CurrentBookProperty = DependencyProperty.Register(
+            "CurrentBook", typeof(Book), typeof(CoverImage), new PropertyMetadata(default(Book), OnBookValueChanged));
+
+        private static void OnBookValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var control = d as CoverImage;
+            var book = control?.CurrentBook;
+
+            //  var book = DataContext as Book;
+            if (book == null)
+            {
+                if (control != null)
+                {
+                    control.ImageCover.Source = null;
+                }
+                return;
+            }
+            var filePath = AppDataPath.GetBookCoverPath(book.BookId);
+            if (filePath == null)
+            {
+                if (!string.IsNullOrEmpty(book.Cover))
+                {
+                    DownloadCoverHelper.SaveHttpImage(AppDataPath.GetBookCoverFolderPath(), book.BookId + ".jpg",
+                        book.Cover,
+                        control.SetCoverImage);
+                }
+                else
+                {
+                    control.ImageCover.Source = null;
+                }
+            }
+            else
+            {
+                control.ImageCover.Source = new BitmapImage(new Uri(filePath, UriKind.Absolute));
+            }
+        }
+
+        public Book CurrentBook
+        {
+            get { return (Book)GetValue(CurrentBookProperty); }
+            set { SetValue(CurrentBookProperty, value); }
+        }
         public CoverImage()
         {
             this.InitializeComponent();
 
-            this.Loaded += CoverImage_Loaded;
+            //  this.Loaded += CoverImage_Loaded;
         }
 
-        private void CoverImage_Loaded(object sender, RoutedEventArgs e)
+        private void CoverImage_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
         {
             var book = DataContext as Book;
             if (book == null)
@@ -57,9 +100,15 @@ namespace Sodu.UserControl
                 this.ImageCover.Source = new BitmapImage(new Uri(filePath, UriKind.Absolute));
             }
         }
+
+        private void CoverImage_Loaded(object sender, RoutedEventArgs e)
+        {
+
+
+        }
         public void SetCoverImage()
         {
-            var book = DataContext as Book;
+            var book = CurrentBook as Book;
             var filePath = AppDataPath.GetBookCoverPath(book?.BookId);
             DispatcherHelper.CheckBeginInvokeOnUI(() =>
             {

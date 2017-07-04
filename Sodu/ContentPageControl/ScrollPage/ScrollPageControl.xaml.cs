@@ -25,6 +25,8 @@ namespace Sodu.ContentPageControl
 {
     public sealed partial class ScrollPageControl : Windows.UI.Xaml.Controls.UserControl
     {
+        private OnlineContentPageViewModel vm;
+
         private bool IsLoadingContent { get; set; }
 
         public ScrollPageControl()
@@ -34,6 +36,7 @@ namespace Sodu.ContentPageControl
 
             Messenger.Default.Register<string>(this, "CurrentCatalogContentChanged", OnCurrentCatalogContentChanged);
 
+            vm = this.DataContext as OnlineContentPageViewModel;
         }
 
         private async void OnCurrentCatalogContentChanged(string str)
@@ -60,50 +63,8 @@ namespace Sodu.ContentPageControl
 
             IsLoadingContent = false;
         }
-
-        //private async void UpdateScrollContent(string str)
-        //{
-        //    IsLoadingContent = true;
-
-        //    //var windowHeight = Window.Current.Bounds.Height;
-
-        //    //ContentText.Text = "";
-        //    //ContentText.Height = double.NaN;
-        //    //await Task.Delay(1);
-
-        //    //Viewer.ChangeView(0, 0, null, true);
-
-        //    //if (string.IsNullOrEmpty(str))
-        //    //{
-        //    //    ContentText.Height = windowHeight + 200;
-        //    //    await Task.Delay(1);
-        //    //}
-        //    //else
-        //    //{
-        //    //    ContentText.Text = str;
-        //    //    await Task.Delay(1);
-        //    //    var textHeight = ContentText.ActualHeight;
-        //    //    if (textHeight < windowHeight + 100)
-        //    //    {
-        //    //        ContentText.Height = windowHeight + 200;
-        //    //    }
-        //    //    else
-        //    //    {
-        //    //        ContentText.Height = textHeight;
-        //    //    }
-        //    //    await Task.Delay(1);
-        //    //}
-
-        //    //Viewer.ChangeView(0, 50, null, Viewer.VerticalOffset > 50);
-        //    //IsLoadingContent = false;
-        //}
-
-
-
         private void Viewer_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
         {
-            var vm = (OnlineContentPageViewModel)DataContext;
-
             if (IsLoadingContent || vm.IsLoading)
             {
                 return;
@@ -134,7 +95,7 @@ namespace Sodu.ContentPageControl
         }
 
 
-        private void SwitchCatalog(CatalogDirection dir)
+        private async void SwitchCatalog(CatalogDirection dir)
         {
             try
             {
@@ -143,6 +104,7 @@ namespace Sodu.ContentPageControl
                     return;
                 }
                 IsLoadingContent = true;
+                await Task.Delay(0);
                 var vm = (OnlineContentPageViewModel)DataContext;
                 vm.ScrollToSwitchCurrentCatalog(dir);
             }

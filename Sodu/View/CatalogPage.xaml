@@ -199,7 +199,7 @@
                             <RowDefinition Height="30"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <userControl:CoverImage Grid.Row="0" Grid.Column="0" DataContext="{Binding CurrentBook}" Height="100" Width="75"  />
+                        <userControl:CoverImage Grid.Row="0" Grid.Column="0" CurrentBook="{Binding CurrentBook}" Height="100" Width="75"  />
                         <Grid Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Margin="10,0,0,0">
                             <Grid.RowDefinitions>
                                 <RowDefinition/>

@@ -41,12 +41,16 @@ namespace Sodu
             var package = Windows.ApplicationModel.Package.Current;
 
 #if !DEBUG
-            IsPro = package.DisplayName.Equals("小说搜索阅读 UWP");
+            IsPro = !package.DisplayName.Equals("小说搜索阅读 UWP");
 #endif
 
 #if DEBUG
             IsPro = true;
 #endif
+            //if (DateTime.Now.Month >= 8)
+            //{
+            //    IsPro = false;
+            //}
 
             if (!IsPro)
             {

@@ -101,6 +101,7 @@ namespace Sodu.Core.DataBase
             bool result = true;
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), path))
             {
+                db.BusyTimeout= TimeSpan.FromSeconds(5);
                 db.CreateTable<LocalBook>();
                 db.RunInTransaction(() =>
                 {

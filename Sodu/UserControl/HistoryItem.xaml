@@ -18,7 +18,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid  Height="75" Width="55">
-            <local:CoverImage DataContext="{Binding}"></local:CoverImage>
+            <local:CoverImage CurrentBook="{Binding}"></local:CoverImage>
             <Border Background="#FF007AFF" Height="14" Width="25" HorizontalAlignment="Right" VerticalAlignment="Bottom"
                     CornerRadius="1" Visibility="{Binding IsLocal,Converter={StaticResource BooleanToVisibilityConverter}}">
                 <TextBlock FontSize="8" Text="在线" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
@@ -33,16 +33,16 @@
             </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="0"  Margin="0,0,160,0" Orientation="Horizontal">
-                <TextBlock Text="{Binding BookName}" Foreground="#FF282828" FontWeight="Normal" VerticalAlignment="Center"  FontSize="17"></TextBlock>
+                <TextBlock Text="{Binding BookName}" Style="{StaticResource  ListViewItemTitleText}"></TextBlock>
             </StackPanel>
 
-            <TextBlock   Grid.Row="1" Foreground="{StaticResource AppTextColor}"    VerticalAlignment="Center"  FontSize="14">
+            <TextBlock   Grid.Row="1" Style="{StaticResource  ListViewItemInfoText}">
             <Run Text="最后阅读："></Run>
             <Run Text="{Binding LastReadChapterName}"></Run>
             </TextBlock>
 
 
-            <TextBlock   Grid.Row="2" Foreground="{StaticResource AppTextColor}"  VerticalAlignment="Center"  FontSize="14">
+            <TextBlock   Grid.Row="2"  Style="{StaticResource  ListViewItemInfoText}">
             <Run Text="阅读时间："></Run>
             <Run Text="{Binding UpdateTime}"></Run>
             </TextBlock>

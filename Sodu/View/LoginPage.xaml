@@ -81,8 +81,7 @@
                 FontFamily="微软雅黑"  FontWeight="Light" FontSize="12"
                 Foreground="Gray"></Button>
 
-            <control:LoadingControl Grid.Row="1" Grid.RowSpan="3" Margin="0,120,0,0" IsActive="{Binding IsLoading}" VerticalAlignment="Center" HorizontalAlignment="Center"  ></control:LoadingControl>
-
+            <control:CustomLoadingControl Grid.Row="1" Grid.RowSpan="3" Margin="0,120,0,0" IsActive="{Binding IsLoading}" CloeseButtonVisility="Collapsed"  ></control:CustomLoadingControl>
         </Grid>
     </Grid>
 
