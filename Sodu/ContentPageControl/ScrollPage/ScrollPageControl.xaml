@@ -8,7 +8,7 @@
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400"
-    DataContext="{Binding  Instance.OnlineBookContent,Source={StaticResource Locator}}"
+    DataContext="{Binding  Instance.BookContent,Source={StaticResource Locator}}"
     >
 
     <Grid Canvas.ZIndex="0" >
@@ -41,10 +41,10 @@
         <ScrollViewer   ManipulationMode="System,TranslateX"  x:Name="Viewer" Canvas.ZIndex="-1"   Grid.Row="1" Style="{StaticResource ContentScrollViewerStyle}" >
             <TextBlock  x:Name="ContentText" 
                         Text="{Binding CurrentCatalogContent, Mode=OneWay}"
-                           Margin="12,60,5,180"
-                           TextWrapping="Wrap" LineHeight="{Binding Instance.OnlineBookContent.LineHeight,Source={StaticResource Locator}}" 
-                           Foreground="{Binding Instance.OnlineBookContent.ContentColor.Item2,Source={StaticResource Locator}}"
-                           FontSize="{Binding Instance.OnlineBookContent.FontSize,Source={StaticResource Locator}}"
+                           Margin="12,60,9,180"
+                           TextWrapping="Wrap" LineHeight="{Binding Instance.BookContent.LineHeight,Source={StaticResource Locator}}" 
+                           Foreground="{Binding Instance.BookContent.ContentColor.Item2,Source={StaticResource Locator}}"
+                           FontSize="{Binding Instance.BookContent.FontSize,Source={StaticResource Locator}}"
                            FontWeight="Light"
                            FontFamily="Arial"
                             VerticalAlignment="Stretch"

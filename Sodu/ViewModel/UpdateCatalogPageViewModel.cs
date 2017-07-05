@@ -110,7 +110,7 @@ namespace Sodu.ViewModel
                 var list = ListPageDataHelper.GetBookUpdateChapterList(html);
                 if (list == null)
                 {
-                    Debug.WriteLine("排行榜数据获取失败");
+                    Debug.WriteLine("更新列表数据获取失败");
                 }
                 else
                 {
@@ -195,8 +195,8 @@ namespace Sodu.ViewModel
                 return;
             }
 
-            NavigationService.NavigateTo(typeof(OnlineContentPage));
-            ViewModelInstance.Instance.OnlineBookContent.LoadData((Book)obj);
+            NavigationService.NavigateTo(typeof(BookContentPage));
+            ViewModelInstance.Instance.BookContent.LoadData((Book)obj);
         }
 
 

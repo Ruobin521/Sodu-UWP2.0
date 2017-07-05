@@ -8,7 +8,7 @@
     xmlns:userControl="using:Sodu.UserControl"
     mc:Ignorable="d"
     x:Name="Root"
-        DataContext="{Binding  Instance.OnlineBookContent,Source={StaticResource Locator}}">
+        DataContext="{Binding  Instance.BookContent,Source={StaticResource Locator}}">
     <Page.Transitions>
         <TransitionCollection>
             <NavigationThemeTransition>
@@ -237,7 +237,7 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Button Style="{StaticResource CatalogItemButtonStyle}" 
-                            Command="{Binding  Instance.OnlineBookContent.CatalogSelectedCommand,Source={StaticResource Locator}}"
+                            Command="{Binding  Instance.BookContent.CatalogSelectedCommand,Source={StaticResource Locator}}"
                             CommandParameter="{Binding}">
                         <Grid Height="45"  VerticalAlignment="Center">
                             <Grid.ColumnDefinitions>

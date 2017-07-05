@@ -238,7 +238,6 @@
         </Setter>
     </Style>
 
-    
     <Style x:Key="ListViewItemTitleText" TargetType="TextBlock">
         <Setter  Property="FontSize" Value="17"></Setter>
         <Setter  Property="FontFamily" Value="Arial"></Setter>
@@ -248,7 +247,6 @@
         <Setter  Property="VerticalAlignment" Value="Center"></Setter>
         <Setter  Property="HorizontalAlignment" Value="Left"></Setter>
     </Style>
-
 
     <Style x:Key="ListViewItemInfoText" TargetType="TextBlock">
         <Setter  Property="FontSize" Value="15"></Setter>
@@ -281,7 +279,6 @@
         <Setter Property="Stretch" Value="Fill"/>
     </Style>
 
-
     <Thickness x:Key="PhoneBorderThickness">2.5</Thickness>
     <FontFamily x:Key="PhoneFontFamilyNormal">Segoe WP</FontFamily>
     <FontWeight x:Key="PhoneButtonFontWeight">Semibold</FontWeight>
@@ -291,6 +288,7 @@
     <x:Double x:Key="PhoneButtonMinWidth">109</x:Double>
     <Thickness x:Key="PhoneTouchTargetOverhang">0,9.5</Thickness>
     <SolidColorBrush x:Key="ButtonDisabledBackgroundThemeBrush" Color="Transparent"/>
+  
     <Style x:Key="CustomButtonStyle" TargetType="Button">
         <Setter Property="Background" Value="#FF3388FF"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
@@ -435,7 +433,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-
 
     <Style x:Key="ContentScrollViewerStyle" TargetType="ScrollViewer">
         <Setter Property="HorizontalScrollMode" Value="Auto"/>
@@ -958,7 +955,6 @@
         </Setter>
     </Style>
 
-
     <Style x:Key="CustomToggleSwitchStyle" TargetType="ToggleSwitch">
         <Setter Property="Foreground" Value="Black"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
@@ -1240,7 +1236,6 @@
         </Setter>
     </Style>
 
-
     <Style x:Key="CatalogItemButtonStyle" TargetType="Button">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="Transparent"/>
@@ -1352,7 +1347,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-
 
 
     <SolidColorBrush x:Key="BackColor1"  Color="#FFADC6A8"  />

@@ -15,10 +15,7 @@ namespace Sodu.Core.Util
         }
 
         public static Platform CurrentPlatform => GetPlatform();
-        public static bool IsMobileDevice => GetPlatform() == Platform.IsMobile;
-
-        public static bool IsIsPcDevice => GetPlatform() == Platform.IsPc;
-
+        public static bool IsMobile => GetPlatform() == Platform.IsMobile;
 
         private static Platform GetPlatform()
         {

@@ -103,9 +103,10 @@ namespace Sodu.ViewModel
         #endregion
 
         #region 已实现方法
-        public void OnSearchCommand(object obj)
+        public virtual void OnSearchCommand(object obj)
         {
             NavigationService.NavigateTo(typeof(SearchPage));
+            ViewModelInstance.Instance.Search.ResetData();
         }
 
 

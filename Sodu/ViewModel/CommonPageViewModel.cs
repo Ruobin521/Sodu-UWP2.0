@@ -6,10 +6,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.UI;
+using Windows.UI.Popups;
+using Windows.UI.StartScreen;
 using Windows.UI.ViewManagement;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Threading;
+using Newtonsoft.Json;
 using Sodu.Core.Config;
 using Sodu.Core.DataBase;
 using Sodu.Core.Entity;
@@ -110,6 +113,7 @@ namespace Sodu.View
         }
 
 
+
         #endregion
 
         #region 命令
@@ -122,6 +126,12 @@ namespace Sodu.View
 
         public async void OnAddToOnlineShelfCommand(object obj)
         {
+            if (!App.IsPro)
+            {
+                ToastHelper.ShowMessage("这是专业版功能，购买专业版即可使用");
+                return;
+            }
+
             var book = obj as Book;
             if (book == null)
             {
@@ -195,6 +205,81 @@ namespace Sodu.View
             if (ViewModelInstance.Instance.Main.IsLogin && AppSettingService.GetBoolKeyValue(SettingKey.IsAutoAddToOnlineShelf))
             {
                 OnAddToOnlineShelfCommand(obj);
+            }
+        }
+
+
+        private ICommand _createTitleCommand;
+        public ICommand CreateTitleCommand => _createTitleCommand ?? (_createTitleCommand = new RelayCommand<object>(OnCreatTileCommand));
+
+
+        public async void OnCreatTileCommand(object obj)
+        {
+            if (!App.IsPro)
+            {
+                ToastHelper.ShowMessage("这是专业版功能，购买专业版即可使用");
+                return;
+            }
+
+            Book book = null;
+
+            if (obj is LocalBookItemViewModel)
+            {
+                book = (obj as LocalBookItemViewModel)?.CurrentBook;
+            }
+            else if (obj is Book)
+            {
+                book = (obj as Book);
+            }
+
+            if (book == null)
+            {
+                return;
+            }
+
+            //磁贴ID
+            var tileid = book.BookId;
+            //磁贴展示名称
+            var displayName = book.BookName;
+            //点击磁贴传回的参数
+
+            var str = JsonConvert.SerializeObject(book);
+
+            var titleEntity = new TitleEntity();
+
+            titleEntity.TtitleId = book.BookId;
+
+            titleEntity.BookJosn = str;
+
+            if (book.IsLocal || book.IsOnline || book.IsTxt)
+            {
+                titleEntity.BookType = "1";
+            }
+            else
+            {
+                titleEntity.BookType = "0";
+            }
+
+            var args = JsonConvert.SerializeObject(titleEntity);
+
+            //磁贴的路径
+            var logourl =   new Uri("ms-appx:///Assets/Square150x150Logo.scale-150.png");
+
+            //磁贴的大小
+            var size = TileSize.Square150x150;
+            //创建磁贴对象
+            var tile = new SecondaryTile(tileid, displayName, args, logourl, size);
+            //让磁贴显示展示名
+            tile.VisualElements.ShowNameOnSquare150x150Logo = true;
+            //创建磁贴，返回bool值
+            bool b = await tile.RequestCreateAsync();
+            if (b)
+            {
+                ToastHelper.ShowMessage($"{book.BookName}磁贴创建成功");
+            }
+            else
+            {
+                ToastHelper.ShowMessage($"{book.BookName}磁贴创建失败",false);
             }
         }
 

@@ -110,13 +110,13 @@ namespace Sodu.ViewModel
 
 
 
-        private OnlineContentPageViewModel _onlineBookContent;
-        public OnlineContentPageViewModel OnlineBookContent
+        private BookContentPageViewModel _bookContent;
+        public BookContentPageViewModel  BookContent
         {
-            get { return _onlineBookContent ?? (_onlineBookContent = new OnlineContentPageViewModel()); }
+            get { return _bookContent ?? (_bookContent = new BookContentPageViewModel()); }
             set
             {
-                Set(ref _onlineBookContent, value);
+                Set(ref _bookContent, value);
             }
         }
 

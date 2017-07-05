@@ -119,6 +119,7 @@
     <Compile Include="Entity\BookShelfSchema.cs" />
     <Compile Include="Entity\LocalBook.cs" />
     <Compile Include="Entity\TabbarItem.cs" />
+    <Compile Include="Entity\TitleEntity.cs" />
     <Compile Include="Extend\AutoLoadCollection.cs" />
     <Compile Include="Extend\ColorExtend.cs" />
     <Compile Include="Extend\IncrementalLoadingBase.cs" />

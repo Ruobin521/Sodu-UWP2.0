@@ -36,7 +36,7 @@ namespace Sodu.ViewModel
         Current
     }
 
-    public class OnlineContentPageViewModel : BasePageViewModel
+    public class BookContentPageViewModel : BasePageViewModel
     {
         #region 属性
 
@@ -167,7 +167,7 @@ namespace Sodu.ViewModel
 
         #region 方法
 
-        public OnlineContentPageViewModel()
+        public BookContentPageViewModel()
         {
             InitBattery();
             InitTimer();
@@ -230,12 +230,12 @@ namespace Sodu.ViewModel
                 CurrentCatalog = catalog;
 
                 //  PreLoadPreAndNextCatalog();
-                Debug.WriteLine("-----------开始获取目录数据");
+                Debug.WriteLine("-----------开始获取章节数据");
 
                 var value = await GetCatalogContent(catalog, true);
 
 
-                Debug.WriteLine("-----------获取目录数据完成");
+                Debug.WriteLine("-----------获取章节数据完成");
 
 
                 if (value != null)
@@ -362,11 +362,11 @@ namespace Sodu.ViewModel
                         }
                         else
                         {
-                            Debug.WriteLine("-----------开始获取在线-------------目录数据");
+                            Debug.WriteLine("-----------开始获取在线-------------章节数据");
 
                             value = await GetOnlineBookCatalogContent(catalog);
 
-                            Debug.WriteLine("-----------获取在线-------------目录数据完成");
+                            Debug.WriteLine("-----------获取在线-------------章节数据完成");
                         }
                     }
                     catch (Exception e)
@@ -965,6 +965,11 @@ namespace Sodu.ViewModel
 
             DicContentCache.Clear();
             DicPagesCache.Clear();
+
+            NextCatalog = null;
+            PreCatalog = null;
+
+            OnCancleHttpRequestCommand(null);
         }
 
 
@@ -989,7 +994,7 @@ namespace Sodu.ViewModel
             Tuple<double, double> size = null;
             await App.RootFrame.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
             {
-                var content = NavigationService.ContentFrame.Content as OnlineContentPage;
+                var content = NavigationService.ContentFrame.Content as BookContentPage;
                 if (content == null)
                 {
                     return;
@@ -1037,7 +1042,7 @@ namespace Sodu.ViewModel
 
               await App.RootFrame.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
              {
-                 var content = NavigationService.ContentFrame.Content as OnlineContentPage;
+                 var content = NavigationService.ContentFrame.Content as BookContentPage;
                  if (content == null)
                  {
                      return;
@@ -1156,6 +1161,12 @@ namespace Sodu.ViewModel
             }
             else
             {
+                if (IsLoadingCatalogData)
+                {
+                    ToastHelper.ShowMessage("目录数据加载中，请稍后");
+                    return;
+                }
+
                 if (CurrentBook.CatalogList == null)
                 {
                     ToastHelper.ShowMessage("没有目录数据");
@@ -1309,6 +1320,7 @@ namespace Sodu.ViewModel
                     return;
                 }
                 Set(ref _isLandscape, value);
+                AppSettingService.SetKeyValue(SettingKey.IsLandscape, value);
                 SetLandscape(value);
             }
         }
@@ -1560,7 +1572,7 @@ namespace Sodu.ViewModel
 
         private void InitBattery()
         {
-            if (PlatformHelper.IsMobileDevice)
+            if (PlatformHelper.IsMobile)
             {
                 _battery = Battery.GetDefault();
                 BatteryValue = string.Format("{0}", _battery.RemainingChargePercent);

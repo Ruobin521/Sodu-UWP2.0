@@ -1,4 +1,4 @@
-﻿<UserControl
+﻿<local:BaseListViewItem
     x:Class="Sodu.UserControl.LocalBookItem"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -56,4 +56,4 @@
             </TextBlock>
         </Grid>
     </Grid>
-</UserControl>
+</local:BaseListViewItem>

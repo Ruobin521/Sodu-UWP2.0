@@ -116,6 +116,7 @@
     <Compile Include="ContentPageControl\SlideSwitchPage\ScrollSwitchItem.xaml.cs">
       <DependentUpon>ScrollSwitchItem.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converter\NightModeLabelConverter.cs" />
     <Compile Include="Converter\BooleanToOpicityConverter.cs" />
     <Compile Include="Converter\IndexConverter.cs" />
     <Compile Include="Converter\CountToVisibilityConverter.cs" />
@@ -132,6 +133,7 @@
     <Compile Include="Service\NavigationService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\ToastHelper.cs" />
+    <Compile Include="UserControl\BaseListViewItem.cs" />
     <Compile Include="UserControl\CoverImage.xaml.cs">
       <DependentUpon>CoverImage.xaml</DependentUpon>
     </Compile>
@@ -165,7 +167,7 @@
     <Compile Include="ViewModel\LoginViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\OnlineBookShelfPageViewModel.cs" />
-    <Compile Include="ViewModel\OnlineContentPageViewModel.cs" />
+    <Compile Include="ViewModel\BookContentPageViewModel.cs" />
     <Compile Include="ViewModel\RankPageViewModel.cs" />
     <Compile Include="ViewModel\SearchPageViewModel.cs" />
     <Compile Include="ViewModel\SettingPageViewModel.cs" />
@@ -175,7 +177,7 @@
     <Compile Include="View\CatalogPage.xaml.cs">
       <DependentUpon>CatalogPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\CommonPageViewModel.cs" />
+    <Compile Include="ViewModel\CommonPageViewModel.cs" />
     <Compile Include="View\DownloadCenterPage.xaml.cs">
       <DependentUpon>DownloadCenterPage.xaml</DependentUpon>
     </Compile>
@@ -194,8 +196,8 @@
     <Compile Include="View\OnlineBookShelfPage.xaml.cs">
       <DependentUpon>OnlineBookShelfPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\OnlineContentPage.xaml.cs">
-      <DependentUpon>OnlineContentPage.xaml</DependentUpon>
+    <Compile Include="View\BookContentPage.xaml.cs">
+      <DependentUpon>BookContentPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\PersonalCenterPage.xaml.cs">
       <DependentUpon>PersonalCenterPage.xaml</DependentUpon>
@@ -381,7 +383,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\OnlineContentPage.xaml">
+    <Page Include="View\BookContentPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

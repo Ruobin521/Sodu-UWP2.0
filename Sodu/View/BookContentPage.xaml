@@ -1,5 +1,5 @@
 ﻿<Page
-    x:Class="Sodu.View.OnlineContentPage"
+    x:Class="Sodu.View.BookContentPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Sodu.View"
@@ -12,7 +12,7 @@
     xmlns:scrollSwitchPage="using:Sodu.ContentPageControl.ScrollSwitchPage"
     mc:Ignorable="d"
     x:Name="Root"
-    DataContext="{Binding  Instance.OnlineBookContent,Source={StaticResource Locator}}">
+    DataContext="{Binding  Instance.BookContent,Source={StaticResource Locator}}">
 
     <Page.Resources>
         <x:String  x:Key="DayPathData">M862.634 601.336h0.028c-31.641 164.953-175.247 289.575-347.794 289.575-195.75 0-354.431-160.312-354.431-358.059 0-162.506 107.409-298.997 254.278-342.647 3.459-1.547 7.284-2.419 11.334-2.419 15.666 0 28.35 12.825 28.35 28.631-108.928 277.341 112.247 477.928 380.812 349.313 15.666 0 28.35 12.825 28.35 28.631 0 2.447-0.394 4.753-0.928 6.975z</x:String>
@@ -23,6 +23,7 @@
 
 
         <converter:LightValueConverter x:Key="LightValueConverter"></converter:LightValueConverter>
+        <converter:NightModeLabelConverter x:Key="NightModeLabelConverter"></converter:NightModeLabelConverter>
         <KeyTime x:Key="SbKeyTime">0:0:0.20</KeyTime>
         <Storyboard x:Name="MenuBarHide">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="TopBar">
@@ -439,7 +440,8 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <control:TabbarButton  x:Name="BtnNightMode" Grid.Column="0"  Foreground="#FFADADAD"  Label="夜间模式" Click="BtnNightMode_OnClick"
+                <control:TabbarButton  x:Name="BtnNightMode" Grid.Column="0"  Foreground="#FFADADAD"  
+                                       Label="{Binding IsNightMode,Converter={StaticResource NightModeLabelConverter}}"
                                     PathData="{StaticResource DayPathData}" 
                                     HighLightBackColor="Black"  Command="{Binding NightModeCommand}"/>
 
@@ -491,7 +493,7 @@
         <!--正文内容-->
         <contentPageControl:ScrollPageControl x:Name="ScrollControl" Opacity="{Binding IsScroll,Converter={StaticResource  BooleanToOpicityConverter }}" IsHitTestVisible="{Binding IsScroll}"/>
         <!--<contentPageControl:SwitchPageControl x:Name="SwitchControl" Visibility="{Binding IsScroll,Converter={StaticResource BooleanToCollapsedConverter}}"/>-->
-        <scrollSwitchPage:ScrollSwitchControl x:Name="SwitchControl" Visibility="{Binding IsScroll,Converter={StaticResource BooleanToCollapsedConverter}}"/>
+        <!--<scrollSwitchPage:ScrollSwitchControl x:Name="SwitchControl" Visibility="{Binding IsScroll,Converter={StaticResource BooleanToCollapsedConverter}}"/>-->
 
         <Grid  VerticalAlignment="Center"
                Visibility="{Binding IsRetry,Converter={StaticResource  BooleanToVisibilityConverter}}"

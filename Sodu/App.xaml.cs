@@ -2,6 +2,7 @@
 using System.Text;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.Foundation;
 using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
@@ -9,10 +10,15 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using GalaSoft.MvvmLight.Threading;
+using Newtonsoft.Json;
 using Sodu.Contants;
+using Sodu.Core.Config;
+using Sodu.Core.DataBase;
+using Sodu.Core.Entity;
 using Sodu.Core.HtmlService;
 using Sodu.Core.Util;
 using Sodu.Service;
+using Sodu.View;
 using static Windows.Phone.UI.Input.HardwareButtons;
 
 namespace Sodu
@@ -45,13 +51,8 @@ namespace Sodu
 #endif
 
 #if DEBUG
-            IsPro = true;
+            IsPro = false;
 #endif
-            //if (DateTime.Now.Month >= 8)
-            //{
-            //    IsPro = false;
-            //}
-
             if (!IsPro)
             {
                 CookieHelper.SetCookie(SoduPageValue.HomePage, false);
@@ -78,8 +79,9 @@ namespace Sodu
                 statusBar.BackgroundColor = ConstantValue.AppMainColor;
             }
 
-
             RootFrame = Window.Current.Content as Frame;
+
+         
 
             // 不要在窗口已包含内容时重复应用程序初始化，
             // 只需确保窗口处于活动状态
@@ -134,12 +136,42 @@ namespace Sodu
                 }
                 // 确保当前窗口处于活动状态
                 Window.Current.Activate();
+
+                ApplicationView.PreferredLaunchViewSize = new Size(450, 600);
+                ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
+
+                if (!string.IsNullOrEmpty(e.Arguments))
+                {
+                    OnTitleClick(e.Arguments);
+                }
+            }
+        }
+
+
+        private static void OnTitleClick(string args)
+        {
+            var titleEntity = JsonConvert.DeserializeObject<TitleEntity>(args);
+            var book = JsonConvert.DeserializeObject<Book>(titleEntity.BookJosn);
+
+            if (titleEntity.BookType == "0")
+            {
+                NavigationService.NavigateTo(typeof(UpdateCatalogPage));
+                ViewModel.ViewModelInstance.Instance.UpdateCatalog.LoadData(book);
+            }
+            else
+            {
+                var temp = DbLocalBook.GetBookById(AppDataPath.GetLocalBookDbPath(), book.BookId);
+                if (temp != null)
+                {
+                    NavigationService.NavigateTo(typeof(BookContentPage));
+                    ViewModel.ViewModelInstance.Instance.BookContent.LoadData(temp);
+                }
             }
         }
 
         public static async void HideStatusBar(bool isContent = false)
         {
-            if (PlatformHelper.IsMobileDevice)
+            if (PlatformHelper.IsMobile)
             {
                 StatusBar statusBar = StatusBar.GetForCurrentView();
                 statusBar.ForegroundColor = Colors.White;
@@ -151,7 +183,7 @@ namespace Sodu
 
         public static async void ShowStatusBar(bool isContent = false)
         {
-            if (PlatformHelper.IsMobileDevice)
+            if (PlatformHelper.IsMobile)
             {
                 StatusBar statusBar = StatusBar.GetForCurrentView();
                 statusBar.ForegroundColor = Colors.White;

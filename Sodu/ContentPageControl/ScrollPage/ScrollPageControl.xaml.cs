@@ -25,7 +25,7 @@ namespace Sodu.ContentPageControl
 {
     public sealed partial class ScrollPageControl : Windows.UI.Xaml.Controls.UserControl
     {
-        private OnlineContentPageViewModel vm;
+        private BookContentPageViewModel vm;
 
         private bool IsLoadingContent { get; set; }
 
@@ -36,7 +36,7 @@ namespace Sodu.ContentPageControl
 
             Messenger.Default.Register<string>(this, "CurrentCatalogContentChanged", OnCurrentCatalogContentChanged);
 
-            vm = this.DataContext as OnlineContentPageViewModel;
+            vm = ViewModelInstance.Instance.BookContent;
         }
 
         private async void OnCurrentCatalogContentChanged(string str)
@@ -65,7 +65,7 @@ namespace Sodu.ContentPageControl
         }
         private void Viewer_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
         {
-            if (IsLoadingContent || vm.IsLoading)
+            if (IsLoadingContent || vm == null || vm.IsLoading)
             {
                 return;
             }
@@ -105,7 +105,7 @@ namespace Sodu.ContentPageControl
                 }
                 IsLoadingContent = true;
                 await Task.Delay(0);
-                var vm = (OnlineContentPageViewModel)DataContext;
+                var vm = (BookContentPageViewModel)DataContext;
                 vm.ScrollToSwitchCurrentCatalog(dir);
             }
             catch (Exception e)

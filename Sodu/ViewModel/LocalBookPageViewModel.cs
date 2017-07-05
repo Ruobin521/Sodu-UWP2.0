@@ -261,8 +261,8 @@ namespace Sodu.ViewModel
                 OnSetHadReadCommand(localbook);
             }
 
-            NavigationService.NavigateTo(typeof(OnlineContentPage));
-            ViewModelInstance.Instance.OnlineBookContent.LoadData(localbook.CurrentBook);
+            NavigationService.NavigateTo(typeof(BookContentPage));
+            ViewModelInstance.Instance.BookContent.LoadData(localbook.CurrentBook);
         }
 
 

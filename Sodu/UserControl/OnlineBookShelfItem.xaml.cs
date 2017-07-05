@@ -20,48 +20,11 @@ using System.Windows.Input;
 
 namespace Sodu.UserControl
 {
-    public sealed partial class OnlineBookShelfItem
+    public sealed partial class OnlineBookShelfItem : BaseListViewItem
     {
-
-        public static readonly DependencyProperty CommandProperty = DependencyProperty.Register(
- "Command", typeof(ICommand), typeof(OnlineBookShelfItem), new PropertyMetadata(default(ICommand)));
-
-        public ICommand Command
-        {
-            get { return (ICommand)GetValue(CommandProperty); }
-            set { SetValue(CommandProperty, value); }
-        }
-
-
-        public static readonly DependencyProperty CommandParameterProperty = DependencyProperty.Register(
-            "CommandParameter", typeof(object), typeof(OnlineBookShelfItem), new PropertyMetadata(default(object)));
-
-        public object CommandParameter
-        {
-            get { return (object)GetValue(CommandParameterProperty); }
-            set { SetValue(CommandParameterProperty, value); }
-        }
-
         public OnlineBookShelfItem()
         {
             this.InitializeComponent();
-
-            if (PlatformHelper.CurrentPlatform == PlatformHelper.Platform.IsPc)
-            {
-                this.RightTapped += OnlineBookShelfItem_OnRightTapped;
-            }
-
-            RootGrid.Tapped += RootGrid_Tapped;
-        }
-
-        private void RootGrid_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-           Command?.Execute(CommandParameter);
-        }
-
-        private void OnlineBookShelfItem_OnRightTapped(object sender, RightTappedRoutedEventArgs e)
-        {
-            FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
         }
     }
 }

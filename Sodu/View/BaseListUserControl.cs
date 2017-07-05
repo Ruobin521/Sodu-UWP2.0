@@ -11,7 +11,7 @@ namespace Sodu.View
 {
     public class BaseListUserControl : Windows.UI.Xaml.Controls.UserControl
     {
-        public SwipeListView CurrentListView { get; set; }
+        public PullToRefreshListView CurrentListView { get; set; }
 
         public void GoTopOrBottom()
         {

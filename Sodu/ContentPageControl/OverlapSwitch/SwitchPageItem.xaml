@@ -8,7 +8,7 @@
     mc:Ignorable="d"
     x:Name="Root"
     IsHitTestVisible="False"
-    DataContext="{Binding  Instance.OnlineBookContent,Source={StaticResource Locator}}"
+    DataContext="{Binding  Instance.BookContent,Source={StaticResource Locator}}"
     >
     <UserControl.RenderTransform>
         <CompositeTransform/>
@@ -58,9 +58,9 @@
     <Grid  Canvas.ZIndex="0" Background="{Binding ContentColor.Item1,Mode=OneWay}">
         <Border  x:Name="Grid" >
             <TextBlock     x:Name="TextContent"
-                           TextWrapping="Wrap" LineHeight="{Binding Instance.OnlineBookContent.LineHeight,Source={StaticResource Locator}}" 
-                           Foreground="{Binding Instance.OnlineBookContent.ContentColor.Item2,Source={StaticResource Locator}}"
-                           FontSize="{Binding Instance.OnlineBookContent.FontSize,Source={StaticResource Locator}}"
+                           TextWrapping="Wrap" LineHeight="{Binding Instance.BookContent.LineHeight,Source={StaticResource Locator}}" 
+                           Foreground="{Binding Instance.BookContent.ContentColor.Item2,Source={StaticResource Locator}}"
+                           FontSize="{Binding Instance.BookContent.FontSize,Source={StaticResource Locator}}"
                            FontWeight="Light"
                            FontFamily="Arial"
                            HorizontalAlignment="Stretch"

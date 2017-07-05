@@ -20,55 +20,11 @@ using Sodu.Core.Util;
 
 namespace Sodu.UserControl
 {
-    public sealed partial class RankListItem
+    public sealed partial class RankListItem:BaseListViewItem
     {
-
-        public static readonly DependencyProperty CommandProperty = DependencyProperty.Register(
-"Command", typeof(ICommand), typeof(RankListItem), new PropertyMetadata(default(ICommand)));
-
-        public ICommand Command
-        {
-            get { return (ICommand)GetValue(CommandProperty); }
-            set { SetValue(CommandProperty, value); }
-        }
-
-
-        public static readonly DependencyProperty CommandParameterProperty = DependencyProperty.Register(
-            "CommandParameter", typeof(object), typeof(RankListItem), new PropertyMetadata(default(object)));
-
-        public object CommandParameter
-        {
-            get { return (object)GetValue(CommandParameterProperty); }
-            set { SetValue(CommandParameterProperty, value); }
-        }
-
-
         public RankListItem()
         {
             this.InitializeComponent();
-            if (PlatformHelper.CurrentPlatform == PlatformHelper.Platform.IsPc)
-            {
-                this.RightTapped += RankListItem_RightTapped;
-            }
-
-            Tapped += RankListItem_Tapped;
-        }
-
-        private void RankListItem_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            Command?.Execute(CommandParameter);
-        }
-
-        private void RankListItem_RightTapped(object sender, RightTappedRoutedEventArgs e)
-        {
-            try
-            {
-                FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message + "\n" + ex.StackTrace);
-            }
         }
     }
 }

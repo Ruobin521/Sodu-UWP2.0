@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Windows.Graphics.Display;
 using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
@@ -20,13 +21,13 @@ namespace Sodu.View
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class OnlineContentPage
+    public sealed partial class BookContentPage
     {
         private bool IsAnimating { get; set; }
         private bool IsShow { get; set; }
 
 
-        public OnlineContentPage()
+        public BookContentPage()
         {
             InitializeComponent();
 
@@ -54,7 +55,9 @@ namespace Sodu.View
             else
             {
                 App.ShowStatusBar(false);
+                DisplayInformation.AutoRotationPreferences = DisplayOrientations.Portrait;
             }
+
         }
 
         private void MenuBarHide_Completed(object sender, object e)
@@ -63,8 +66,8 @@ namespace Sodu.View
             IsAnimating = false;
 
             ScrollControl.IsEnabled = true;
-            SwitchControl.IsEnabled = true;
-           
+            //SwitchControl.IsEnabled = true;
+
         }
 
         private void MenuBarShow_Completed(object sender, object e)
@@ -73,15 +76,18 @@ namespace Sodu.View
             IsAnimating = false;
 
             ScrollControl.IsEnabled = false;
-            SwitchControl.IsEnabled = false;
+            //  SwitchControl.IsEnabled = false;
 
-           
+
         }
 
         private void OnlineContentPage_Loaded(object sender, RoutedEventArgs e)
         {
             SetMenuVisibility(false);
             App.HideStatusBar(true);
+
+            var isLandscape = ViewModelInstance.Instance.BookContent.IsLandscape;
+            DisplayInformation.AutoRotationPreferences = isLandscape ? DisplayOrientations.Landscape : DisplayOrientations.None;
         }
 
 
@@ -131,13 +137,6 @@ namespace Sodu.View
         }
 
 
-        private void BtnNightMode_OnClick(object sender, RoutedEventArgs e)
-        {
-            var btn = (TabbarButton)sender;
-
-            btn.Label = btn.Label == "夜间模式" ? "日间模式" : "夜间模式";
-        }
-
         private void BtnAdd_OnClick(object sender, RoutedEventArgs e)
         {
             SetMenuVisibility(false);
@@ -145,7 +144,8 @@ namespace Sodu.View
 
         public Tuple<double, double> GetControlSize()
         {
-            return SwitchControl.GetControlSize();
+            //    return SwitchControl.GetControlSize();
+            return new Tuple<double, double>(0, 0);
         }
     }
 }

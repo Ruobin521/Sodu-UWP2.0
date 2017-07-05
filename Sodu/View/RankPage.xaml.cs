@@ -28,7 +28,7 @@ namespace Sodu.View
         public RankPage()
         {
             this.InitializeComponent();
-            base.CurrentListView = BookListView as SwipeListView;
+            base.CurrentListView = BookListView;
         }
 
 

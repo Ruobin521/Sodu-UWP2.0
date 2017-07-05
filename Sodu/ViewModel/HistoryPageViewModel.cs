@@ -107,8 +107,8 @@ namespace Sodu.ViewModel
 
         public override void OnItemClickCommand(object obj)
         {
-            NavigationService.NavigateTo(typeof(OnlineContentPage));
-            ViewModelInstance.Instance.OnlineBookContent.LoadData(obj as Book);
+            NavigationService.NavigateTo(typeof(BookContentPage));
+            ViewModelInstance.Instance.BookContent.LoadData(obj as Book);
         }
 
         #endregion

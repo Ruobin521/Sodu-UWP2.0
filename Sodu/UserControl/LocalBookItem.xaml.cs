@@ -19,46 +19,14 @@ using System.Windows.Input;
 
 namespace Sodu.UserControl
 {
-    public sealed partial class LocalBookItem
+    public sealed partial class LocalBookItem:BaseListViewItem
     {
 
-        public static readonly DependencyProperty CommandProperty = DependencyProperty.Register(
-    "Command", typeof(ICommand), typeof(LocalBookItem), new PropertyMetadata(default(ICommand)));
-
-        public ICommand Command
-        {
-            get { return (ICommand)GetValue(CommandProperty); }
-            set { SetValue(CommandProperty, value); }
-        }
-
-
-        public static readonly DependencyProperty CommandParameterProperty = DependencyProperty.Register(
-            "CommandParameter", typeof(object), typeof(LocalBookItem), new PropertyMetadata(default(object)));
-
-        public object CommandParameter
-        {
-            get { return (object)GetValue(CommandParameterProperty); }
-            set { SetValue(CommandParameterProperty, value); }
-        }
+      
         public LocalBookItem()
         {
             this.InitializeComponent();
-            if (PlatformHelper.CurrentPlatform == PlatformHelper.Platform.IsPc)
-            {
-                this.RightTapped += LocalBookItem_RightTapped;
-            }
-
-            RootGrid.Tapped += RootGrid_Tapped;
         }
-
-        private void RootGrid_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            Command?.Execute(CommandParameter);
-        }
-
-        private void LocalBookItem_RightTapped(object sender, RightTappedRoutedEventArgs e)
-        {
-            FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
-        }
+ 
     }
 }

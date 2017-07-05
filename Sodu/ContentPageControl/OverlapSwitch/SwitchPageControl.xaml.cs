@@ -73,7 +73,7 @@ namespace Sodu.ContentPageControl
 
         private void SwitchPageControl_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            var vm = (OnlineContentPageViewModel)DataContext;
+            var vm = (BookContentPageViewModel)DataContext;
 
             //var str = vm.SpiltContent(new Tuple<double, double>(
             //      Item1.ActualWidth,
@@ -90,7 +90,7 @@ namespace Sodu.ContentPageControl
 
         private void The_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
         {
-            var vm = (OnlineContentPageViewModel)DataContext;
+            var vm = (BookContentPageViewModel)DataContext;
             if (vm.IsLoading)
             {
                 return;
@@ -101,7 +101,7 @@ namespace Sodu.ContentPageControl
 
         private void The_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
         {
-            var vm = (OnlineContentPageViewModel)DataContext;
+            var vm = (BookContentPageViewModel)DataContext;
 
             //上一页（章节）
             if (x > 50)
@@ -121,7 +121,7 @@ namespace Sodu.ContentPageControl
         {
             Item2.Text = Item1.Text;
 
-            var vm = (OnlineContentPageViewModel)DataContext;
+            var vm = (BookContentPageViewModel)DataContext;
 
             if (vm.PageIndex < vm.PageCount - 1)
             {
@@ -178,7 +178,7 @@ namespace Sodu.ContentPageControl
         {
             Item2.Text = Item1.Text;
 
-            var vm = (OnlineContentPageViewModel)DataContext;
+            var vm = (BookContentPageViewModel)DataContext;
 
 
             if (vm.PageIndex > 0)

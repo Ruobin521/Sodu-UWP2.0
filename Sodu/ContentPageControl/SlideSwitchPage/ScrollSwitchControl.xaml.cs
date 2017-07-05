@@ -33,7 +33,7 @@ namespace Sodu.ContentPageControl.ScrollSwitchPage
 
         private double Threshold { get; set; } = 50;
 
-        private OnlineContentPageViewModel ViewModel { get; set; }
+        private BookContentPageViewModel ViewModel { get; set; }
 
         private bool IsAnimating { get; set; }
 
@@ -56,7 +56,7 @@ namespace Sodu.ContentPageControl.ScrollSwitchPage
             Messenger.Default.Register<string>(this, "ContentTextChanged", OnContentTextChanged);
 
 
-            ViewModel = ViewModelInstance.Instance.OnlineBookContent;
+            ViewModel = ViewModelInstance.Instance.BookContent;
 
             SizeChanged += ScrollSwitchControl_SizeChanged;
         }

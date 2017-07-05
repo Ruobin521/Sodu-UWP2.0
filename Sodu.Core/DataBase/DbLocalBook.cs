@@ -59,6 +59,46 @@ namespace Sodu.Core.DataBase
             return list;
         }
 
+        public static Book GetBookById(string path, string bookId)
+        {
+            var book = new Book();
+            try
+            {
+                using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), path))
+                {
+                    db.CreateTable<LocalBook>();
+
+                    db.RunInTransaction(() =>
+                    {
+                        try
+                        {
+                            var temp = (from m in db.Table<LocalBook>()
+                                        where m.BookId == bookId
+                                        select m
+                                ).FirstOrDefault();
+
+                            if (temp == null)
+                            {
+                                return;
+                            }
+                            book = JsonConvert.DeserializeObject<Book>(temp.BookJson);
+                        }
+                        catch (Exception ex)
+                        {
+                            Debug.WriteLine(ex.Message + "\n" + ex.StackTrace);
+                            book = null;
+                        }
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message + "\n" + ex.StackTrace);
+                book = null;
+            }
+            return book;
+        }
+
         public static int GetBooksCount(string path)
         {
             int count = 0;
@@ -101,7 +141,7 @@ namespace Sodu.Core.DataBase
             bool result = true;
             using (var db = new SQLiteConnection(new SQLitePlatformWinRT(), path))
             {
-                db.BusyTimeout= TimeSpan.FromSeconds(5);
+                db.BusyTimeout = TimeSpan.FromSeconds(5);
                 db.CreateTable<LocalBook>();
                 db.RunInTransaction(() =>
                 {
@@ -275,7 +315,7 @@ namespace Sodu.Core.DataBase
                 {
                     Debug.WriteLine(e.Message + "\n" + e.StackTrace);
                 }
-               
+
             }
             return result;
         }
