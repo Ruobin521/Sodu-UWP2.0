@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Text;
+using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.Background;
 using Windows.Foundation;
 using Windows.UI;
 using Windows.UI.Core;
@@ -51,7 +53,7 @@ namespace Sodu
 #endif
 
 #if DEBUG
-            IsPro = false;
+            IsPro = true;
 #endif
             if (!IsPro)
             {
@@ -69,7 +71,7 @@ namespace Sodu
         /// 将在启动应用程序以打开特定文件等情况下使用。
         /// </summary>
         /// <param name="e">有关启动请求和过程的详细信息。</param>
-        protected override void OnLaunched(LaunchActivatedEventArgs e)
+        protected override async void OnLaunched(LaunchActivatedEventArgs e)
         {
             if (PlatformHelper.CurrentPlatform == PlatformHelper.Platform.IsMobile)
             {
@@ -81,7 +83,14 @@ namespace Sodu
 
             RootFrame = Window.Current.Content as Frame;
 
-         
+            if (IsPro)
+            {
+                await RegisterBackgroundTask();
+            }
+            else
+            {
+                UnRegisterBackgroundTask();
+            }
 
             // 不要在窗口已包含内容时重复应用程序初始化，
             // 只需确保窗口处于活动状态
@@ -91,20 +100,6 @@ namespace Sodu
                 RootFrame = new Frame();
                 DispatcherHelper.Initialize();
 
-                if (PlatformHelper.CurrentPlatform == PlatformHelper.Platform.IsPc)
-                {
-                    //RootFrame.Navigated += RootFrame_Navigated;
-                    //SystemNavigationManager.GetForCurrentView().BackRequested += (sender, args) =>
-                    //{
-                    //    args.Handled = true;
-                    //    OnAppBack();
-                    //};
-                    //rootFrame.KeyUp -= RootFrame_KeyUp;
-                    //rootFrame.KeyUp += RootFrame_KeyUp;
-
-                    //rootFrame.KeyDown -= RootFrame_KeyDown;
-                    //rootFrame.KeyDown += RootFrame_KeyDown;
-                }
                 if (PlatformHelper.CurrentPlatform == PlatformHelper.Platform.IsMobile)
                 {
                     BackPressed += (sender, args) =>
@@ -193,18 +188,30 @@ namespace Sodu
             }
         }
 
+        private async Task RegisterBackgroundTask()
+        {
+            var task = await BackgroundTaskHelper.RegisterBackgroundTask(
+                typeof(Sodu.CheckUpdateTask.BookShelfCheckTask),
+                "BookShelfCheckTask",
+                new TimeTrigger(120,false),
+                null);
+        }
+
+        private void UnRegisterBackgroundTask()
+        {
+            BackgroundTaskHelper.UnRegisterBackgroundTask(
+                typeof(Sodu.CheckUpdateTask.BookShelfCheckTask),
+                "BookShelfCheckTask",
+                new TimeTrigger(15, false),
+                null);
+        }
+
+
         public void OnAppBack()
         {
             NavigationService.GoBack();
         }
 
-        private void RootFrame_Navigated(object sender, NavigationEventArgs e)
-        {
-            if (PlatformHelper.CurrentPlatform == PlatformHelper.Platform.IsPc)
-            {
-                SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = RootFrame.CanGoBack ? AppViewBackButtonVisibility.Visible : AppViewBackButtonVisibility.Collapsed;
-            }
-        }
 
         /// <summary>
         /// 导航到特定页失败时调用

@@ -107,6 +107,7 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppService\AppSettingService.cs" />
     <Compile Include="Config\AppDataPath.cs" />
     <Compile Include="DataBase\DbBookShelf.cs" />
     <Compile Include="DataBase\DbHelper.cs" />
@@ -131,8 +132,11 @@
     <Compile Include="HtmlService\ListPageDataHelper.cs" />
     <Compile Include="HtmlService\SoduPageValue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\BackgroundTaskHelper.cs" />
+    <Compile Include="AppService\CookieHelper.cs" />
     <Compile Include="Util\DownloadCoverHelper.cs" />
     <Compile Include="Util\HttpHelper.cs" />
+    <Compile Include="Util\NetworkHelper.cs" />
     <Compile Include="Util\PlatformHelper.cs" />
     <Compile Include="Util\SettingHelper.cs" />
     <Compile Include="Util\SoduVisualTreeHelper.cs" />

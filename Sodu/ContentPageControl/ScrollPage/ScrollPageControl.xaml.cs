@@ -46,7 +46,7 @@ namespace Sodu.ContentPageControl
             var windowHeight = Window.Current.Bounds.Height;
             ContentText.Height = double.NaN;
             Viewer.ChangeView(0, 0, null, true);
-            await Task.Delay(2);
+            await Task.Delay(5);
 
             var textHeight = ContentText.ActualHeight;
             if (textHeight < windowHeight + 200)

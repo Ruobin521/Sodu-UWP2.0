@@ -15,3 +15,9 @@ Sodu/bin/
 Sodu/obj/
 Sodu.Core/bin/
 Sodu/AppPackages/
+Sodu.CheckUpdateTask/obj/
+Sodu.DataService/bin/x86/Debug/Sodu.Core.pri
+Sodu.DataService/bin/x86/Debug/Sodu.DataService.dll
+Sodu.DataService/bin/
+Sodu.DataService/obj/
+Sodu.CheckUpdateTask/bin/

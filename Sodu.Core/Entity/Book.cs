@@ -180,14 +180,6 @@ namespace Sodu.Core.Entity
         public string UpdateCatalogUrl { get; set; }
 
         /// <summary>
-        /// 正文章节列表地址
-        /// </summary>
-        public string CatalogListUrl
-        {
-            get; set;
-        }
-
-        /// <summary>
         ///作者名称
         /// </summary>
         public string AuthorName { get; set; }
@@ -264,9 +256,6 @@ namespace Sodu.Core.Entity
             }
         }
 
-        public string TxtPath { get; set; }
-
-
         [Ignore]
         [JsonIgnore]
         public List<BookCatalog> CatalogList { get; set; }
@@ -274,9 +263,32 @@ namespace Sodu.Core.Entity
 
         public Book Clone()
         {
-            var str = JsonConvert.SerializeObject(this);
-            var entity = JsonConvert.DeserializeObject<Book>(str);
-            return entity;
+            var book = new Book
+            {
+                AuthorName = this.AuthorName,
+                BookName = this.BookName,
+                BookId = this.BookId,
+                Cover = this.Cover,
+                Description = this.Description,
+                IsLocal = this.IsLocal,
+                IsHistory = this.IsHistory,
+                IsNew = this.IsNew,
+                Id = this.Id,
+                IsOnline = this.IsOnline,
+                IsTxt = this.IsTxt,
+                LastReadChapterName = this.LastReadChapterName,
+                LastReadChapterUrl = this.LastReadChapterUrl,
+                LyWeb = this.LyWeb,
+                NewestChapterName = this.NewestChapterName,
+                NewestChapterUrl = this.NewestChapterUrl,
+                RankChangeValue = this.RankChangeValue,
+                UpdateCatalogUrl = this.UpdateCatalogUrl,
+                UpdateTime = this.UpdateTime,
+            };
+
+
+
+            return book;
         }
 
     }

@@ -32,7 +32,8 @@
                     <Setter Property="VerticalAlignment" Value="Stretch"/>
                 </Style>
             </MenuFlyout.MenuFlyoutPresenterStyle>
-            <MenuFlyoutItem Text="添加在线书架" Command="{Binding  Instance.Search.AddToOnlineShelfCommand,Source={StaticResource Locator}}"  CommandParameter="{Binding}" Width="150"/>
+            <MenuFlyoutItem Text="添加在线书架" Width="200"
+                            Command="{Binding  Instance.Search.AddToOnlineShelfCommand,Source={StaticResource Locator}}"  CommandParameter="{Binding}" />
         </MenuFlyout>
 
         <Style x:Key="CusotmSearchTextBoxStyle" TargetType="TextBox">
@@ -298,6 +299,7 @@
                            IsItemClickEnabled="True"
                            SelectionMode="None"
                            RefreshCommand="{Binding  RefreshCommand}"
+                                       ItemContainerStyle="{StaticResource CustomListViewItemStyle}"
                            Grid.Row="2">
             <control:PullToRefreshListView.ItemTemplate>
                 <DataTemplate>

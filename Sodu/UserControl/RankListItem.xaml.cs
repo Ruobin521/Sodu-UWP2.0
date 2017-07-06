@@ -20,7 +20,7 @@ using Sodu.Core.Util;
 
 namespace Sodu.UserControl
 {
-    public sealed partial class RankListItem:BaseListViewItem
+    public sealed partial class RankListItem
     {
         public RankListItem()
         {

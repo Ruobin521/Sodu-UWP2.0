@@ -11,6 +11,7 @@ using Windows.Web.Http;
 using Windows.Web.Http.Filters;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using Sodu.Core.AppService;
 using Sodu.Core.HtmlService;
 using Sodu.Core.Util;
 using Sodu.Service;

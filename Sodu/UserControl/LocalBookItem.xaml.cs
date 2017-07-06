@@ -19,7 +19,7 @@ using System.Windows.Input;
 
 namespace Sodu.UserControl
 {
-    public sealed partial class LocalBookItem:BaseListViewItem
+    public sealed partial class LocalBookItem
     {
 
       

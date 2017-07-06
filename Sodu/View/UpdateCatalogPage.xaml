@@ -21,6 +21,7 @@
                            ItemsSource="{Binding  Books}" 
                            IsItemClickEnabled="True"
                            SelectionMode="None"
+                            ItemContainerStyle="{StaticResource CustomListViewItemStyle}"
                            RequestCommand="{Binding PullToLoadCommand}"
                            RefreshCommand="{Binding RefreshCommand}"
                            Grid.Row="1">

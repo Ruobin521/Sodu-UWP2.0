@@ -55,7 +55,6 @@ namespace Sodu.View
             else
             {
                 App.ShowStatusBar(false);
-                DisplayInformation.AutoRotationPreferences = DisplayOrientations.Portrait;
             }
 
         }
@@ -85,9 +84,6 @@ namespace Sodu.View
         {
             SetMenuVisibility(false);
             App.HideStatusBar(true);
-
-            var isLandscape = ViewModelInstance.Instance.BookContent.IsLandscape;
-            DisplayInformation.AutoRotationPreferences = isLandscape ? DisplayOrientations.Landscape : DisplayOrientations.None;
         }
 
 

@@ -20,7 +20,7 @@ using System.Windows.Input;
 
 namespace Sodu.UserControl
 {
-    public sealed partial class OnlineBookShelfItem : BaseListViewItem
+    public sealed partial class OnlineBookShelfItem 
     {
         public OnlineBookShelfItem()
         {

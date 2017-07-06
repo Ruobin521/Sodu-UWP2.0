@@ -12,6 +12,7 @@ using Windows.Web.Http.Filters;
 using GalaSoft.MvvmLight.Command;
 using Sodu.Core.Entity;
 using Sodu.Core.HtmlService;
+using Sodu.Core.Util;
 using Sodu.Service;
 using Sodu.View;
 
@@ -109,6 +110,7 @@ namespace Sodu.ViewModel
         {
             IsLogin = CookieHelper.CheckLogin();
             InitTabbar();
+            ViewModelInstance.Instance.BookContent.InitSettingValue();
         }
 
         private void InitTabbar()
@@ -198,14 +200,6 @@ namespace Sodu.ViewModel
             }
         }
 
-
-        private void CheckLogin()
-        {
-            var filter = new HttpBaseProtocolFilter();
-            var cookieCollection = filter.CookieManager.GetCookies(new Uri(SoduPageValue.HomePage));
-            var cookieItem = cookieCollection.FirstOrDefault(p => p.Name.Equals("sodu_user"));
-            IsLogin = cookieItem != null;
-        }
 
         private void ToTopOrBottom(BaseListUserControl control)
         {

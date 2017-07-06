@@ -324,7 +324,7 @@
                 <RowDefinition Height="55"/>
             </Grid.RowDefinitions>
             <ScrollViewer Style="{StaticResource ContentScrollViewerStyle}">
-                <Grid x:Name="FontSetingPanel" Background="#F2131313" Height="Auto"  IsTapEnabled="False" Visibility="Collapsed">
+                <Grid x:Name="FontSetingPanel" Background="#F2131313" Height="Auto"  IsTapEnabled="False" Visibility="Visible">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="60"/>
                         <RowDefinition Height="60"/>
@@ -344,13 +344,7 @@
                               Minimum="20" Maximum="100"  Orientation="Horizontal" Width="150"  Value="{Binding LightValue,Mode=TwoWay}"   ></Slider>
                         <Image Grid.Column="2" Height="35" Width="35" Margin="10,0"   Source="../Assets/Icon/maxLight@3x.png"   ></Image>
 
-
-                        <control:SettingButton Grid.Column="3"   Command="{Binding LandsacpeCommand}"  
-                            BorderThickness="1" IsSelected="{Binding IsLandscape}">
-                            <control:SettingButton.Content>
-                                <Image Source="../Assets/Icon/screen.png" Stretch="Fill" Height="20" Width="25"></Image>
-                            </control:SettingButton.Content>
-                        </control:SettingButton>
+                       
                     </Grid>
 
                     <Grid Grid.Row="1"  Tapped="Prevent_OnTapped">
@@ -376,11 +370,11 @@
                             </Button.Content>
                         </Button>
 
-                        <TextBlock Grid.Column="3" Text="滚动阅读"
+                        <TextBlock Grid.Column="3" Text="滚动"
                                    Foreground="White" FontSize="14" VerticalAlignment="Center" ></TextBlock>
 
                         <ToggleSwitch Grid.Column="4"   IsOn="{Binding IsScroll,Mode=TwoWay}"
-                                      Style="{StaticResource CustomToggleSwitchStyle}" Foreground="White"  />
+                                      Style="{StaticResource CustomToggleSwitchStyle}"  Foreground="White"  />
 
                     </Grid>
 

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Windows.UI.Popups;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Threading;
@@ -59,9 +60,18 @@ namespace Sodu.ViewModel
 
         public ICommand DeleteCommand => _deleteCommand ?? (
                                              _deleteCommand = new RelayCommand<object>(
-                                                 (obj) =>
+                                                async (obj) =>
                                                  {
-                                                     IsDelete = true;
+                                                     var dialog = new MessageDialog("是否取消下载?", "下载提示");
+                                                     dialog.Commands.Add(new UICommand("确定", cmd =>
+                                                     {
+                                                         IsDelete = true;
+                                                     }, commandId: 0));
+                                                     dialog.Commands.Add(new UICommand("取消", cmd =>
+                                                     {
+                                                     }, commandId: 1));
+                                                     //获取返回值
+                                                     await dialog.ShowAsync();
                                                  }));
 
 
@@ -139,7 +149,10 @@ namespace Sodu.ViewModel
                 {
                     if (CompletedCount < TotalCount - 10)
                     {
-                        ToastHelper.ShowMessage(Book.BookName + "下载失败", false);
+                        if (!IsDelete)
+                        {
+                            ToastHelper.ShowMessage(Book.BookName + "下载失败", false);
+                        }
                         ViewModelInstance.Instance.DownloadCenter.RemoveDownItem(this);
                         return;
                     }

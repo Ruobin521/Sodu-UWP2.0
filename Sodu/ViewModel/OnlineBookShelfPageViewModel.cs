@@ -7,11 +7,13 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Threading;
+using Sodu.Core.AppService;
 using Sodu.Core.Config;
 using Sodu.Core.DataBase;
 using Sodu.Core.Entity;
 using Sodu.Core.HtmlService;
 using Sodu.Core.Util;
+using Sodu.DataService;
 using Sodu.Service;
 
 namespace Sodu.ViewModel
@@ -232,7 +234,6 @@ namespace Sodu.ViewModel
             base.OnItemClickCommand(obj);
         }
 
-
         private async void RemoveItemFromShelf(Book item)
         {
             var url = SoduPageValue.BookShelfPage + "?id=" + item.BookId;
@@ -248,7 +249,6 @@ namespace Sodu.ViewModel
                 ToastHelper.ShowMessage(item.BookName + "移除失败");
             }
         }
-
 
         public void ResetData()
         {

@@ -7,7 +7,7 @@ using Windows.Web.Http;
 using Windows.Web.Http.Filters;
 using Sodu.Core.HtmlService;
 
-namespace Sodu.Service
+namespace Sodu.Core.Util
 {
     public class CookieHelper
     {

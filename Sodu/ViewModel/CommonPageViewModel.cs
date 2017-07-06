@@ -13,6 +13,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Threading;
 using Newtonsoft.Json;
+using Sodu.Core.AppService;
 using Sodu.Core.Config;
 using Sodu.Core.DataBase;
 using Sodu.Core.Entity;
@@ -262,8 +263,11 @@ namespace Sodu.View
 
             var args = JsonConvert.SerializeObject(titleEntity);
 
-            //磁贴的路径
-            var logourl =   new Uri("ms-appx:///Assets/Square150x150Logo.scale-150.png");
+            var filepath = AppDataPath.GetBookCoverPath(book.BookId);
+
+            //磁贴背景图片的路径
+
+            var logourl = filepath != null ? new Uri($"ms-appdata:///local/Images/{book.BookId}.jpg") : new Uri("ms-appx:///Assets/Square150x150Logo.scale-150.png");
 
             //磁贴的大小
             var size = TileSize.Square150x150;
@@ -279,7 +283,7 @@ namespace Sodu.View
             }
             else
             {
-                ToastHelper.ShowMessage($"{book.BookName}磁贴创建失败",false);
+                ToastHelper.ShowMessage($"{book.BookName}磁贴创建失败", false);
             }
         }
 

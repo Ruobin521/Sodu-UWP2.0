@@ -140,6 +140,8 @@ namespace Sodu.ViewModel
                         IsLoading = true;
                     });
 
+                    var catalogs = new List<BookCatalog>();
+                    var bookId = Guid.NewGuid().ToString();
                     string txt;
                     using (Stream stream = await file.OpenStreamForReadAsync())
                     {
@@ -152,63 +154,83 @@ namespace Sodu.ViewModel
                     var matches1 = Regex.Matches(txt, @"(?<title>第?\w*章\s\w{1,20}[！]?\s?[--，]?\w{1,20}\(?（?\w{1,20}\)?）?)", RegexOptions.Compiled);
                     var matches = Regex.Matches(txt, @"(第?\w*章\s\w{0,20}[\(【（]?\w{0,20}[\)】）]?)", RegexOptions.Compiled);
 
-
                     if (matches.Count <= 0)
                     {
-                        ToastHelper.ShowMessage("文件解析失败");
-                        return;
-                    }
+                        ToastHelper.ShowMessage("智能分章失败，将采用按字数分章节");
 
-                    Debug.WriteLine(matches.Count);
+                        var list = SplitText(txt);
 
-                    var catalogs = new List<BookCatalog>();
-
-                    var bookId = Guid.NewGuid().ToString();
-
-                    for (int i = 0; i < matches.Count; i++)
-                    {
-                        var currentMatch = matches[i];
-                        if (currentMatch == null)
+                        if (list == null || list.Count == 0)
                         {
-                            continue; ;
+                            ToastHelper.ShowMessage("文件解析失败");
+                            return;
                         }
 
-
-                        if (i == 0 && !string.IsNullOrEmpty(txt.Substring(0, currentMatch.Index)?.Trim()))
+                        for (int i = 0; i < list.Count; i++)
                         {
                             var temp = new BookCatalog
                             {
                                 BookId = bookId,
-                                Index = 0,
-                                CatalogName = "前言",
-                                CatalogContent = txt.Substring(0, currentMatch.Index),
-                                CatalogUrl = "0"
+                                Index = i,
+                                CatalogName = $"第{i + 1}章",
+                                CatalogContent = list[i],
+                                CatalogUrl = (i + 1).ToString()
                             };
                             catalogs.Add(temp);
                         }
+                    }
+                    else
+                    {
+                        for (int i = 0; i < matches.Count; i++)
+                        {
+                            var currentMatch = matches[i];
+                            if (currentMatch == null)
+                            {
+                                continue; ;
+                            }
 
-                        var catalog = new BookCatalog
-                        {
-                            CatalogName = currentMatch.ToString().Replace("\r", "").Replace("\n", ""),
-                            BookId = bookId,
-                            Index = i + 1
-                        };
-                        if (i == matches.Count - 1)
-                        {
-                            catalog.CatalogContent = txt.Substring(currentMatch.Index, txt.Length - currentMatch.Index);
-                            catalog.CatalogUrl = currentMatch.Index.ToString();
-                            catalog.CatalogUrl = (i + 1).ToString();
+                            if (i == 0 && !string.IsNullOrEmpty(txt.Substring(0, currentMatch.Index)?.Trim()))
+                            {
+                                var temp = new BookCatalog
+                                {
+                                    BookId = bookId,
+                                    Index = 0,
+                                    CatalogName = "前言",
+                                    CatalogContent = txt.Substring(0, currentMatch.Index),
+                                    CatalogUrl = "0"
+                                };
+                                catalogs.Add(temp);
+                            }
+
+                            var catalog = new BookCatalog
+                            {
+                                CatalogName = currentMatch.ToString().Replace("\r", "").Replace("\n", ""),
+                                BookId = bookId,
+                                Index = i + 1
+                            };
+                            if (i == matches.Count - 1)
+                            {
+                                catalog.CatalogContent = txt.Substring(currentMatch.Index, txt.Length - currentMatch.Index);
+                                catalog.CatalogUrl = currentMatch.Index.ToString();
+                                catalog.CatalogUrl = (i + 1).ToString();
+                            }
+                            else
+                            {
+                                var nextMatch = matches[i + 1];
+                                catalog.CatalogContent = txt.Substring(currentMatch.Index, nextMatch.Index - currentMatch.Index);
+                                catalog.CatalogUrl = (i + 1).ToString();
+                            }
+                            catalog.CatalogContent = catalog.CatalogContent?.Replace("\r\n\r\n", "\r\n");
+
+                            catalogs.Add(catalog);
                         }
-                        else
-                        {
-                            var nextMatch = matches[i + 1];
-                            catalog.CatalogContent = txt.Substring(currentMatch.Index, nextMatch.Index - currentMatch.Index);
-                            catalog.CatalogUrl = (i + 1).ToString();
-                        }
-                        catalog.CatalogContent = catalog.CatalogContent?.Replace("\r\n\r\n", "\r\n");
+                    }
 
-                        catalogs.Add(catalog);
 
+                    if (catalogs.Count == 0)
+                    {
+                        ToastHelper.ShowMessage("文件解析失败");
+                        return;
                     }
 
                     var book = new Book();
@@ -228,13 +250,12 @@ namespace Sodu.ViewModel
                     DispatcherHelper.CheckBeginInvokeOnUI(() =>
                     {
                         this.InserOrUpdateBook(book);
-
-                        IsLoading = false;
                     });
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e);
+                    ToastHelper.ShowMessage("文件解析失败");
                 }
                 finally
                 {
@@ -247,6 +268,40 @@ namespace Sodu.ViewModel
             });
         }
 
+
+        private List<string> SplitText(string text, int count = 4000)
+        {
+            var list = new List<string>();
+
+            try
+            {
+                if (string.IsNullOrEmpty(text))
+                {
+                    return null;
+                }
+                if (text.Length <= count)
+                {
+                    list.Add(text);
+                }
+                else
+                {
+                    var catalogCount = text.Length % count == 0 ? text.Length / count : text.Length / count + 1;
+
+                    for (int i = 0; i < catalogCount; i++)
+                    {
+                        var str = text.Substring(i * 3000, i < catalogCount - 1 ? count : text.Length - i * 3000);
+                        str = str.Trim(new char[] { '\\', 'n', 'r' });
+                        list.Add(str);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+            return list;
+        }
 
 
         public override void OnItemClickCommand(object obj)

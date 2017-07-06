@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Sodu</RootNamespace>
     <AssemblyName>Sodu</AssemblyName>
-    <DefaultLanguage>en-us</DefaultLanguage>
+    <DefaultLanguage>zh-CN</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.10586.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.10240.0</TargetPlatformMinVersion>
@@ -128,8 +128,6 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Service\AppSettingService.cs" />
-    <Compile Include="Service\CookieHelper.cs" />
     <Compile Include="Service\NavigationService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\ToastHelper.cs" />
@@ -417,6 +415,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Sodu.CheckUpdateTask\Sodu.CheckUpdateTask.csproj">
+      <Project>{62b48773-9012-4a83-a525-8a76db052c5c}</Project>
+      <Name>Sodu.CheckUpdateTask</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Sodu.Control\Sodu.Control.csproj">
       <Project>{cb88d0cb-0959-46c3-a192-0c19419620bf}</Project>
       <Name>Sodu.Control</Name>
@@ -424,6 +426,10 @@
     <ProjectReference Include="..\Sodu.Core\Sodu.Core.csproj">
       <Project>{194fa0a1-1ced-41b8-a03d-33e50e9219ac}</Project>
       <Name>Sodu.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sodu.DataService\Sodu.DataService.csproj">
+      <Project>{EF75CC46-D3E1-4179-B04E-B579164A7FDD}</Project>
+      <Name>Sodu.DataService</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

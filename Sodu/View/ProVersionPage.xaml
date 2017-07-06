@@ -41,18 +41,18 @@
         <Grid Grid.Row="1"  Margin="0,5,0,10" HorizontalAlignment="Stretch">
             <ScrollViewer   HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                 <StackPanel Orientation="Vertical">
-                    <TextBlock Style="{StaticResource TitleTextStyle}" Text="专业版特有功能" HorizontalAlignment="Center" FontSize="18"/>
+                    <TextBlock Style="{StaticResource TitleTextStyle}" Text="专业版特有功能" HorizontalAlignment="Center" FontSize="18" Margin="0,15,0,0"/>
                     <TextBlock Style="{StaticResource TitleTextStyle}" 
                                Text="1.体验在线书架，随时查看章节最新更新，追更根本停不下来."  />
                     <TextBlock Style="{StaticResource TitleTextStyle}"  
                                Text="2.本地书架不限制收藏数量，想存多少就存多少。"  />
 
                     <TextBlock Style="{StaticResource TitleTextStyle}" 
-                               Text="3.更快的下载速度，开足马力极速下载。"  />
+                               Text="3.更快的缓存速度，开足马力极速缓存。"  />
 
 
                     <TextBlock Style="{StaticResource TitleTextStyle}" FontSize="16"
-                               Text="4.本地Txt阅读功能，对，就是你想要的本地Txt阅读，终于有了。"  />
+                               Text="4.本地TXT阅读功能，对，就是你想要的本地TXT阅读，终于有了。"  />
 
                     <TextBlock Style="{StaticResource TitleTextStyle}" FontSize="16"
                                Text="5.添加磁贴到开始菜单，直接开始阅读。"  />

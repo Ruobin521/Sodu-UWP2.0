@@ -24,8 +24,10 @@ using Windows.UI.Xaml.Media;
 using GalaSoft.MvvmLight.Messaging;
 using GalaSoft.MvvmLight.Threading;
 using Sodu.ContentPageControl;
+using Sodu.Core.AppService;
 using Sodu.Core.Config;
 using Sodu.Core.DataBase;
+using Sodu.DataService;
 
 namespace Sodu.ViewModel
 {
@@ -171,14 +173,13 @@ namespace Sodu.ViewModel
         {
             InitBattery();
             InitTimer();
-            InitSettingValue();
+            //InitSettingValue();
         }
 
 
         public void LoadData(Book book)
         {
             ResDeta();
-
             CurrentBook = book.Clone();
 
             var catalog = new BookCatalog()
@@ -229,15 +230,9 @@ namespace Sodu.ViewModel
 
                 CurrentCatalog = catalog;
 
-                //  PreLoadPreAndNextCatalog();
-                Debug.WriteLine("-----------开始获取章节数据");
+                PreLoadPreAndNextCatalog();
 
                 var value = await GetCatalogContent(catalog, true);
-
-
-                Debug.WriteLine("-----------获取章节数据完成");
-
-
                 if (value != null)
                 {
                     CurrentCatalogContent = value.Item2;
@@ -259,7 +254,7 @@ namespace Sodu.ViewModel
                 Debug.WriteLine($"{e.Message}\n{e.StackTrace}");
             }
         }
-    
+
         /// <summary>
         /// 根据方向获取目录数据
         /// </summary>
@@ -353,20 +348,11 @@ namespace Sodu.ViewModel
                     {
                         if (CurrentBook.IsLocal || CurrentBook.IsTxt)
                         {
-                            Debug.WriteLine("-----------开始获取本地-------------目录数据");
-
                             value = await GetLoaclBookCatalogContent(catalog);
-
-                            Debug.WriteLine("-----------获取在线-------------目录数据完成");
-
                         }
                         else
                         {
-                            Debug.WriteLine("-----------开始获取在线-------------章节数据");
-
                             value = await GetOnlineBookCatalogContent(catalog);
-
-                            Debug.WriteLine("-----------获取在线-------------章节数据完成");
                         }
                     }
                     catch (Exception e)
@@ -1301,30 +1287,6 @@ namespace Sodu.ViewModel
             }
         }
 
-        private bool _isLandscape = false;
-        /// <summary>
-        /// 是否开启横向模式
-        /// </summary>
-        public bool IsLandscape
-        {
-
-            get
-            {
-                return _isLandscape;
-            }
-            set
-            {
-
-                if (value == _isLandscape)
-                {
-                    return;
-                }
-                Set(ref _isLandscape, value);
-                AppSettingService.SetKeyValue(SettingKey.IsLandscape, value);
-                SetLandscape(value);
-            }
-        }
-
         private bool _isScroll = false;
         /// <summary>
         /// 是否滚动阅读
@@ -1387,13 +1349,6 @@ namespace Sodu.ViewModel
                      }));
 
 
-        private ICommand _landsacpeCommand;
-        public ICommand LandsacpeCommand => _landsacpeCommand ?? (
-                 _landsacpeCommand = new RelayCommand<object>(
-                       (obj) =>
-                       {
-                           IsLandscape = !IsLandscape;
-                       }));
 
         private ICommand _nightModeCommand;
         public ICommand NightModeCommand => _nightModeCommand ?? (
@@ -1416,7 +1371,7 @@ namespace Sodu.ViewModel
 
                            if (CurrentBook.CatalogList == null)
                            {
-                               ToastHelper.ShowMessage("获取目录数据失败，请换个来源重试",false);
+                               ToastHelper.ShowMessage("获取目录数据失败，请换个来源重试", false);
                                return;
                            }
                            NavigationService.NavigateTo(typeof(CatalogPage));
@@ -1426,7 +1381,7 @@ namespace Sodu.ViewModel
         private ICommand _downloadCommand;
         public ICommand DownloadCommand => _downloadCommand ?? (
                  _downloadCommand = new RelayCommand<object>(
-                       (obj) =>
+                    async (obj) =>
                        {
 
                            if (IsLoadingCatalogData)
@@ -1455,11 +1410,30 @@ namespace Sodu.ViewModel
                                return;
                            }
 
-                           ViewModelInstance.Instance.DownloadCenter.AddDownItem(CurrentBook);
+                           var isMobile = InternetStatus.IsMobile;
+
+                           if (isMobile)
+                           {
+                               var dialog = new MessageDialog("是否使用手机流量缓存？这有可能消耗您的流量", "下载提示");
+                               dialog.Commands.Add(new UICommand("确定", cmd =>
+                               {
+                                   ViewModelInstance.Instance.DownloadCenter.AddDownItem(CurrentBook);
+
+                               }, commandId: 0));
+                               dialog.Commands.Add(new UICommand("取消", cmd =>
+                               {
+                               }, commandId: 1));
+                               //获取返回值
+                               await dialog.ShowAsync();
+                           }
+                           else
+                           {
+                               ViewModelInstance.Instance.DownloadCenter.AddDownItem(CurrentBook);
+                           }
 
                        }));
 
-        private void InitSettingValue()
+        public void InitSettingValue()
         {
             //初始化字体颜色 背景颜色
             var index = AppSettingService.GetIntValue(SettingKey.ContentColorIndex);
@@ -1510,8 +1484,6 @@ namespace Sodu.ViewModel
             //夜间模式
             IsNightMode = AppSettingService.GetBoolKeyValue(SettingKey.IsNightMode);
 
-            //横屏模式
-            IsLandscape = AppSettingService.GetBoolKeyValue(SettingKey.IsLandscape);
 
             //滚动阅读
             IsScroll = AppSettingService.GetBoolKeyValue(SettingKey.IsScroll);
@@ -1531,10 +1503,6 @@ namespace Sodu.ViewModel
             return list;
         }
 
-        public void SetLandscape(bool value)
-        {
-            DisplayInformation.AutoRotationPreferences = IsLandscape ? DisplayOrientations.Landscape : DisplayOrientations.None;
-        }
         #endregion
 
         #region 系统数据（电量，时间）

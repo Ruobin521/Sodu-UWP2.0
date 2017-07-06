@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Sodu.Core.Util;
-using Sodu.ViewModel;
 
-namespace Sodu.Service
+namespace Sodu.Core.AppService
 {
     public enum SettingKey
     {

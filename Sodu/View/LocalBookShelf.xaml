@@ -18,19 +18,25 @@
                     <Setter Property="BorderBrush" Value="{StaticResource AppThemeColor}"/>
                     <Setter Property="BorderThickness" Value="1"/>
                     <Setter Property="Background" Value="White"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="VerticalContentAlignment" Value="Stretch"/>
                 </Style>
             </MenuFlyout.MenuFlyoutPresenterStyle>
-            <MenuFlyoutItem Text="创建磁贴" 
+            <MenuFlyoutItem Text="创建磁贴"  Width="200"
                             Command="{Binding Instance.LocalBookPage.CreateTitleCommand,Source={StaticResource Locator}}"
-                            CommandParameter="{Binding}" Width="150"/>
+                            CommandParameter="{Binding}" />
           
             <MenuFlyoutSeparator/>
 
-            <MenuFlyoutItem Text="标为已读"
+            <MenuFlyoutItem Text="标为已读" Width="200"
                             Visibility="{Binding CurrentBook.IsNew,Converter={StaticResource BooleanToVisibilityConverter}}"
-                            Command="{Binding Instance.LocalBookPage.SetHadReadCommand,Source={StaticResource Locator}}"  CommandParameter="{Binding}" Width="150"/>
+                            Command="{Binding Instance.LocalBookPage.SetHadReadCommand,Source={StaticResource Locator}}"  CommandParameter="{Binding}" />
+            
             <MenuFlyoutSeparator Visibility="{Binding CurrentBook.IsNew,Converter={StaticResource BooleanToVisibilityConverter}}"/>
-            <MenuFlyoutItem Text="删除" Command="{Binding Instance.LocalBookPage.DeleteCommand,Source={StaticResource Locator}}"  CommandParameter="{Binding}" Width="150"/>
+            
+            <MenuFlyoutItem Text="删除" Width="200"
+                            Command="{Binding Instance.LocalBookPage.DeleteCommand,Source={StaticResource Locator}}"
+                            CommandParameter="{Binding}" />
         </MenuFlyout>
     </local:BaseListUserControl.Resources>
     <Grid Background="{StaticResource AppBackColor}">
@@ -57,6 +63,7 @@
                            ItemsSource="{Binding  LocalBooks}" 
                            IsItemClickEnabled="True"
                            SelectionMode="None"
+                               ItemContainerStyle="{StaticResource CustomListViewItemStyle}"
                            Grid.Row="1">
             <control:PullToRefreshListView.ItemTemplate>
                 <DataTemplate>

@@ -18,16 +18,20 @@
                     <Setter Property="BorderBrush" Value="{StaticResource AppThemeColor}"/>
                     <Setter Property="BorderThickness" Value="1"/>
                     <Setter Property="Background" Value="White"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="VerticalContentAlignment" Value="Stretch"/>
                 </Style>
             </MenuFlyout.MenuFlyoutPresenterStyle>
-            
-            <MenuFlyoutItem Text="创建磁贴" 
+
+            <MenuFlyoutItem Text="创建磁贴"  Width="200"
                             Command="{Binding Instance.HotAndRecommend.CreateTitleCommand,Source={StaticResource Locator}}"
-                            CommandParameter="{Binding}" Width="150"/>
+                            CommandParameter="{Binding}"/>
 
             <MenuFlyoutSeparator/>
 
-            <MenuFlyoutItem Text="添加在线书架" Command="{Binding Instance.HotAndRecommend.AddToOnlineShelfCommand,Source={StaticResource Locator}}"  CommandParameter="{Binding}" Width="150"/>
+            <MenuFlyoutItem Text="添加在线书架"  Width="200"
+                            Command="{Binding Instance.HotAndRecommend.AddToOnlineShelfCommand,Source={StaticResource Locator}}" 
+                            CommandParameter="{Binding}"/>
         </MenuFlyout>
     </local:BaseListUserControl.Resources>
     <Grid Background="{StaticResource AppBackColor}">
@@ -40,6 +44,7 @@
                            ItemsSource="{Binding  Books}" 
                            IsItemClickEnabled="True"
                            SelectionMode="None"
+                            ItemContainerStyle="{StaticResource CustomListViewItemStyle}"
                            RequestCommand="{Binding PullToLoadCommand}"
                            Grid.Row="1">
             <control:PullToRefreshListView.ItemTemplate>

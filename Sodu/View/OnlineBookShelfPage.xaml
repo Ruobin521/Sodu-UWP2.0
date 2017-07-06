@@ -18,29 +18,40 @@
                     <Setter Property="BorderBrush" Value="{StaticResource AppThemeColor}"/>
                     <Setter Property="BorderThickness" Value="1"/>
                     <Setter Property="Background" Value="White"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="VerticalContentAlignment" Value="Stretch"/>
                 </Style>
             </MenuFlyout.MenuFlyoutPresenterStyle>
 
-            <MenuFlyoutItem Text="创建磁贴" 
+            <MenuFlyoutItem Text="创建磁贴"   Width="200"
                             Command="{Binding Instance.OnLineBookShelf.CreateTitleCommand,Source={StaticResource Locator}}"
-                            CommandParameter="{Binding}" Width="150"/>
+                            CommandParameter="{Binding}" />
 
             <MenuFlyoutSeparator/>
 
-            <MenuFlyoutItem Text="标为已读" Visibility="{Binding IsNew,Converter={StaticResource BooleanToVisibilityConverter}}"
+            <MenuFlyoutItem Text="标为已读"   Width="200"
+                            Visibility="{Binding IsNew,Converter={StaticResource BooleanToVisibilityConverter}}"
                             Command="{Binding Instance.OnLineBookShelf.SetHadReadCommand,Source={StaticResource Locator}}"
-                            CommandParameter="{Binding}" Width="150"/>
+                            CommandParameter="{Binding}" />
 
             <MenuFlyoutSeparator Visibility="{Binding IsNew,Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
-            <MenuFlyoutItem Text="移出书架" Command="{Binding Instance.OnLineBookShelf.RemoveCommand,Source={StaticResource Locator}}"  CommandParameter="{Binding}" Tag="B" Width="150"/>
+            <MenuFlyoutItem Text="移出书架"    Width="200"
+                            Command="{Binding Instance.OnLineBookShelf.RemoveCommand,Source={StaticResource Locator}}"  
+                            CommandParameter="{Binding}" Tag="B" />
         </MenuFlyout>
+        
+        
+
+
+
     </local:BaseListUserControl.Resources>
     <Grid Background="{StaticResource AppBackColor}">
         <Grid.RowDefinitions>
             <RowDefinition Height="44"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+
         <userControl:TopNavigationBar Grid.Row="0" Title="{Binding Title}"
                                       SearchCommand="{Binding SearchCommand}"
                                       RefreshCommand="{Binding RefreshCommand}"></userControl:TopNavigationBar>
@@ -49,6 +60,7 @@
                            ItemsSource="{Binding  Books}" 
                            IsItemClickEnabled="True"
                            SelectionMode="None"
+                            ItemContainerStyle="{StaticResource CustomListViewItemStyle}"
                             RefreshCommand="{Binding RefreshCommand}"
                             RequestCommand="{Binding PullToLoadCommand}"
                            Grid.Row="1">

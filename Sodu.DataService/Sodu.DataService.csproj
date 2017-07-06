@@ -4,15 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CB88D0CB-0959-46C3-A192-0C19419620BF}</ProjectGuid>
+    <ProjectGuid>{EF75CC46-D3E1-4179-B04E-B579164A7FDD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sodu.Control</RootNamespace>
-    <AssemblyName>Sodu.Control</AssemblyName>
+    <RootNamespace>Sodu.DataService</RootNamespace>
+    <AssemblyName>Sodu.DataService</AssemblyName>
     <DefaultLanguage>zh-CN</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion>10.0.10586.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.10240.0</TargetPlatformMinVersion>
+    <TargetPlatformVersion>10.0.14393.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.10586.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -105,55 +105,11 @@
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
     <None Include="project.json" />
-    <AppxManifest Include="Properties\Package.appxmanifest">
-      <SubType>Designer</SubType>
-    </AppxManifest>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CustomLoadingControl.xaml.cs">
-      <DependentUpon>CustomLoadingControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="LoadingControl.xaml.cs">
-      <DependentUpon>LoadingControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PopupWindow.xaml.cs">
-      <DependentUpon>PopupWindow.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="OnlineBookShelfDataService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PullToRefreshListView.cs" />
-    <Compile Include="SettingButton.cs" />
-    <Compile Include="SwipeListControl\ItemSwipeEventArgs.cs" />
-    <Compile Include="SwipeListControl\ItemSwipeEventHandler.cs" />
-    <Compile Include="SwipeListControl\SwipeListBehavior.cs" />
-    <Compile Include="SwipeListControl\SwipeListDirection.cs" />
-    <Compile Include="SwipeListControl\SwipeListView.cs" />
-    <Compile Include="SwipeListControl\SwipeListViewItem.cs" />
-    <Compile Include="TabbarButton.cs" />
-    <Compile Include="VerticalTextBlock.cs" />
-    <EmbeddedResource Include="Properties\Sodu.Control.rd.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="CustomLoadingControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="LoadingControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PopupWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Style\CustomControlStyle.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Page>
-    <Page Include="Themes\Generic.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
+    <EmbeddedResource Include="Properties\Sodu.DataService.rd.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sodu.Core\Sodu.Core.csproj">
